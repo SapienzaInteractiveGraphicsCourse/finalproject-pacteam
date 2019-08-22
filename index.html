@@ -2,16 +2,17 @@
 <html>
 	<head>
 		<meta charset=utf-8>
-		<title>My first three.js app</title>
+		<title>PacTeam - Interactive Graphics Project</title>
 		<style>
-			body { margin: 0; 
-                   height: 100%;
-                   overflow: hidden
-                   }
+			body { 
+                margin: 0; 
+                height: 100%;
+                overflow: hidden
+            }
 			canvas { 
                 width: 100%; 
                 height: 100%;
-                background-image: url('images/pacman_homepage_background.jpg');
+                background-image: url("images/pacman_homepage_background.jpg");
                 background-size: 100% 100%;
             }
         </style>
@@ -23,19 +24,20 @@
                 requestAnimationFrame(animate)
                 renderer.render(scene, camera)
             }
-            // Create the scene
+
+            // Creates the scene
             var scene = new THREE.Scene();
 
-            //Create the main camera
-            var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+            // Creates the main camera
+            var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-            //Create the renderer
-            var renderer = new THREE.WebGLRenderer({antialias: false,alpha:true});
-            renderer.setSize( window.innerWidth, window.innerHeight );
+            // Creates the renderer
+            var renderer = new THREE.WebGLRenderer({antialias: false, alpha: true});
+            renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setClearColor(0x000000, 0);
-            document.body.appendChild( renderer.domElement );
+            document.body.appendChild(renderer.domElement);
             
-            //Set up the main camera
+            // Sets up the main camera
             camera.position.z = 5;
 
             var dirLight = new THREE.DirectionalLight();
@@ -43,9 +45,9 @@
             scene.add(dirLight);
 
             var loader = new THREE.FontLoader();
-            loader.load("fonts/Plastic_Fantastic_Regular.json", function ( font ) {
+            loader.load("fonts/Plastic_Fantastic_Regular.json", function (font) {
 
-                var text = new THREE.TextGeometry( 'Hello three.js!', {
+                var text = new THREE.TextGeometry('Hello three.js!', {
                     font: font,
                     size: 100,
                     height: 5,
@@ -55,19 +57,16 @@
                     bevelSize: 8,
                     bevelOffset: 0,
                     bevelSegments: 5
-                    
-                } );
+                });
 
                 var textMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
                 var mesh = new THREE.Mesh(text, textMaterial);
                 mesh.position.set(0, 0, -1000);
 
                 scene.add(mesh)
-                
+
                 animate()
             } );
-
-            
         </script>
     </body>
     
