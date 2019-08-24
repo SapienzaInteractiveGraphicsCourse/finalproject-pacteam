@@ -2,16 +2,17 @@
 <html>
 	<head>
 		<meta charset=utf-8>
-		<title>My first three.js app</title>
+		<title>PacTeam - Interactive Graphics Project</title>
 		<style>
-			body { margin: 0; 
-                   height: 100%;
-                   overflow: hidden
-                   }
+			body { 
+                margin: 0; 
+                height: 100%;
+                overflow: hidden
+            }
 			canvas { 
                 width: 100%; 
                 height: 100%;
-                background-image: url('images/pacman_homepage_background.jpg');
+                background-image: url("images/pacman_homepage_background.jpg");
                 background-size: 100% 100%;
             }
         </style>
@@ -56,6 +57,7 @@
                 }
             }
 
+<<<<<<< HEAD
             // Create the scene
             const scene = new THREE.Scene();
 
@@ -74,6 +76,22 @@
             
             //Set up the main camera
             camera.position.z = 100;
+=======
+            // Creates the scene
+            var scene = new THREE.Scene();
+
+            // Creates the main camera
+            var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+            // Creates the renderer
+            var renderer = new THREE.WebGLRenderer({antialias: false, alpha: true});
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x000000, 0);
+            document.body.appendChild(renderer.domElement);
+            
+            // Sets up the main camera
+            camera.position.z = 5;
+>>>>>>> b05a809fa7c0f7feab9b7f0091f41b5a2d2b563f
 
             var dirLight = new THREE.DirectionalLight();
             dirLight.position.set(25, 23, 15);
@@ -82,14 +100,26 @@
             const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
 
             var loader = new THREE.FontLoader();
-            loader.load("fonts/Plastic_Fantastic_Regular.json", function ( font ) {
+            loader.load("fonts/Plastic_Fantastic_Regular.json", function (font) {
 
-                var text = new THREE.TextGeometry( 'Hello three.js!', {
+                var text = new THREE.TextGeometry('Hello three.js!', {
                     font: font,
+<<<<<<< HEAD
                     size: 50,
                     height: 10,
                     curveSegments: 0,
                 } );
+=======
+                    size: 100,
+                    height: 5,
+                    curveSegments: 12,
+                    bevelEnabled: true,
+                    bevelThickness: 10,
+                    bevelSize: 8,
+                    bevelOffset: 0,
+                    bevelSegments: 5
+                });
+>>>>>>> b05a809fa7c0f7feab9b7f0091f41b5a2d2b563f
 
                 var textMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
                 var mesh = new THREE.Mesh(text, textMaterial);
@@ -97,6 +127,7 @@
 
                 scene.add(mesh);
 
+<<<<<<< HEAD
                 domEvents.addEventListener(mesh, "mouseover", event => {
                     mesh.material.color.setHex(0xffffff);
                 })
@@ -117,6 +148,12 @@
 
             animate();
             
+=======
+                scene.add(mesh)
+
+                animate()
+            } );
+>>>>>>> b05a809fa7c0f7feab9b7f0091f41b5a2d2b563f
         </script>
     </body>
     
