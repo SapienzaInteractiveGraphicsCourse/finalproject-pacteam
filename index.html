@@ -17,56 +17,105 @@
         </style>
 	</head>
 	<body>
-		<script src="js/three.js"></script>
+        <script src="js/three.js"></script>
+        <script src="js/OrbitControls.js"></script>
+        <script src="js/threex.domevents.js"></script>
 		<script>
             function animate() {
-                requestAnimationFrame(animate)
-                renderer.render(scene, camera)
+                requestAnimationFrame(animate);
+
+                //controls.update();
+                renderer.render(scene, camera);
             }
+
+            function raycast ( e ) {
+
+                //Sets the mouse position with a coordinate system where the center of the screen is the origin
+                mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+                mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+
+                //Set the picking ray from the camera position and mouse coordinates
+                raycaster.setFromCamera( mouse, camera );    
+
+                //Compute intersections
+                var intersects = raycaster.intersectObjects( scene.children );
+                 /*
+                    An intersection has the following properties :
+                        - object : intersected object (THREE.Mesh)
+                        - distance : distance from camera to intersection (number)
+                        - face : intersected face (THREE.Face3)
+                        - faceIndex : intersected face index (number)
+                        - point : intersection point (THREE.Vector3)
+                        - uv : intersection point in the object's UV coordinates (THREE.Vector2)
+                */
+
+                for ( var i = 0; i < intersects.length; i++ ) {
+                    console.log( intersects[ i ] ); 
+                    scene.remove(intersects[i].object)
+                   
+                }
+            }
+
             // Create the scene
-            var scene = new THREE.Scene();
+            const scene = new THREE.Scene();
 
             //Create the main camera
-            var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+            const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
             //Create the renderer
-            var renderer = new THREE.WebGLRenderer({antialias: false,alpha:true});
+            const renderer = new THREE.WebGLRenderer({antialias: false,alpha:true});
             renderer.setSize( window.innerWidth, window.innerHeight );
-            renderer.setClearColor(0x000000, 0);
             document.body.appendChild( renderer.domElement );
+
+            //Create a raycaster instances useful to object picking and other things
+            var mouse = { x : 0, y : 0 };
+            var raycaster = new THREE.Raycaster();
+            renderer.domElement.addEventListener( 'click', raycast, false );
             
             //Set up the main camera
-            camera.position.z = 5;
+            camera.position.z = 100;
 
             var dirLight = new THREE.DirectionalLight();
             dirLight.position.set(25, 23, 15);
             scene.add(dirLight);
+
+            const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
 
             var loader = new THREE.FontLoader();
             loader.load("fonts/Plastic_Fantastic_Regular.json", function ( font ) {
 
                 var text = new THREE.TextGeometry( 'Hello three.js!', {
                     font: font,
-                    size: 100,
-                    height: 5,
-                    curveSegments: 12,
-                    bevelEnabled: true,
-                    bevelThickness: 10,
-                    bevelSize: 8,
-                    bevelOffset: 0,
-                    bevelSegments: 5
-                    
+                    size: 50,
+                    height: 10,
+                    curveSegments: 0,
                 } );
 
                 var textMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
                 var mesh = new THREE.Mesh(text, textMaterial);
-                mesh.position.set(0, 0, -1000);
+                mesh.position.set(-400, 150, -200);
 
-                scene.add(mesh)
-                
-                animate()
+                scene.add(mesh);
+
+                domEvents.addEventListener(mesh, "mouseover", event => {
+                    mesh.material.color.setHex(0xffffff);
+                })
+
+                domEvents.addEventListener(mesh, "mouseout", event => {
+                    mesh.material.color.setHex(0xff0000);
+                })
             } );
 
+            /* controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.minDistance = 1;
+            controls.maxDistance = 1000; */
+
+            var geometry = new THREE.BoxGeometry(10, 10, 10);
+            var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+            var cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+
+            animate();
             
         </script>
     </body>
