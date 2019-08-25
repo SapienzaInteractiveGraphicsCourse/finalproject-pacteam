@@ -2,8 +2,10 @@ var scene, camera, renderer;
 var mouse, raycaster;
 
 var cube;
+var floor;
 
 var keyboard = {};
+var player = {height: 1.8, speed: 1};
 
 function init() {
     // Create the scene
@@ -18,8 +20,8 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     //Set up the main camera
-    camera.position.set(0, 0, 100);
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
+    camera.position.set(0, player.height, 5);
+    camera.lookAt(new THREE.Vector3(0, player.height, 0));
 
     //Create and add a source of light
     var dirLight = new THREE.DirectionalLight();
@@ -27,20 +29,29 @@ function init() {
     scene.add(dirLight);
 
     cube = new THREE.Mesh(
-        new THREE.BoxGeometry(10, 10, 10),
-        new THREE.MeshBasicMaterial({ color: 0x00ff00 }),
+        new THREE.BoxGeometry(1, 1, 1),
+        new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe:false}),
     );
+    cube.position.y += 0.5;
     scene.add(cube);
     
-    //Used to add events listenders
-    const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
-
+    floor = new THREE.Mesh(
+        new THREE.PlaneGeometry(10, 10, 10, 10),
+        new THREE.MeshBasicMaterial({color:0xffffff, wireframe:false})
+    );
+    floor.rotation.x -= Math.PI / 2;
+    scene.add(floor);
+    
     //Create a raycaster instances useful to object picking and other things
     mouse = { x : 0, y : 0 };
     raycaster = new THREE.Raycaster();
     renderer.domElement.addEventListener('click', raycast, false);
 
-    /* var loader = new THREE.FontLoader();
+    /*
+    //Used to add events listenders
+    const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
+
+    var loader = new THREE.FontLoader();
     loader.load("fonts/Plastic_Fantastic_Regular.json", function (font) {
 
         var text = new THREE.TextGeometry('Hello three.js!', {
@@ -71,11 +82,20 @@ function init() {
 function animate() {
     requestAnimationFrame(animate);
 
-    if (keyboard[37]) { //left arrow key
+    if (keyboard[87]) { // W key
+        camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
+        camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
+    }
+
+    if (keyboard[83]) { // S key
+        camera.position.x += Math.sin(camera.rotation.y) * player.speed;
+        camera.position.z += Math.cos(camera.rotation.y) * player.speed;
+    }
+    if (keyboard[65]) { //D key
         camera.rotation.y += Math.PI * 0.01;
     }
 
-    if (keyboard[39]) { //right arrow key
+    if (keyboard[68]) { //A key
         camera.rotation.y -= Math.PI * 0.01;
     }
 
