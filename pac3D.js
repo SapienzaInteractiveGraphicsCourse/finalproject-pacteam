@@ -3,6 +3,8 @@ var mouse, raycaster;
 
 var cube;
 
+var keyboard = {};
+
 function init() {
     // Create the scene
     scene = new THREE.Scene();
@@ -38,21 +40,54 @@ function init() {
     raycaster = new THREE.Raycaster();
     renderer.domElement.addEventListener('click', raycast, false);
 
+    /* var loader = new THREE.FontLoader();
+    loader.load("fonts/Plastic_Fantastic_Regular.json", function (font) {
+
+        var text = new THREE.TextGeometry('Hello three.js!', {
+            font: font,
+            size: 50,
+            height: 10,
+            curveSegments: 0,
+        } );
+
+        var textMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
+        var mesh = new THREE.Mesh(text, textMaterial);
+        mesh.position.set(-400, 150, -200);
+
+        scene.add(mesh);
+
+        domEvents.addEventListener(mesh, "mouseover", event => {
+            mesh.material.color.setHex(0xffffff);
+        })
+
+        domEvents.addEventListener(mesh, "mouseout", event => {
+            mesh.material.color.setHex(0xff0000);
+        })
+    } ); */
+
     animate();
 }
 
 function animate() {
     requestAnimationFrame(animate);
 
+    if (keyboard[37]) { //left arrow key
+        camera.rotation.y += Math.PI * 0.01;
+    }
+
+    if (keyboard[39]) { //right arrow key
+        camera.rotation.y -= Math.PI * 0.01;
+    }
+
     //controls.update();
     renderer.render(scene, camera);
 }
 
-function raycast (e) {
+function raycast(event) {
 
     //Sets the mouse position with a coordinate system where the center of the screen is the origin
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
     //Set the picking ray from the camera position and mouse coordinates
     raycaster.setFromCamera(mouse, camera);    
@@ -76,29 +111,19 @@ function raycast (e) {
     }
 }
 
-/* var loader = new THREE.FontLoader();
-loader.load("fonts/Plastic_Fantastic_Regular.json", function (font) {
+function keyDown(event) {
+    // When you click on keyboard set true to start moving
+    keyboard[event.keyCode] = true;
+}
 
-    var text = new THREE.TextGeometry('Hello three.js!', {
-        font: font,
-        size: 50,
-        height: 10,
-        curveSegments: 0,
-    } );
+function keyUp(event) {
+    // When you let the keyboard key, set false to stop moving
+    keyboard[event.keyCode] = false;
+}
 
-    var textMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
-    var mesh = new THREE.Mesh(text, textMaterial);
-    mesh.position.set(-400, 150, -200);
 
-    scene.add(mesh);
 
-    domEvents.addEventListener(mesh, "mouseover", event => {
-        mesh.material.color.setHex(0xffffff);
-    })
-
-    domEvents.addEventListener(mesh, "mouseout", event => {
-        mesh.material.color.setHex(0xff0000);
-    })
-} ); */
+window.addEventListener('keyup', keyUp);
+window.addEventListener('keydown', keyDown);
 
 window.onload = init;
