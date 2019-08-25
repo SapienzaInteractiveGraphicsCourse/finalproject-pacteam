@@ -5,7 +5,7 @@ var cube;
 var floor;
 
 var keyboard = {};
-var player = {height: 1.8, speed: 1};
+var player = {height: 1.8, speed: 0.2, turnSpeed: Math.PI*0.02};
 
 function init() {
     // Create the scene
@@ -101,13 +101,13 @@ function animate() {
         camera.position.x += Math.sin(camera.rotation.y + Math.PI/2) * player.speed;
         camera.position.z += Math.cos(camera.rotation.y + Math.PI/2) * player.speed;
     }
-    
+
     if (keyboard[37]) { //left arrow key
-        camera.rotation.y += Math.PI * 0.01;
+        camera.rotation.y += player.turnSpeed;
     }
 
     if (keyboard[39]) { //right arrow key
-        camera.rotation.y -= Math.PI * 0.01;
+        camera.rotation.y -= player.turnSpeed;
     }
 
     //controls.update();
