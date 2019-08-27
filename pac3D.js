@@ -1,6 +1,9 @@
 var scene, camera, renderer;
 var mouse, raycaster;
 
+// audio variables
+var audio;
+
 var cube;
 var floor;
 
@@ -15,7 +18,7 @@ function init() {
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
     //Create the renderer
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({alpha:true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
@@ -46,6 +49,8 @@ function init() {
     mouse = { x : 0, y : 0 };
     raycaster = new THREE.Raycaster();
     renderer.domElement.addEventListener('click', raycast, false);
+
+    initAudioPlayer();
 
     /*
     //Used to add events listenders
@@ -142,6 +147,42 @@ function raycast(event) {
     }
 }
 
+function initAudioPlayer() {
+    audio = new Audio();
+
+    // Specify the source
+    audio.src = "background_music/homepage_soundtrack.mp3";
+    // The audio is gonna loop over the source
+    audio.loop = true;
+    // Start playing
+    audio.play();
+
+    // Event handling
+    document.getElementById("playpausebtn").onclick = function() {
+        if (audio.paused) {
+            audio.play();
+            document.getElementById("playpausebtn").style.background = "url(images/pause.png) no-repeat";
+        } else {
+            audio.pause();
+            document.getElementById("playpausebtn").style.background = "url(images/play.png) no-repeat";
+        }
+    };
+
+    document.getElementById("mutebtn").onclick = function() {
+        if (audio.muted) {
+		    audio.muted = false;
+            document.getElementById("mutebtn").style.background = "url(images/volume-high.png) no-repeat";
+	    } else {
+		    audio.muted = true;
+		    document.getElementById("mutebtn").style.background = "url(images/muted.png) no-repeat";
+	    }
+    };
+
+    document.getElementById("volumeslider").oninput = function() {
+        audio.volume = document.getElementById("volumeslider").value/100;
+    };
+}
+
 function keyDown(event) {
     // When you click on keyboard set true to start moving
     keyboard[event.keyCode] = true;
@@ -152,9 +193,8 @@ function keyUp(event) {
     keyboard[event.keyCode] = false;
 }
 
-
-
 window.addEventListener('keyup', keyUp);
 window.addEventListener('keydown', keyDown);
 
+// This way the audio will be loaded after the page is fully loaded
 window.onload = init;
