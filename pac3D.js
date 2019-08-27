@@ -154,32 +154,36 @@ function initAudioPlayer() {
     audio.src = "background_music/homepage_soundtrack.mp3";
     // The audio is gonna loop over the source
     audio.loop = true;
-    // Start playing
-    audio.play();
+    // Put the audio in pause
+    audio.pause();
 
+    playPauseBtn = document.getElementById("playpausebtn");
+    muteBtn = document.getElementById("mutebtn");
+    volumeSlider = document.getElementById("volumeslider");
+    
     // Event handling
-    document.getElementById("playpausebtn").onclick = function() {
+    playPauseBtn.onclick = function() {
         if (audio.paused) {
             audio.play();
-            document.getElementById("playpausebtn").style.background = "url(images/pause.png) no-repeat";
+            playPauseBtn.style.background = "url(images/pause.png) no-repeat";
         } else {
             audio.pause();
-            document.getElementById("playpausebtn").style.background = "url(images/play.png) no-repeat";
+            playPauseBtn.style.background = "url(images/play.png) no-repeat";
         }
     };
 
-    document.getElementById("mutebtn").onclick = function() {
+    muteBtn.onclick = function() {
         if (audio.muted) {
 		    audio.muted = false;
-            document.getElementById("mutebtn").style.background = "url(images/volume-high.png) no-repeat";
+            muteBtn.style.background = "url(images/volume-high.png) no-repeat";
 	    } else {
 		    audio.muted = true;
-		    document.getElementById("mutebtn").style.background = "url(images/muted.png) no-repeat";
+		    muteBtn.style.background = "url(images/muted.png) no-repeat";
 	    }
     };
 
-    document.getElementById("volumeslider").oninput = function() {
-        audio.volume = document.getElementById("volumeslider").value/100;
+    volumeSlider.oninput = function() {
+        audio.volume = volumeSlider.value/100;
     };
 }
 
