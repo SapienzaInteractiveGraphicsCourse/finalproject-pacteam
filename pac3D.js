@@ -151,7 +151,7 @@ function initAudioPlayer() {
     audio = new Audio();
 
     // Specify the source
-    audio.src = "background_music/homepage_soundtrack.mp3";
+    audio.src = "background_music/pacman_remix.mp3";
     // The audio is gonna loop over the source
     audio.loop = true;
     // Put the audio in pause
