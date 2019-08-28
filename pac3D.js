@@ -188,6 +188,8 @@ function initAudioPlayer() {
     volumeSlider.oninput = function() {
         audio.volume = volumeSlider.value/100;
     };
+
+    console.log(volumeSlider.value)
 }
 
 function keyDown(event) {
