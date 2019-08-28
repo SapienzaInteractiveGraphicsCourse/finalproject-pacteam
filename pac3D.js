@@ -57,7 +57,7 @@ function init() {
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement);
 
     var loader = new THREE.FontLoader();
-    loader.load("fonts/Plastic_Fantastic_Regular.json", 
+    loader.load("fonts/Super_Mario_256.json", 
     
         function (font) {
             var text = new THREE.TextGeometry('PLAY', 
@@ -68,11 +68,9 @@ function init() {
                 curveSegments: 0,
             });
 
-            var textMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
+            var textMaterial = new THREE.MeshPhongMaterial({color: 0xffff00});
             var mesh = new THREE.Mesh(text, textMaterial);
-            mesh.position.set(-65, 10, -50);
-            mesh.rotation.z = 0.3;
-            mesh.rotation.y = 0.5;
+            mesh.position.set(-11, 10, -50);
 
             scene.add(mesh);
 
@@ -81,7 +79,7 @@ function init() {
             })
 
             domEvents.addEventListener(mesh, "mouseout", event => {
-                mesh.material.color.setHex(0xff0000);
+                mesh.material.color.setHex(0xffff00);
             })
         },
         
