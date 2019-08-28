@@ -2,7 +2,7 @@ var scene, camera, renderer;
 var mouse, raycaster;
 
 // audio variables
-var audio;
+var audio, playPauseBtn, muteBtn, volumeSlider;
 
 var cube;
 var floor;
@@ -160,6 +160,9 @@ function initAudioPlayer() {
     playPauseBtn = document.getElementById("playpausebtn");
     muteBtn = document.getElementById("mutebtn");
     volumeSlider = document.getElementById("volumeslider");
+
+    // Setting up the correct volume
+    audio.volume = volumeSlider.value/100;
     
     // Event handling
     playPauseBtn.onclick = function() {
