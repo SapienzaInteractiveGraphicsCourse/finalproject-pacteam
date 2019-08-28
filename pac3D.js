@@ -45,25 +45,14 @@ function init() {
     floor.rotation.x -= Math.PI / 2;
     scene.add(floor);
     
-<<<<<<< HEAD
     //Create a raycaster instances useful to object picking and other things
     mouse = {x : 0, y : 0};
-=======
-    // Create a raycaster instances useful to object picking and other things
-    mouse = { x : 0, y : 0 };
->>>>>>> 83ba243c56261fd895c6afbf5b7476353053c4e0
     raycaster = new THREE.Raycaster();
     renderer.domElement.addEventListener('click', raycast, false);
 
     initAudioPlayer();
-<<<<<<< HEAD
 
     //Used to add events listenders
-=======
-    initSettings();
-    
-    // Used to add events listenders
->>>>>>> 83ba243c56261fd895c6afbf5b7476353053c4e0
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement);
 
     var loader = new THREE.FontLoader();
@@ -95,7 +84,6 @@ function init() {
             })
         },
         
-<<<<<<< HEAD
         function(xhr) {
             console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
         },
@@ -103,15 +91,6 @@ function init() {
         // onError callback
 	    function(err) {
 		    console.log( 'An error happened' );
-=======
-        function (xhr) {
-            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-        },
-
-        // onError callback
-	    function (err) {
-		    console.log('An error happened');
->>>>>>> 83ba243c56261fd895c6afbf5b7476353053c4e0
 	    }
     );
 
