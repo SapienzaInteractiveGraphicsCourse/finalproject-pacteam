@@ -218,5 +218,16 @@ function keyUp(event) {
 window.addEventListener('keyup', keyUp);
 window.addEventListener('keydown', keyDown);
 
+window.addEventListener( 'resize', onWindowResize, false );
+
+function onWindowResize(){
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( window.innerWidth, window.innerHeight );
+
+}
+
 // This way the audio will be loaded after the page is fully loaded
 window.onload = init;
