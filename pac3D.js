@@ -80,7 +80,7 @@ function init() {
             domEvents.addEventListener(mesh, "mouseover", event => {
                 mesh.material.color.setHex(0xffffff);
                 $('html,body').css('cursor', 'pointer');
-            })
+            });
 
             domEvents.addEventListener(mesh, "click", event => {
                 // Hides the buttons
@@ -88,12 +88,13 @@ function init() {
                 playPauseBtn.style.display = "none";
                 muteBtn.style.display = "none";
                 settingsBtn.style.display = "none";
-            })
+                scene.remove(mesh);
+            });
 
             domEvents.addEventListener(mesh, "mouseout", event => {
                 mesh.material.color.setHex(0xffff00);
                 $('html,body').css('cursor', 'default');
-            })
+            });
         },
         
         function(xhr) {
