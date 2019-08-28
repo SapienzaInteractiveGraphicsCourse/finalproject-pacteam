@@ -46,20 +46,19 @@ function init() {
     scene.add(floor);
     
     //Create a raycaster instances useful to object picking and other things
-    mouse = { x : 0, y : 0 };
+    mouse = {x : 0, y : 0};
     raycaster = new THREE.Raycaster();
     renderer.domElement.addEventListener('click', raycast, false);
 
     initAudioPlayer();
 
-    
     //Used to add events listenders
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement);
 
     var loader = new THREE.FontLoader();
     loader.load("fonts/Super_Mario_256.json", 
     
-        function (font) {
+        function(font) {
             var text = new THREE.TextGeometry('PLAY', 
             {
                 font: font,
@@ -76,19 +75,21 @@ function init() {
 
             domEvents.addEventListener(mesh, "mouseover", event => {
                 mesh.material.color.setHex(0xffffff);
+                $('html,body').css('cursor', 'pointer');
             })
 
             domEvents.addEventListener(mesh, "mouseout", event => {
                 mesh.material.color.setHex(0xffff00);
+                $('html,body').css('cursor', 'default');
             })
         },
         
-        function ( xhr ) {
+        function(xhr) {
             console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
         },
 
         // onError callback
-	    function ( err ) {
+	    function(err) {
 		    console.log( 'An error happened' );
 	    }
     );
