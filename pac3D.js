@@ -28,7 +28,7 @@ function init() {
 
     //Create and add a source of light
     var dirLight = new THREE.DirectionalLight();
-    dirLight.position.set(25, 23, 15);
+    dirLight.position.set(0, 0, 5);
     scene.add(dirLight);
 
     cube = new THREE.Mesh(
@@ -52,34 +52,86 @@ function init() {
 
     initAudioPlayer();
 
-    /*
+    
     //Used to add events listenders
-    const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
+    const domEvents = new THREEx.DomEvents(camera, renderer.domElement);
 
     var loader = new THREE.FontLoader();
-    loader.load("fonts/Plastic_Fantastic_Regular.json", function (font) {
+    loader.load("fonts/Plastic_Fantastic_Regular.json", 
+    
+        function (font) {
+            var text = new THREE.TextGeometry('PLAY', 
+            {
+                font: font,
+                size: 7,
+                height: 3,
+                curveSegments: 0,
+            });
 
-        var text = new THREE.TextGeometry('Hello three.js!', {
-            font: font,
-            size: 50,
-            height: 10,
-            curveSegments: 0,
-        } );
+            var textMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
+            var mesh = new THREE.Mesh(text, textMaterial);
+            mesh.position.set(-65, 10, -50);
+            mesh.rotation.z = 0.3;
+            mesh.rotation.y = 0.5;
 
-        var textMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
-        var mesh = new THREE.Mesh(text, textMaterial);
-        mesh.position.set(-400, 150, -200);
+            scene.add(mesh);
 
-        scene.add(mesh);
+            domEvents.addEventListener(mesh, "mouseover", event => {
+                mesh.material.color.setHex(0xffffff);
+            })
 
-        domEvents.addEventListener(mesh, "mouseover", event => {
-            mesh.material.color.setHex(0xffffff);
-        })
+            domEvents.addEventListener(mesh, "mouseout", event => {
+                mesh.material.color.setHex(0xff0000);
+            })
+        },
+        
+        function ( xhr ) {
+            console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+        },
 
-        domEvents.addEventListener(mesh, "mouseout", event => {
-            mesh.material.color.setHex(0xff0000);
-        })
-    } ); */
+        // onError callback
+	    function ( err ) {
+		    console.log( 'An error happened' );
+	    }
+    );
+
+    loader.load("fonts/Plastic_Fantastic_Regular.json", 
+    
+        function (font) {
+            var text = new THREE.TextGeometry('Settings', 
+            {
+                font: font,
+                size: 7,
+                height: 3,
+                curveSegments: 0,
+            });
+
+            var textMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
+            var mesh = new THREE.Mesh(text, textMaterial);
+            mesh.position.set(30, 15, -50);
+            mesh.rotation.z = -0.3;
+            mesh.rotation.y = -0.5;
+
+            scene.add(mesh);
+
+            domEvents.addEventListener(mesh, "mouseover", event => {
+                mesh.material.color.setHex(0xffffff);
+            })
+
+            domEvents.addEventListener(mesh, "mouseout", event => {
+                mesh.material.color.setHex(0xff0000);
+            })
+        },
+        
+        function ( xhr ) {
+            console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+        },
+
+        // onError callback
+	    function ( err ) {
+		    console.log( 'An error happened' );
+	    }
+    );
 
     animate();
 }
