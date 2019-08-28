@@ -14,19 +14,19 @@ function init() {
     // Create the scene
     scene = new THREE.Scene();
 
-    //Create the main camera
+    // Create the main camera
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-    //Create the renderer
+    // Create the renderer
     renderer = new THREE.WebGLRenderer({alpha:true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    //Set up the main camera
+    // Set up the main camera
     camera.position.set(0, player.height, 5);
     camera.lookAt(new THREE.Vector3(0, player.height, 0));
 
-    //Create and add a source of light
+    // Create and add a source of light
     var dirLight = new THREE.DirectionalLight();
     dirLight.position.set(0, 0, 5);
     scene.add(dirLight);
@@ -45,15 +45,15 @@ function init() {
     floor.rotation.x -= Math.PI / 2;
     scene.add(floor);
     
-    //Create a raycaster instances useful to object picking and other things
+    // Create a raycaster instances useful to object picking and other things
     mouse = { x : 0, y : 0 };
     raycaster = new THREE.Raycaster();
     renderer.domElement.addEventListener('click', raycast, false);
 
     initAudioPlayer();
-
+    initSettings();
     
-    //Used to add events listenders
+    // Used to add events listenders
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement);
 
     var loader = new THREE.FontLoader();
@@ -83,13 +83,13 @@ function init() {
             })
         },
         
-        function ( xhr ) {
-            console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+        function (xhr) {
+            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
         },
 
         // onError callback
-	    function ( err ) {
-		    console.log( 'An error happened' );
+	    function (err) {
+		    console.log('An error happened');
 	    }
     );
 
@@ -133,16 +133,16 @@ function animate() {
 
 function raycast(event) {
 
-    //Sets the mouse position with a coordinate system where the center of the screen is the origin
+    // Sets the mouse position with a coordinate system where the center of the screen is the origin
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-    //Set the picking ray from the camera position and mouse coordinates
+    // Set the picking ray from the camera position and mouse coordinates
     raycaster.setFromCamera(mouse, camera);    
 
-    //Compute intersections
+    // Compute intersections
     var intersects = raycaster.intersectObjects(scene.children);
-     /*
+    /*
         An intersection has the following properties :
             - object : intersected object (THREE.Mesh)
             - distance : distance from camera to intersection (number)
@@ -155,7 +155,6 @@ function raycast(event) {
     for (var i = 0; i < intersects.length; i++) {
         console.log(intersects[i]); 
         intersects[i].object.material.color.setHex(0xffffff);
-       
     }
 }
 
@@ -201,8 +200,10 @@ function initAudioPlayer() {
     volumeSlider.oninput = function() {
         audio.volume = volumeSlider.value/100;
     };
+}
 
-    console.log(volumeSlider.value)
+function initSettings() {
+    // ToDO
 }
 
 function keyDown(event) {
@@ -215,18 +216,19 @@ function keyUp(event) {
     keyboard[event.keyCode] = false;
 }
 
+// Arrows listeners
 window.addEventListener('keyup', keyUp);
 window.addEventListener('keydown', keyDown);
 
-window.addEventListener( 'resize', onWindowResize, false );
+// Resize listeners
+window.addEventListener('resize', onWindowResize, false);
 
-function onWindowResize(){
+function onWindowResize() {
 
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
-    renderer.setSize( window.innerWidth, window.innerHeight );
-
+    renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 // This way the audio will be loaded after the page is fully loaded
