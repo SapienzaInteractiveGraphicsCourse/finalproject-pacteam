@@ -2,7 +2,7 @@ var scene, camera, renderer;
 var mouse, raycaster;
 
 // audio variables
-var audio;
+var audio, playPauseBtn, muteBtn, volumeSlider;
 
 var cube;
 var floor;
