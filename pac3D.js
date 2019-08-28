@@ -95,44 +95,6 @@ function init() {
 	    }
     );
 
-    loader.load("fonts/Plastic_Fantastic_Regular.json", 
-    
-        function (font) {
-            var text = new THREE.TextGeometry('Settings', 
-            {
-                font: font,
-                size: 7,
-                height: 3,
-                curveSegments: 0,
-            });
-
-            var textMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
-            var mesh = new THREE.Mesh(text, textMaterial);
-            mesh.position.set(30, 15, -50);
-            mesh.rotation.z = -0.3;
-            mesh.rotation.y = -0.5;
-
-            scene.add(mesh);
-
-            domEvents.addEventListener(mesh, "mouseover", event => {
-                mesh.material.color.setHex(0xffffff);
-            })
-
-            domEvents.addEventListener(mesh, "mouseout", event => {
-                mesh.material.color.setHex(0xff0000);
-            })
-        },
-        
-        function ( xhr ) {
-            console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-        },
-
-        // onError callback
-	    function ( err ) {
-		    console.log( 'An error happened' );
-	    }
-    );
-
     animate();
 }
 
