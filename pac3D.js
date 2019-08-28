@@ -4,6 +4,9 @@ var mouse, raycaster;
 // audio variables
 var audio, playPauseBtn, muteBtn, volumeSlider;
 
+// settings button
+var settingBtn;
+
 var cube;
 var floor;
 
@@ -51,6 +54,7 @@ function init() {
     renderer.domElement.addEventListener('click', raycast, false);
 
     initAudioPlayer();
+    initSettings();
 
     //Used to add events listenders
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement);
@@ -76,6 +80,14 @@ function init() {
             domEvents.addEventListener(mesh, "mouseover", event => {
                 mesh.material.color.setHex(0xffffff);
                 $('html,body').css('cursor', 'pointer');
+            })
+
+            domEvents.addEventListener(mesh, "click", event => {
+                // Hides the buttons
+                volumeSlider.style.display = "none";
+                playPauseBtn.style.display = "none";
+                muteBtn.style.display = "none";
+                settingsBtn.style.display = "none";
             })
 
             domEvents.addEventListener(mesh, "mouseout", event => {
@@ -204,6 +216,8 @@ function initAudioPlayer() {
 }
 
 function initSettings() {
+
+    settingsBtn = document.getElementById("settings");
     // ToDO
 }
 
