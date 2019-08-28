@@ -22,26 +22,33 @@ input {
     outline: none; 
 }
 
+button#settings {
+    background: url("images/settings.png") no-repeat;
+    height: 96px;
+    width: 96px;
+    position: absolute;
+    left: 10px;
+}
+
 button#playpausebtn {
     background: url("images/play.png") no-repeat;
-    height: 48px;
-    width: 48px;
+    height: 96px;
+    width: 96px;
     position: absolute;
-    right: 130px;
-    
+    right: 220px;
 }
 
 button#mutebtn {
     background: url("images/volume-high.png") no-repeat;
-    height: 48px;
-    width: 48px;
+    height: 96px;
+    width: 96px;
     position: absolute;
     right: 10px;
 }
 
 input#volumeslider {
-    width: 70px;
+    width: 100px;
     position: absolute;
-    right: 60px;
-    top: 13px;
+    right: 110px;
+    top: 37px;
 }
