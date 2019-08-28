@@ -160,6 +160,9 @@ function initAudioPlayer() {
     playPauseBtn = document.getElementById("playpausebtn");
     muteBtn = document.getElementById("mutebtn");
     volumeSlider = document.getElementById("volumeslider");
+
+    // Setting up the correct volume
+    audio.volume = volumeSlider.value/100;
     
     // Event handling
     playPauseBtn.onclick = function() {
