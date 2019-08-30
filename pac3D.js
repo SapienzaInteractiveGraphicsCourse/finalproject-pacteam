@@ -9,6 +9,7 @@ var settingBtn;
 
 var cube;
 var floor;
+var maze = [];
 
 var keyboard = {};
 var player = {height: 1.8, speed: 0.2, turnSpeed: Math.PI*0.02};
@@ -26,8 +27,8 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     // Set up the main camera
-    camera.position.set(0, player.height, 5);
-    camera.lookAt(new THREE.Vector3(0, player.height, 0));
+    camera.position.set(0, 200, -120);
+    camera.lookAt(new THREE.Vector3(0, 0, -120));
 
     // Create and add a source of light
     var dirLight = new THREE.DirectionalLight();
@@ -37,13 +38,12 @@ function init() {
     cube = new THREE.Mesh(
         new THREE.BoxGeometry(1, 1, 1),
         new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe:false}),
-    );
-    cube.position.y += 0.5;
+    )
     scene.add(cube);
     
     floor = new THREE.Mesh(
-        new THREE.PlaneGeometry(10, 10, 10, 10),
-        new THREE.MeshBasicMaterial({color:0xffffff, wireframe:false})
+        new THREE.PlaneGeometry(1000, 1000),
+        new THREE.MeshBasicMaterial({color:0x808080, wireframe:false})
     );
     floor.rotation.x -= Math.PI / 2;
     scene.add(floor);
@@ -75,7 +75,7 @@ function init() {
             var mesh = new THREE.Mesh(text, textMaterial);
             mesh.position.set(-11, 10, -50);
 
-            scene.add(mesh);
+            //scene.add(mesh);
 
             domEvents.addEventListener(mesh, "mouseover", event => {
                 mesh.material.color.setHex(0xffffff);
@@ -106,6 +106,11 @@ function init() {
 		    console.log( 'An error happened' );
 	    }
     );
+
+    createMaze();
+    for(i=0; i < maze.length; i++) {
+        scene.add(maze[i]);
+    }
 
     animate();
 }
@@ -163,6 +168,263 @@ function raycast(event) {
     for (var i = 0; i < intersects.length; i++) {
         console.log(intersects[i]); 
         intersects[i].object.material.color.setHex(0xffffff);
+    }
+}
+
+function createMaze() {
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(200, 10, 5),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = 0;
+        cube.position.z = -i*200;
+        maze.push(cube);
+    }
+    
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(5, 10, 85),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = i*200 -100;
+        cube.position.z = -40;
+        maze.push(cube);
+    }
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(5, 10, 65),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = i*200 -100;
+        cube.position.z = -170;
+        maze.push(cube);
+    }
+
+    for (i=0; i<4; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(45, 10, 5),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = -80;
+        cube.position.z = -80 - i*20;
+        maze.push(cube);
+    }
+
+    for (i=0; i<4; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(45, 10, 5),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = 80;
+        cube.position.z = -80 - i*20;
+        maze.push(cube);
+    }
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(5, 10, 20),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = -60;
+        cube.position.z = -92.5 - i*40;
+        maze.push(cube);
+    }
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(5, 10, 20),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = 60;
+        cube.position.z = -92.5 - i*40;
+        maze.push(cube);
+    }
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(20, 10, 5),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = -90 + i*180;
+        cube.position.z = -40;
+        maze.push(cube);
+    }
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(60, 10, 5),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = -50 + i*100;
+        cube.position.z = -20;
+        maze.push(cube);
+    }
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(5, 10, 20),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = -40 + i*80;
+        cube.position.z = -30;
+        maze.push(cube);
+    }
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(5, 10, 25),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = -60 + i*120;
+        cube.position.z = -50;
+        maze.push(cube);
+    }
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(20, 10, 5),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = -72.5 + i*145;
+        cube.position.z = -60;
+        maze.push(cube);
+    }
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(25, 10, 5),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = -30 + i*60;
+        cube.position.z = -60;
+        maze.push(cube);
+    }
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(40, 10, 5),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = 0;
+        cube.position.z = -40 - 40*i;
+        maze.push(cube);
+    }
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(5, 10, 25),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = 0;
+        cube.position.z = -30 - 40*i;
+        maze.push(cube);
+    }
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(5, 10, 25),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = -40 + i*80;
+        cube.position.z = -90;
+        maze.push(cube);
+    }
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(5, 10, 45),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = -40 + i*80;
+        cube.position.z = -140;
+        maze.push(cube);
+    }
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(20, 10, 5),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = -30 + i*60;
+        cube.position.z = -140;
+        maze.push(cube);
+    }
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(25, 10, 5),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = -70 + i*140;
+        cube.position.z = -160;
+        maze.push(cube);
+    }
+
+    cube = new THREE.Mesh(
+        new THREE.BoxGeometry(45, 10, 5),
+        new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+    );
+    cube.position.x = 0;
+    cube.position.z = -160;
+    maze.push(cube);
+
+    cube = new THREE.Mesh(
+        new THREE.BoxGeometry(5, 10, 25),
+        new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+    );
+    cube.position.x = 0;
+    cube.position.z = -150;
+    maze.push(cube);
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(25, 10, 10),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = -70 + i*140;
+        cube.position.z = -180;
+        maze.push(cube);
+    }
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(30, 10, 10),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = -30 + i*60;
+        cube.position.z = -180;
+        maze.push(cube);
+    }
+
+    cube = new THREE.Mesh(
+        new THREE.BoxGeometry(5, 10, 25),
+        new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+    );
+    cube.position.x = 0;
+    cube.position.z = -187.5;
+    maze.push(cube);
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(5, 10, 25),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = -20 + 40*i;
+        cube.position.z = -110;
+        maze.push(cube);
+    }
+
+    for (i=0; i<2; i++) {
+        cube = new THREE.Mesh(
+            new THREE.BoxGeometry(40, 10, 5),
+            new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
+        );
+        cube.position.x = 0;
+        cube.position.z = -120 + 20*i;
+        maze.push(cube);
     }
 }
 
