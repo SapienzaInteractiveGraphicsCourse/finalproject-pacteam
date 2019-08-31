@@ -9,7 +9,7 @@ var settingBtn;
 
 var cube;
 var floor;
-var maze = [];
+var maze1 = [];
 
 var keyboard = {};
 var player = {height: 1.8, speed: 0.2, turnSpeed: Math.PI*0.02};
@@ -27,7 +27,8 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     // Set up the main camera
-    camera.position.set(0, player.height, -120);
+    camera.position.set(0, 400, -120);
+    camera.lookAt(0, 0, -120);
 
     // Create and add a source of light
     var dirLight = new THREE.DirectionalLight();
@@ -106,10 +107,11 @@ function init() {
 	    }
     );
 
-    createMaze();
-    for(i=0; i < maze.length; i++) {
-        maze[i].position.y += player.height;
-        scene.add(maze[i]);
+    createMaze1();
+    for(i=0; i < maze1.length; i++) {
+        maze1[i].position.y += player.height;
+        maze1[i].position.x -= 200;
+        scene.add(maze1[i]);
     }
 
     animate();
@@ -183,7 +185,7 @@ function raycast(event) {
     }
 }
 
-function createMaze() {
+function createMaze1() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
@@ -192,7 +194,7 @@ function createMaze() {
         );
         cube.position.x = 0;
         cube.position.z = -i*200;
-        maze.push(cube);
+        maze1.push(cube);
     }
     
     for (i=0; i<2; i++) {
@@ -202,7 +204,7 @@ function createMaze() {
         );
         cube.position.x = i*200 -100;
         cube.position.z = -40;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<2; i++) {
@@ -212,7 +214,7 @@ function createMaze() {
         );
         cube.position.x = i*200 -100;
         cube.position.z = -170;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<4; i++) {
@@ -222,7 +224,7 @@ function createMaze() {
         );
         cube.position.x = -80;
         cube.position.z = -80 - i*20;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<4; i++) {
@@ -232,7 +234,7 @@ function createMaze() {
         );
         cube.position.x = 80;
         cube.position.z = -80 - i*20;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<2; i++) {
@@ -242,7 +244,7 @@ function createMaze() {
         );
         cube.position.x = -60;
         cube.position.z = -92.5 - i*40;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<2; i++) {
@@ -252,7 +254,7 @@ function createMaze() {
         );
         cube.position.x = 60;
         cube.position.z = -92.5 - i*40;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<2; i++) {
@@ -262,7 +264,7 @@ function createMaze() {
         );
         cube.position.x = -90 + i*180;
         cube.position.z = -40;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<2; i++) {
@@ -272,7 +274,7 @@ function createMaze() {
         );
         cube.position.x = -50 + i*100;
         cube.position.z = -20;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<2; i++) {
@@ -282,7 +284,7 @@ function createMaze() {
         );
         cube.position.x = -40 + i*80;
         cube.position.z = -30;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<2; i++) {
@@ -292,7 +294,7 @@ function createMaze() {
         );
         cube.position.x = -60 + i*120;
         cube.position.z = -50;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<2; i++) {
@@ -302,7 +304,7 @@ function createMaze() {
         );
         cube.position.x = -72.5 + i*145;
         cube.position.z = -60;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<2; i++) {
@@ -312,7 +314,7 @@ function createMaze() {
         );
         cube.position.x = -30 + i*60;
         cube.position.z = -60;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<2; i++) {
@@ -322,7 +324,7 @@ function createMaze() {
         );
         cube.position.x = 0;
         cube.position.z = -40 - 40*i;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<2; i++) {
@@ -332,7 +334,7 @@ function createMaze() {
         );
         cube.position.x = 0;
         cube.position.z = -30 - 40*i;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<2; i++) {
@@ -342,7 +344,7 @@ function createMaze() {
         );
         cube.position.x = -40 + i*80;
         cube.position.z = -90;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<2; i++) {
@@ -352,7 +354,7 @@ function createMaze() {
         );
         cube.position.x = -40 + i*80;
         cube.position.z = -140;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<2; i++) {
@@ -362,7 +364,7 @@ function createMaze() {
         );
         cube.position.x = -30 + i*60;
         cube.position.z = -140;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<2; i++) {
@@ -372,7 +374,7 @@ function createMaze() {
         );
         cube.position.x = -70 + i*140;
         cube.position.z = -160;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     cube = new THREE.Mesh(
@@ -381,7 +383,7 @@ function createMaze() {
     );
     cube.position.x = 0;
     cube.position.z = -160;
-    maze.push(cube);
+    maze1.push(cube);
 
     cube = new THREE.Mesh(
         new THREE.BoxGeometry(5, 50, 25),
@@ -389,7 +391,7 @@ function createMaze() {
     );
     cube.position.x = 0;
     cube.position.z = -150;
-    maze.push(cube);
+    maze1.push(cube);
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
@@ -398,7 +400,7 @@ function createMaze() {
         );
         cube.position.x = -70 + i*140;
         cube.position.z = -180;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<2; i++) {
@@ -408,7 +410,7 @@ function createMaze() {
         );
         cube.position.x = -30 + i*60;
         cube.position.z = -180;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     cube = new THREE.Mesh(
@@ -417,7 +419,7 @@ function createMaze() {
     );
     cube.position.x = 0;
     cube.position.z = -187.5;
-    maze.push(cube);
+    maze1.push(cube);
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
@@ -426,7 +428,7 @@ function createMaze() {
         );
         cube.position.x = -20 + 40*i;
         cube.position.z = -110;
-        maze.push(cube);
+        maze1.push(cube);
     }
 
     for (i=0; i<2; i++) {
@@ -436,7 +438,7 @@ function createMaze() {
         );
         cube.position.x = 0;
         cube.position.z = -120 + 20*i;
-        maze.push(cube);
+        maze1.push(cube);
     }
 }
 
