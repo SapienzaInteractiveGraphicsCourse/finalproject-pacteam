@@ -179,7 +179,7 @@ function raycast(event) {
 
     for (var i = 0; i < intersects.length; i++) {
         console.log(intersects[i]); 
-        intersects[i].object.material.color.setHex(0xffffff);
+        //intersects[i].object.material.color.setHex(0xffffff);
     }
 }
 
