@@ -11,8 +11,6 @@ var cube;
 var unique_cube = new THREE.BoxGeometry(5, 50, 5);
 var cube_material = new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false});
 
-
-
 var floor;
 var maze = new Array(42);
 
@@ -36,8 +34,8 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     // Set up the main camera
-    camera.position.set(200, 400, -120);
-    camera.lookAt(200, 0, -120);
+    camera.position.set(0, player.height, -120);
+    //camera.lookAt(200, 0, -120);
 
     // Create and add a source of light
     var dirLight = new THREE.DirectionalLight();
