@@ -27,8 +27,7 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     // Set up the main camera
-    camera.position.set(0, 200, -120);
-    camera.lookAt(new THREE.Vector3(0, 0, -120));
+    camera.position.set(0, player.height, -120);
 
     // Create and add a source of light
     var dirLight = new THREE.DirectionalLight();
@@ -42,7 +41,7 @@ function init() {
     scene.add(cube);
     
     floor = new THREE.Mesh(
-        new THREE.PlaneGeometry(1000, 1000),
+        new THREE.PlaneGeometry(1000, 1000, 10, 10),
         new THREE.MeshBasicMaterial({color:0x808080, wireframe:false})
     );
     floor.rotation.x -= Math.PI / 2;
@@ -98,17 +97,18 @@ function init() {
         },
         
         function(xhr) {
-            console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
         },
 
         // onError callback
 	    function(err) {
-		    console.log( 'An error happened' );
+		    console.log('An error happened');
 	    }
     );
 
     createMaze();
     for(i=0; i < maze.length; i++) {
+        maze[i].position.y += player.height;
         scene.add(maze[i]);
     }
 
@@ -131,13 +131,25 @@ function animate() {
     if (keyboard[65]) { // A key
         camera.position.x += Math.sin(camera.rotation.y - Math.PI/2) * player.speed;
         camera.position.z += Math.cos(camera.rotation.y - Math.PI/2) * player.speed;
-        camera.rotation.y += player.turnSpeed;
     }
 
     if (keyboard[68]) { // D key
         camera.position.x += Math.sin(camera.rotation.y + Math.PI/2) * player.speed;
         camera.position.z += Math.cos(camera.rotation.y + Math.PI/2) * player.speed;
+    }
+
+    if (keyboard[37]) {
+        camera.rotation.y += player.turnSpeed;
+    }
+
+    if (keyboard[39]) {
         camera.rotation.y -= player.turnSpeed;
+    }
+
+    if (keyboard[16]) {
+        player.speed = 0.4;
+    } else {
+        player.speed = 0.2;
     }
 
     //controls.update();
@@ -175,7 +187,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(200, 10, 5),
+            new THREE.BoxGeometry(200, 50, 5),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = 0;
@@ -185,7 +197,7 @@ function createMaze() {
     
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(5, 10, 85),
+            new THREE.BoxGeometry(5, 50, 85),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = i*200 -100;
@@ -195,7 +207,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(5, 10, 65),
+            new THREE.BoxGeometry(5, 50, 65),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = i*200 -100;
@@ -205,7 +217,7 @@ function createMaze() {
 
     for (i=0; i<4; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(45, 10, 5),
+            new THREE.BoxGeometry(45, 50, 5),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = -80;
@@ -215,7 +227,7 @@ function createMaze() {
 
     for (i=0; i<4; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(45, 10, 5),
+            new THREE.BoxGeometry(45, 50, 5),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = 80;
@@ -225,7 +237,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(5, 10, 20),
+            new THREE.BoxGeometry(5, 50, 20),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = -60;
@@ -235,7 +247,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(5, 10, 20),
+            new THREE.BoxGeometry(5, 50, 20),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = 60;
@@ -245,7 +257,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(20, 10, 5),
+            new THREE.BoxGeometry(20, 50, 5),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = -90 + i*180;
@@ -255,7 +267,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(60, 10, 5),
+            new THREE.BoxGeometry(60, 50, 5),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = -50 + i*100;
@@ -265,7 +277,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(5, 10, 20),
+            new THREE.BoxGeometry(5, 50, 20),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = -40 + i*80;
@@ -275,7 +287,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(5, 10, 25),
+            new THREE.BoxGeometry(5, 50, 25),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = -60 + i*120;
@@ -285,7 +297,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(20, 10, 5),
+            new THREE.BoxGeometry(20, 50, 5),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = -72.5 + i*145;
@@ -295,7 +307,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(25, 10, 5),
+            new THREE.BoxGeometry(25, 50, 5),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = -30 + i*60;
@@ -305,7 +317,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(40, 10, 5),
+            new THREE.BoxGeometry(40, 50, 5),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = 0;
@@ -315,7 +327,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(5, 10, 25),
+            new THREE.BoxGeometry(5, 50, 25),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = 0;
@@ -325,7 +337,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(5, 10, 25),
+            new THREE.BoxGeometry(5, 50, 25),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = -40 + i*80;
@@ -335,7 +347,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(5, 10, 45),
+            new THREE.BoxGeometry(5, 50, 45),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = -40 + i*80;
@@ -345,7 +357,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(20, 10, 5),
+            new THREE.BoxGeometry(20, 50, 5),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = -30 + i*60;
@@ -355,7 +367,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(25, 10, 5),
+            new THREE.BoxGeometry(25, 50, 5),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = -70 + i*140;
@@ -364,7 +376,7 @@ function createMaze() {
     }
 
     cube = new THREE.Mesh(
-        new THREE.BoxGeometry(45, 10, 5),
+        new THREE.BoxGeometry(45, 50, 5),
         new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
     );
     cube.position.x = 0;
@@ -372,7 +384,7 @@ function createMaze() {
     maze.push(cube);
 
     cube = new THREE.Mesh(
-        new THREE.BoxGeometry(5, 10, 25),
+        new THREE.BoxGeometry(5, 50, 25),
         new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
     );
     cube.position.x = 0;
@@ -381,7 +393,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(25, 10, 10),
+            new THREE.BoxGeometry(25, 50, 10),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = -70 + i*140;
@@ -391,7 +403,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(30, 10, 10),
+            new THREE.BoxGeometry(30, 50, 10),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = -30 + i*60;
@@ -400,7 +412,7 @@ function createMaze() {
     }
 
     cube = new THREE.Mesh(
-        new THREE.BoxGeometry(5, 10, 25),
+        new THREE.BoxGeometry(5, 50, 25),
         new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
     );
     cube.position.x = 0;
@@ -409,7 +421,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(5, 10, 25),
+            new THREE.BoxGeometry(5, 50, 25),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = -20 + 40*i;
@@ -419,7 +431,7 @@ function createMaze() {
 
     for (i=0; i<2; i++) {
         cube = new THREE.Mesh(
-            new THREE.BoxGeometry(40, 10, 5),
+            new THREE.BoxGeometry(40, 50, 5),
             new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false}),
         );
         cube.position.x = 0;
