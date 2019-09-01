@@ -34,8 +34,8 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     // Set up the main camera
-    camera.position.set(0, player.height, -120);
-    //camera.lookAt(200, 0, -120);
+    camera.position.set(0, 400, -120);
+    camera.lookAt(200, 0, -120);
 
     // Create and add a source of light
     var dirLight = new THREE.DirectionalLight();
@@ -49,10 +49,12 @@ function init() {
     scene.add(cube);
     
     floor = new THREE.Mesh(
-        new THREE.PlaneGeometry(1000, 1000, 10, 10),
+        new THREE.PlaneGeometry(215, 205, 10, 10),
         new THREE.MeshBasicMaterial({color:0x808080, wireframe:false})
     );
     floor.rotation.x -= Math.PI / 2;
+    floor.position.x = 105;
+    floor.position.z = -105;
     scene.add(floor);
     
     //Create a raycaster instances useful to object picking and other things
