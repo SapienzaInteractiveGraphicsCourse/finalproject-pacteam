@@ -7,11 +7,18 @@ var audio, playPauseBtn, muteBtn, volumeSlider;
 // settings button
 var settingBtn;
 
-var texture = new THREE.TextureLoader().load("textures/Grass/grass_01.png");
-var normalMap = new THREE.TextureLoader().load("textures/Grass/grass_01_Nrm.png")
+var textureWall = new THREE.TextureLoader().load("textures/Grass/grass_01.png");
+textureWall.wrapS = THREE.RepeatWrapping;
+textureWall.wrapT = THREE.RepeatWrapping;
+textureWall.generateMipmaps = true;
+textureWall.repeat.set(1, 10);
+var textureFloor = new THREE.TextureLoader().load("textures/floor.png");
+textureFloor.wrapS = THREE.RepeatWrapping;
+textureFloor.wrapT = THREE.RepeatWrapping;
+textureFloor.repeat.set(50, 50);
 var cube;
 var unique_cube = new THREE.BoxGeometry(5, 50, 5);
-var cube_material = new THREE.MeshPhongMaterial({color: 0x808000, wireframe:false, map:texture});
+var cube_material = new THREE.MeshPhongMaterial({color: 0x228B22, wireframe:false, map:textureWall});
 
 var floor;
 var maze = new Array(42);
@@ -21,7 +28,7 @@ for (i = 0; i < maze.length; i++) {
 }
 
 var keyboard = {};
-var player = {height: 1.8, speed: 0.2, turnSpeed: Math.PI*0.02};
+var player = {height: 5, speed: 0.2, turnSpeed: Math.PI*0.02};
 
 function init() {
     // Create the scene
@@ -36,8 +43,8 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     // Set up the main camera
-    camera.position.set(10, player.height, -5);
-    //camera.lookAt(10, 0, -5);
+    camera.position.set(0, player.height, 0);
+    camera.lookAt(0, player.height, 0);
 
     // Create and add a source of light
     var dirLight = new THREE.DirectionalLight();
@@ -48,10 +55,10 @@ function init() {
     scene.add(ambientLight);
 
     var pointLight = new THREE.PointLight(0xffffff, 0.8, 18);
-    pointLight.position.set(15, 10, -10);
+    pointLight.position.set(15, 30, -10);
     pointLight.castShadow = true;
     pointLight.shadow.camera.near = 0.1;
-    pointLight.shadow.camera.far = 30;
+    pointLight.shadow.camera.far = 500;
     scene.add(pointLight);
 
     cube = new THREE.Mesh(
@@ -61,12 +68,14 @@ function init() {
     scene.add(cube);
     
     floor = new THREE.Mesh(
-        new THREE.PlaneGeometry(215, 205, 10, 10),
-        new THREE.MeshBasicMaterial({color:0x808080, wireframe:false})
+        new THREE.PlaneGeometry(205, 211, 10, 10),
+        new THREE.MeshPhongMaterial({color:0x808080, wireframe:false, map:textureFloor})
     );
+    floor.castShadow = true;
+    floor.receiveShadow = true;
     floor.rotation.x -= Math.PI / 2;
-    floor.position.x = 105;
-    floor.position.z = -105;
+    floor.position.x = 100;
+    floor.position.z = -103;
     scene.add(floor);
     
     //Create a raycaster instances useful to object picking and other things
@@ -137,13 +146,12 @@ function init() {
                     cube.castShadow = true;
                     cube.receiveShadow = true;
                     cube.position.set(5*j, 25, -5*i);
-                    
                     scene.add(cube);
             }
         }
     }
 
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    //controls = new THREE.OrbitControls(camera, renderer.domElement);
 
     animate();
 }
