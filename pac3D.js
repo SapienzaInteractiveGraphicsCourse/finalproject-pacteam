@@ -7,9 +7,11 @@ var audio, playPauseBtn, muteBtn, volumeSlider;
 // settings button
 var settingBtn;
 
+var texture = new THREE.TextureLoader().load("textures/Grass/grass_01.png");
+var normalMap = new THREE.TextureLoader().load("textures/Grass/grass_01_Nrm.png")
 var cube;
 var unique_cube = new THREE.BoxGeometry(5, 50, 5);
-var cube_material = new THREE.MeshBasicMaterial({color: 0x4f4f4f, wireframe:false});
+var cube_material = new THREE.MeshPhongMaterial({color: 0x808000, wireframe:false, map:texture});
 
 var floor;
 var maze = new Array(42);
@@ -34,13 +36,23 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     // Set up the main camera
-    camera.position.set(0, 400, -120);
-    camera.lookAt(200, 0, -120);
+    camera.position.set(10, player.height, -5);
+    //camera.lookAt(10, 0, -5);
 
     // Create and add a source of light
     var dirLight = new THREE.DirectionalLight();
-    dirLight.position.set(0, 0, 5);
+    dirLight.position.set(0, 10, 0);
     scene.add(dirLight);
+
+    var ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    scene.add(ambientLight);
+
+    var pointLight = new THREE.PointLight(0xffffff, 0.8, 18);
+    pointLight.position.set(15, 10, -10);
+    pointLight.castShadow = true;
+    pointLight.shadow.camera.near = 0.1;
+    pointLight.shadow.camera.far = 30;
+    scene.add(pointLight);
 
     cube = new THREE.Mesh(
         new THREE.BoxGeometry(1, 1, 1),
@@ -122,13 +134,16 @@ function init() {
             switch (maze[i][j]) {
                 case 1:
                     cube = new THREE.Mesh(unique_cube, cube_material);
-                    cube.position.z = -5*i;
-                    cube.position.x = 5*j;
+                    cube.castShadow = true;
+                    cube.receiveShadow = true;
+                    cube.position.set(5*j, 25, -5*i);
                     
                     scene.add(cube);
             }
         }
     }
+
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
 
     animate();
 }
