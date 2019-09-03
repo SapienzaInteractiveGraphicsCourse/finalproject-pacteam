@@ -30,6 +30,8 @@ var keyboard = {};
 var player = {height: 5, speed: 0.2, turnSpeed: Math.PI*0.02};
 var pacman;
 
+var collidable_objects = [];
+
 function init() {
     // Create the scene
     scene = new THREE.Scene();
@@ -148,6 +150,7 @@ function init() {
                     cube.receiveShadow = true;
                     cube.position.set(5*j, 25, -5*i);
                     scene.add(cube);
+                    collidable_objects.push(cube);
             }
         }
     }
@@ -157,21 +160,30 @@ function init() {
     animate();
 }
 
+/* var left_top_vertex = new THREE.Vector3(pacman.position.x - 0.5 * Math.cos(actual_orientation) + 0.5 * Math.sin(actual_orientation),
+                                                 pacman.position.y + 0.5,
+                                                 pacman.position.z - 0.5 * Math.cos(actual_orientation) - 0.5 * Math.sin(actual_orientation)
+                                            ); */
+
 function animate() {
 
     if (keyboard[87]) { // W key
-        raycaster.set(pacman.position, new THREE.Vector3(-Math.sin(0.5 + camera.rotation.y), 0, -Math.cos(0.5 + camera.rotation.y)));
-        scene.add(new THREE.ArrowHelper( raycaster.ray.direction, raycaster.ray.origin, 100, Math.random() * 0xffffff ));
-        var intersects = raycaster.intersectObjects(scene.children);
-        if (intersects.length > 0 && intersects[0].distance > 1.0) {
-            raycaster.set(pacman.position, new THREE.Vector3(-Math.sin(0.5 + camera.rotation.y), 0, -Math.cos(0.5 + camera.rotation.y)));
-            scene.add(new THREE.ArrowHelper( raycaster.ray.direction, raycaster.ray.origin, 100, Math.random() * 0xffffff ));
+        actual_orientation = -camera.rotation.y;
+        var right_vertex = new THREE.Vector3(
+            pacman.position.x + 0.5 * Math.cos(actual_orientation) + 0.5 * Math.sin(actual_orientation),
+            pacman.position.y + 0.5,
+            pacman.position.z - 0.5 * Math.cos(actual_orientation) + 0.5 * Math.sin(actual_orientation)
+        );
+        //var destination = new THREE.Vector3(right_vertex.x, right_vertex.y, right_vertex.z-1);
+        var destination = new THREE.Vector3(right_vertex.x + Math.sin(actual_orientation), right_vertex.y, right_vertex.z - Math.cos(actual_orientation));
+        console.log(destination);
+        raycaster.set(right_vertex, new THREE.Vector3(destination.x - right_vertex.x, destination.y - right_vertex.y, destination.z - right_vertex.z).normalize());
+        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 100, Math.random() * 0xffffff));
+        var intersects = raycaster.intersectObjects(collidable_objects);
+        if (intersects.length > 0 && intersects[0].distance > 0.2) {
             console.log(intersects[0].distance);
-            if (intersects.length > 0 && intersects[0].distance > 1.0) {
-                camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
-                camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
-            }
-            //intersects[i].object.material.color.setHex(0xffffff);
+            camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
+            camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
         }
     }
 
