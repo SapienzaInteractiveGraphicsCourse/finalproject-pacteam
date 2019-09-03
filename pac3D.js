@@ -197,7 +197,7 @@ function animate() {
         ));
         var intersects_left = raycaster.intersectObjects(collidable_objects);
 
-        if (intersects_right.length > 0 && intersects_right[0].distance > 0.11 || intersects_left.length > 0 && intersects_left[0].distance > 0.11) {
+        if (intersects_right.length > 0 && intersects_right[0].distance > 0.3 && intersects_left.length > 0 && intersects_left[0].distance > 0.3) {
             camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
             camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
         }
