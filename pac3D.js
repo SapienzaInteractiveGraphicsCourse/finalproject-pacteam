@@ -29,6 +29,7 @@ for (i = 0; i < maze.length; i++) {
 var keyboard = {};
 var player = {height: 5, speed: 0.2, turnSpeed: Math.PI*0.02};
 var pacman;
+var pacman_x_dim = 0.5, pacman_y_dim = 0.5, pacman_z_dim = 0.5;
 
 var collidable_objects = [];
 
@@ -64,7 +65,7 @@ function init() {
     scene.add(pointLight);
  
     pacman = new THREE.Mesh(
-        new THREE.BoxGeometry(1, 1, 1),
+        new THREE.BoxGeometry(pacman_x_dim, pacman_y_dim, pacman_z_dim),
         new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe:false}),
     );
     pacman.position.set(10, player.height, -10);
@@ -166,34 +167,34 @@ function animate() {
 
         actual_orientation = -camera.rotation.y;
 
-        var right_vertex = new THREE.Vector3(
-            pacman.position.x + 0.5 * Math.cos(actual_orientation) + 0.5 * Math.sin(actual_orientation),
-            pacman.position.y + 0.5,
-            pacman.position.z + 0.5 * Math.sin(actual_orientation) - 0.5 * Math.cos(actual_orientation)
+        var pacman_top_front_right_vertex = new THREE.Vector3(
+            pacman.position.x + pacman_x_dim * Math.cos(actual_orientation) + pacman_z_dim * Math.sin(actual_orientation),
+            pacman.position.y + pacman_y_dim,
+            pacman.position.z + pacman_x_dim * Math.sin(actual_orientation) - pacman_z_dim * Math.cos(actual_orientation)
         );
 
-        var left_vertex = new THREE.Vector3(
-            pacman.position.x - 0.5 * Math.cos(actual_orientation) + 0.5 * Math.sin(actual_orientation),
-            pacman.position.y + 0.5,
-            pacman.position.z - 0.5 * Math.sin(actual_orientation) - 0.5 * Math.cos(actual_orientation)
+        var pacman_top_front_left_vertex = new THREE.Vector3(
+            pacman.position.x - pacman_x_dim * Math.cos(actual_orientation) + pacman_z_dim * Math.sin(actual_orientation),
+            pacman.position.y + pacman_y_dim,
+            pacman.position.z - pacman_x_dim * Math.sin(actual_orientation) - pacman_z_dim * Math.cos(actual_orientation)
         );
         
-        raycaster.set(right_vertex, new THREE.Vector3(
+        raycaster.set(pacman_top_front_right_vertex, new THREE.Vector3(
             Math.sin(actual_orientation), 
             0, 
             -Math.cos(actual_orientation)
         ));
-        var intersects_right = raycaster.intersectObjects(collidable_objects);
+        var intersects_top_front_right = raycaster.intersectObjects(collidable_objects);
 
-        raycaster.set(left_vertex, new THREE.Vector3(
+        raycaster.set(pacman_top_front_left_vertex, new THREE.Vector3(
             Math.sin(actual_orientation), 
             0, 
             -Math.cos(actual_orientation)
         ));
-        var intersects_left = raycaster.intersectObjects(collidable_objects);
+        var intersects_top_front_left = raycaster.intersectObjects(collidable_objects);
 
-        if (((intersects_right.length > 0 && intersects_right[0].distance > 0.3) || intersects_right.length == 0) && 
-            ((intersects_left.length > 0 && intersects_left[0].distance > 0.3) || intersects_left.length == 0)) {
+        if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > 0.3) || intersects_top_front_right.length == 0) && 
+            ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > 0.3) || intersects_top_front_left.length == 0)) {
             camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
             camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
         }
@@ -203,48 +204,116 @@ function animate() {
 
         actual_orientation = -camera.rotation.y;
 
-        var right_vertex = new THREE.Vector3(
-            pacman.position.x + 0.5 * Math.cos(actual_orientation) - 0.5 * Math.sin(actual_orientation),
-            pacman.position.y + 0.5,
-            pacman.position.z + 0.5 * Math.sin(actual_orientation) + 0.5 * Math.cos(actual_orientation)
+        var top_back_right_vertex = new THREE.Vector3(
+            pacman.position.x + pacman_x_dim * Math.cos(actual_orientation) - pacman_z_dim * Math.sin(actual_orientation),
+            pacman.position.y + pacman_y_dim,
+            pacman.position.z + pacman_x_dim * Math.sin(actual_orientation) + pacman_z_dim * Math.cos(actual_orientation)
         );
 
-        var left_vertex = new THREE.Vector3(
-            pacman.position.x - 0.5 * Math.cos(actual_orientation) - 0.5 * Math.sin(actual_orientation),
-            pacman.position.y + 0.5,
-            pacman.position.z - 0.5 * Math.sin(actual_orientation) + 0.5 * Math.cos(actual_orientation)
+        var top_back_left_vertex = new THREE.Vector3(
+            pacman.position.x - pacman_x_dim * Math.cos(actual_orientation) - pacman_z_dim * Math.sin(actual_orientation),
+            pacman.position.y + pacman_y_dim,
+            pacman.position.z - pacman_x_dim * Math.sin(actual_orientation) + pacman_z_dim * Math.cos(actual_orientation)
         );
 
-        raycaster.set(right_vertex, new THREE.Vector3(
+        raycaster.set(top_back_right_vertex, new THREE.Vector3(
             -Math.sin(actual_orientation), 
             0, 
             Math.cos(actual_orientation)
         ));
-        var intersects_right = raycaster.intersectObjects(collidable_objects);
+        var intersects_top_back_right = raycaster.intersectObjects(collidable_objects);
 
-        raycaster.set(left_vertex, new THREE.Vector3(
+        raycaster.set(top_back_left_vertex, new THREE.Vector3(
             -Math.sin(actual_orientation), 
             0, 
             Math.cos(actual_orientation)
         ));
-        var intersects_left = raycaster.intersectObjects(collidable_objects);
+        var intersects_top_back_left = raycaster.intersectObjects(collidable_objects);
 
-        if (((intersects_right.length > 0 && intersects_right[0].distance > 0.3) || intersects_right.length == 0) && 
-            ((intersects_left.length > 0 && intersects_left[0].distance > 0.3) || intersects_left.length == 0)) {
+        if (((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance > 0.3) || intersects_top_back_right.length == 0) && 
+            ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance > 0.3) || intersects_top_back_left.length == 0)) {
             camera.position.x += Math.sin(camera.rotation.y) * player.speed;
             camera.position.z += Math.cos(camera.rotation.y) * player.speed;
         }
     }
 
     if (keyboard[65]) { // A key
-        camera.position.x += Math.sin(camera.rotation.y - Math.PI/2) * player.speed;
-        camera.position.z += Math.cos(camera.rotation.y - Math.PI/2) * player.speed;
+
+        actual_orientation = -camera.rotation.y;
+
+        var pacman_top_front_left_vertex = new THREE.Vector3(
+            pacman.position.x - pacman_x_dim * Math.cos(actual_orientation) + pacman_z_dim * Math.sin(actual_orientation),
+            pacman.position.y + pacman_y_dim,
+            pacman.position.z - pacman_x_dim * Math.sin(actual_orientation) - pacman_z_dim * Math.cos(actual_orientation)
+        );
+
+        var top_back_left_vertex = new THREE.Vector3(
+            pacman.position.x - pacman_x_dim * Math.cos(actual_orientation) - pacman_z_dim * Math.sin(actual_orientation),
+            pacman.position.y + pacman_y_dim,
+            pacman.position.z - pacman_x_dim * Math.sin(actual_orientation) + pacman_z_dim * Math.cos(actual_orientation)
+        );
+
+        // ToDO Gotta find the direction for left
+
+        raycaster.set(pacman_top_front_left_vertex, new THREE.Vector3(
+            Math.sin(actual_orientation), 
+            0, 
+            -Math.cos(actual_orientation)
+        ));
+        var intersects_top_front_left = raycaster.intersectObjects(collidable_objects);
+
+        raycaster.set(top_back_left_vertex, new THREE.Vector3(
+            -Math.sin(actual_orientation), 
+            0, 
+            Math.cos(actual_orientation)
+        ));
+        var intersects_top_back_left = raycaster.intersectObjects(collidable_objects);
+
+        if (((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > 0.3) || intersects_top_front_left.length == 0) && 
+            ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance > 0.3) || intersects_top_back_left.length == 0)) {
+            camera.position.x += Math.sin(camera.rotation.y - Math.PI/2) * player.speed;
+            camera.position.z += Math.cos(camera.rotation.y - Math.PI/2) * player.speed;
+
+        }
     }
 
     if (keyboard[68]) { // D key
-        camera.position.x += Math.sin(camera.rotation.y + Math.PI/2) * player.speed;
-        camera.position.z += Math.cos(camera.rotation.y + Math.PI/2) * player.speed;
-        
+
+        actual_orientation = -camera.rotation.y;
+
+        var pacman_top_front_right_vertex = new THREE.Vector3(
+            pacman.position.x + pacman_x_dim * Math.cos(actual_orientation) + pacman_z_dim * Math.sin(actual_orientation),
+            pacman.position.y + pacman_y_dim,
+            pacman.position.z + pacman_x_dim * Math.sin(actual_orientation) - pacman_z_dim * Math.cos(actual_orientation)
+        );
+
+        var top_back_right_vertex = new THREE.Vector3(
+            pacman.position.x + pacman_x_dim * Math.cos(actual_orientation) - pacman_z_dim * Math.sin(actual_orientation),
+            pacman.position.y + pacman_y_dim,
+            pacman.position.z + pacman_x_dim * Math.sin(actual_orientation) + pacman_z_dim * Math.cos(actual_orientation)
+        );
+
+        // ToDO Gotta find the direction for right
+
+        raycaster.set(top_back_right_vertex, new THREE.Vector3(
+            -Math.sin(actual_orientation), 
+            0, 
+            Math.cos(actual_orientation)
+        ));
+        var intersects_top_back_right = raycaster.intersectObjects(collidable_objects);
+
+        raycaster.set(pacman_top_front_right_vertex, new THREE.Vector3(
+            Math.sin(actual_orientation), 
+            0, 
+            -Math.cos(actual_orientation)
+        ));
+        var intersects_top_front_right = raycaster.intersectObjects(collidable_objects);
+
+        if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > 0.3) || intersects_top_front_right.length == 0) && 
+            ((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance > 0.3) || intersects_top_back_right.length == 0)) {
+            camera.position.x += Math.sin(camera.rotation.y + Math.PI/2) * player.speed;
+            camera.position.z += Math.cos(camera.rotation.y + Math.PI/2) * player.speed;
+        }
     }
 
     if (keyboard[37]) {
