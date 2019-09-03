@@ -160,11 +160,6 @@ function init() {
     animate();
 }
 
-/* var left_top_vertex = new THREE.Vector3(pacman.position.x - 0.5 * Math.cos(actual_orientation) + 0.5 * Math.sin(actual_orientation),
-                                                 pacman.position.y + 0.5,
-                                                 pacman.position.z - 0.5 * Math.cos(actual_orientation) - 0.5 * Math.sin(actual_orientation)
-                                            ); */
-
 function animate() {
 
     if (keyboard[87]) { // W key
@@ -197,31 +192,42 @@ function animate() {
         ));
         var intersects_left = raycaster.intersectObjects(collidable_objects);
 
-        if (intersects_right.length > 0 && intersects_right[0].distance > 0.3 && intersects_left.length > 0 && intersects_left[0].distance > 0.3) {
+        if (((intersects_right.length > 0 && intersects_right[0].distance > 0.3) || intersects_right.length == 0) && 
+            ((intersects_left.length > 0 && intersects_left[0].distance > 0.3) || intersects_left.length == 0)) {
             camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
             camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
         }
     }
 
     if (keyboard[83]) { // S key
+
+        actual_orientation = -camera.rotation.y;
+
+        var right_vertex = new THREE.Vector3(
+            pacman.position.x + 0.5 * Math.cos(actual_orientation) - 0.5 * Math.sin(actual_orientation),
+            pacman.position.y + 0.5,
+            pacman.position.z + 0.5 * Math.sin(actual_orientation) + 0.5 * Math.cos(actual_orientation)
+        );
+
+        var left_vertex = new THREE.Vector3(
+            pacman.position.x - 0.5 * Math.cos(actual_orientation) - 0.5 * Math.sin(actual_orientation),
+            pacman.position.y + 0.5,
+            pacman.position.z - 0.5 * Math.sin(actual_orientation) + 0.5 * Math.cos(actual_orientation)
+        );
+
         camera.position.x += Math.sin(camera.rotation.y) * player.speed;
-        camera.position.z += Math.cos(camera.rotation.y) * player.speed;
-        /* pacman.position.x += Math.sin(camera.rotation.y) * player.speed;
-        pacman.position.z += Math.cos(camera.rotation.y) * player.speed; */
+        camera.position.z += Math.cos(camera.rotation.y) * player.speed;        
     }
 
     if (keyboard[65]) { // A key
         camera.position.x += Math.sin(camera.rotation.y - Math.PI/2) * player.speed;
         camera.position.z += Math.cos(camera.rotation.y - Math.PI/2) * player.speed;
-        /* pacman.position.x += Math.sin(camera.rotation.y - Math.PI/2) * player.speed;
-        pacman.position.z += Math.cos(camera.rotation.y - Math.PI/2) * player.speed; */
     }
 
     if (keyboard[68]) { // D key
         camera.position.x += Math.sin(camera.rotation.y + Math.PI/2) * player.speed;
         camera.position.z += Math.cos(camera.rotation.y + Math.PI/2) * player.speed;
-        /* pacman.position.x += Math.sin(camera.rotation.y + Math.PI/2) * player.speed;
-        pacman.position.z += Math.cos(camera.rotation.y + Math.PI/2) * player.speed; */
+        
     }
 
     if (keyboard[37]) {
