@@ -215,8 +215,25 @@ function animate() {
             pacman.position.z - 0.5 * Math.sin(actual_orientation) + 0.5 * Math.cos(actual_orientation)
         );
 
-        camera.position.x += Math.sin(camera.rotation.y) * player.speed;
-        camera.position.z += Math.cos(camera.rotation.y) * player.speed;        
+        raycaster.set(right_vertex, new THREE.Vector3(
+            -Math.sin(actual_orientation), 
+            0, 
+            Math.cos(actual_orientation)
+        ));
+        var intersects_right = raycaster.intersectObjects(collidable_objects);
+
+        raycaster.set(left_vertex, new THREE.Vector3(
+            -Math.sin(actual_orientation), 
+            0, 
+            Math.cos(actual_orientation)
+        ));
+        var intersects_left = raycaster.intersectObjects(collidable_objects);
+
+        if (((intersects_right.length > 0 && intersects_right[0].distance > 0.3) || intersects_right.length == 0) && 
+            ((intersects_left.length > 0 && intersects_left[0].distance > 0.3) || intersects_left.length == 0)) {
+            camera.position.x += Math.sin(camera.rotation.y) * player.speed;
+            camera.position.z += Math.cos(camera.rotation.y) * player.speed;
+        }
     }
 
     if (keyboard[65]) { // A key
