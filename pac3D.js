@@ -22,13 +22,13 @@ var cube_material = new THREE.MeshPhongMaterial({color: 0x228B22, wireframe:fals
 
 var floor;
 var maze = new Array(42);
-
 for (i = 0; i < maze.length; i++) {
     maze[i] = new Array(41);
 }
 
 var keyboard = {};
 var player = {height: 5, speed: 0.2, turnSpeed: Math.PI*0.02};
+var pacman;
 
 function init() {
     // Create the scene
@@ -43,8 +43,8 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     // Set up the main camera
-    camera.position.set(0, player.height, 0);
-    camera.lookAt(0, player.height, 0);
+    camera.position.set(10, player.height, -5);
+    camera.lookAt(camera.position.x, camera.position.y, camera.position.z);
 
     // Create and add a source of light
     var dirLight = new THREE.DirectionalLight();
@@ -60,12 +60,13 @@ function init() {
     pointLight.shadow.camera.near = 0.1;
     pointLight.shadow.camera.far = 500;
     scene.add(pointLight);
-
-    cube = new THREE.Mesh(
+ 
+    pacman = new THREE.Mesh(
         new THREE.BoxGeometry(1, 1, 1),
         new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe:false}),
-    )
-    scene.add(cube);
+    );
+    pacman.position.set(10, player.height, -10);
+    scene.add(pacman);
     
     floor = new THREE.Mesh(
         new THREE.PlaneGeometry(205, 211, 10, 10),
@@ -157,26 +158,42 @@ function init() {
 }
 
 function animate() {
-    requestAnimationFrame(animate);
 
     if (keyboard[87]) { // W key
-        camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
-        camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
+        raycaster.set(pacman.position, new THREE.Vector3(-Math.sin(0.5 + camera.rotation.y), 0, -Math.cos(0.5 + camera.rotation.y)));
+        scene.add(new THREE.ArrowHelper( raycaster.ray.direction, raycaster.ray.origin, 100, Math.random() * 0xffffff ));
+        var intersects = raycaster.intersectObjects(scene.children);
+        if (intersects.length > 0 && intersects[0].distance > 1.0) {
+            raycaster.set(pacman.position, new THREE.Vector3(-Math.sin(0.5 + camera.rotation.y), 0, -Math.cos(0.5 + camera.rotation.y)));
+            scene.add(new THREE.ArrowHelper( raycaster.ray.direction, raycaster.ray.origin, 100, Math.random() * 0xffffff ));
+            console.log(intersects[0].distance);
+            if (intersects.length > 0 && intersects[0].distance > 1.0) {
+                camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
+                camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
+            }
+            //intersects[i].object.material.color.setHex(0xffffff);
+        }
     }
 
     if (keyboard[83]) { // S key
         camera.position.x += Math.sin(camera.rotation.y) * player.speed;
         camera.position.z += Math.cos(camera.rotation.y) * player.speed;
+        /* pacman.position.x += Math.sin(camera.rotation.y) * player.speed;
+        pacman.position.z += Math.cos(camera.rotation.y) * player.speed; */
     }
 
     if (keyboard[65]) { // A key
         camera.position.x += Math.sin(camera.rotation.y - Math.PI/2) * player.speed;
         camera.position.z += Math.cos(camera.rotation.y - Math.PI/2) * player.speed;
+        /* pacman.position.x += Math.sin(camera.rotation.y - Math.PI/2) * player.speed;
+        pacman.position.z += Math.cos(camera.rotation.y - Math.PI/2) * player.speed; */
     }
 
     if (keyboard[68]) { // D key
         camera.position.x += Math.sin(camera.rotation.y + Math.PI/2) * player.speed;
         camera.position.z += Math.cos(camera.rotation.y + Math.PI/2) * player.speed;
+        /* pacman.position.x += Math.sin(camera.rotation.y + Math.PI/2) * player.speed;
+        pacman.position.z += Math.cos(camera.rotation.y + Math.PI/2) * player.speed; */
     }
 
     if (keyboard[37]) {
@@ -194,7 +211,10 @@ function animate() {
     }
 
     //controls.update();
+    pacman.position.set(camera.position.x + Math.cos(camera.rotation.y + Math.PI/2)*0.5, camera.position.y - 1, camera.position.z - Math.sin(camera.rotation.y + Math.PI/2)*0.5);
+    pacman.rotation.set(camera.rotation.x, camera.rotation.y, camera.rotation.z);
     renderer.render(scene, camera);
+    requestAnimationFrame(animate);
 }
 
 function raycast(event) {
