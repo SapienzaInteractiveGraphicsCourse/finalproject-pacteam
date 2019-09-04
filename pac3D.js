@@ -256,16 +256,16 @@ function animate() {
         // ToDO Gotta find the direction for left
 
         raycaster.set(pacman_top_front_left_vertex, new THREE.Vector3(
-            Math.sin(actual_orientation), 
+            -Math.cos(actual_orientation), 
             0, 
-            -Math.cos(actual_orientation)
+            Math.sin(actual_orientation)
         ));
         var intersects_top_front_left = raycaster.intersectObjects(collidable_objects);
 
         raycaster.set(top_back_left_vertex, new THREE.Vector3(
-            -Math.sin(actual_orientation), 
+            -Math.cos(actual_orientation), 
             0, 
-            Math.cos(actual_orientation)
+            Math.sin(actual_orientation)
         ));
         var intersects_top_back_left = raycaster.intersectObjects(collidable_objects);
 
@@ -273,7 +273,6 @@ function animate() {
             ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance > 0.3) || intersects_top_back_left.length == 0)) {
             camera.position.x += Math.sin(camera.rotation.y - Math.PI/2) * player.speed;
             camera.position.z += Math.cos(camera.rotation.y - Math.PI/2) * player.speed;
-
         }
     }
 
@@ -293,19 +292,17 @@ function animate() {
             pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) + pacman_z_dim / 2 * Math.cos(actual_orientation)
         );
 
-        // ToDO Gotta find the direction for right
-
         raycaster.set(top_back_right_vertex, new THREE.Vector3(
-            -Math.sin(actual_orientation), 
+            Math.cos(actual_orientation), 
             0, 
-            Math.cos(actual_orientation)
+            -Math.sin(actual_orientation)
         ));
         var intersects_top_back_right = raycaster.intersectObjects(collidable_objects);
 
         raycaster.set(pacman_top_front_right_vertex, new THREE.Vector3(
-            Math.sin(actual_orientation), 
+            Math.cos(actual_orientation), 
             0, 
-            -Math.cos(actual_orientation)
+            -Math.sin(actual_orientation)
         ));
         var intersects_top_front_right = raycaster.intersectObjects(collidable_objects);
 
