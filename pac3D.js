@@ -176,26 +176,26 @@ function animate() {
 
         actual_orientation = -camera.rotation.y;
 
-        var pacman_top_front_right_vertex = new THREE.Vector3(
+        var top_front_right_vertex = new THREE.Vector3(
             pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
             pacman.position.y + pacman_y_dim / 2,
             pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
         );
 
-        var pacman_top_front_left_vertex = new THREE.Vector3(
+        var top_front_left_vertex = new THREE.Vector3(
             pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
             pacman.position.y + pacman_y_dim / 2,
             pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
         );
         
-        raycaster.set(pacman_top_front_right_vertex, new THREE.Vector3(
+        raycaster.set(top_front_right_vertex, new THREE.Vector3(
             Math.sin(actual_orientation), 
             0, 
             -Math.cos(actual_orientation)
         ));
         var intersects_top_front_right = raycaster.intersectObjects(collidable_objects);
 
-        raycaster.set(pacman_top_front_left_vertex, new THREE.Vector3(
+        raycaster.set(top_front_left_vertex, new THREE.Vector3(
             Math.sin(actual_orientation), 
             0, 
             -Math.cos(actual_orientation)
@@ -250,7 +250,7 @@ function animate() {
 
         actual_orientation = -camera.rotation.y;
 
-        var pacman_top_front_left_vertex = new THREE.Vector3(
+        var top_front_left_vertex = new THREE.Vector3(
             pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
             pacman.position.y + pacman_y_dim / 2,
             pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
@@ -262,9 +262,7 @@ function animate() {
             pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) + pacman_z_dim / 2 * Math.cos(actual_orientation)
         );
 
-        // ToDO Gotta find the direction for left
-
-        raycaster.set(pacman_top_front_left_vertex, new THREE.Vector3(
+        raycaster.set(top_front_left_vertex, new THREE.Vector3(
             -Math.cos(actual_orientation), 
             0, 
             -Math.sin(actual_orientation)
@@ -289,7 +287,7 @@ function animate() {
 
         actual_orientation = -camera.rotation.y;
 
-        var pacman_top_front_right_vertex = new THREE.Vector3(
+        var top_front_right_vertex = new THREE.Vector3(
             pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
             pacman.position.y + pacman_y_dim / 2,
             pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
@@ -308,7 +306,7 @@ function animate() {
         ));
         var intersects_top_back_right = raycaster.intersectObjects(collidable_objects);
 
-        raycaster.set(pacman_top_front_right_vertex, new THREE.Vector3(
+        raycaster.set(top_front_right_vertex, new THREE.Vector3(
             Math.cos(actual_orientation), 
             0, 
             Math.sin(actual_orientation)
@@ -326,13 +324,13 @@ function animate() {
 
         actual_orientation = -camera.rotation.y;
 
-        var pacman_top_front_right_vertex = new THREE.Vector3(
+        var top_front_right_vertex = new THREE.Vector3(
             pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
             pacman.position.y + pacman_y_dim / 2,
             pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
         );
 
-        var pacman_top_front_left_vertex = new THREE.Vector3(
+        var top_front_left_vertex = new THREE.Vector3(
             pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
             pacman.position.y + pacman_y_dim / 2,
             pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
@@ -352,14 +350,14 @@ function animate() {
 
         //ToDO: Specify the correct directions for the rotations
 
-        raycaster.set(pacman_top_front_right_vertex, new THREE.Vector3(
+        raycaster.set(top_front_right_vertex, new THREE.Vector3(
             Math.sin(actual_orientation), 
             0, 
             -Math.cos(actual_orientation)
         ));
         var intersects_top_front_right = raycaster.intersectObjects(collidable_objects);
 
-        raycaster.set(pacman_top_front_left_vertex, new THREE.Vector3(
+        raycaster.set(top_front_left_vertex, new THREE.Vector3(
             Math.sin(actual_orientation), 
             0, 
             -Math.cos(actual_orientation)
@@ -387,13 +385,13 @@ function animate() {
 
         actual_orientation = -camera.rotation.y;
 
-        var pacman_top_front_right_vertex = new THREE.Vector3(
+        var top_front_right_vertex = new THREE.Vector3(
             pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
             pacman.position.y + pacman_y_dim / 2,
             pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
         );
 
-        var pacman_top_front_left_vertex = new THREE.Vector3(
+        var top_front_left_vertex = new THREE.Vector3(
             pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
             pacman.position.y + pacman_y_dim / 2,
             pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
@@ -411,14 +409,14 @@ function animate() {
             pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) + pacman_z_dim / 2 * Math.cos(actual_orientation)
         );
 
-        raycaster.set(pacman_top_front_right_vertex, new THREE.Vector3(
+        raycaster.set(top_front_right_vertex, new THREE.Vector3(
             Math.sin(actual_orientation), 
             0, 
             -Math.cos(actual_orientation)
         ));
         var intersects_top_front_right = raycaster.intersectObjects(collidable_objects);
 
-        raycaster.set(pacman_top_front_left_vertex, new THREE.Vector3(
+        raycaster.set(top_front_left_vertex, new THREE.Vector3(
             Math.sin(actual_orientation), 
             0, 
             -Math.cos(actual_orientation)
