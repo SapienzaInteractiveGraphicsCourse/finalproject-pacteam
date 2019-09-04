@@ -29,7 +29,7 @@ for (i = 0; i < maze.length; i++) {
 var keyboard = {};
 var player = {height: 5, speed: 0.2, turnSpeed: Math.PI*0.02};
 var pacman;
-var pacman_x_dim = 0.5, pacman_y_dim = 0.5, pacman_z_dim = 0.5;
+var pacman_x_dim = 1, pacman_y_dim = 1, pacman_z_dim = 1;
 
 var collidable_objects = [];
 
@@ -168,15 +168,15 @@ function animate() {
         actual_orientation = -camera.rotation.y;
 
         var pacman_top_front_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim * Math.cos(actual_orientation) + pacman_z_dim * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim,
-            pacman.position.z + pacman_x_dim * Math.sin(actual_orientation) - pacman_z_dim * Math.cos(actual_orientation)
+            pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
+            pacman.position.y + pacman_y_dim / 2,
+            pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
         );
 
         var pacman_top_front_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim * Math.cos(actual_orientation) + pacman_z_dim * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim,
-            pacman.position.z - pacman_x_dim * Math.sin(actual_orientation) - pacman_z_dim * Math.cos(actual_orientation)
+            pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
+            pacman.position.y + pacman_y_dim / 2,
+            pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
         );
         
         raycaster.set(pacman_top_front_right_vertex, new THREE.Vector3(
@@ -205,15 +205,15 @@ function animate() {
         actual_orientation = -camera.rotation.y;
 
         var top_back_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim * Math.cos(actual_orientation) - pacman_z_dim * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim,
-            pacman.position.z + pacman_x_dim * Math.sin(actual_orientation) + pacman_z_dim * Math.cos(actual_orientation)
+            pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) - pacman_z_dim / 2 * Math.sin(actual_orientation),
+            pacman.position.y + pacman_y_dim / 2,
+            pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) + pacman_z_dim / 2 * Math.cos(actual_orientation)
         );
 
         var top_back_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim * Math.cos(actual_orientation) - pacman_z_dim * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim,
-            pacman.position.z - pacman_x_dim * Math.sin(actual_orientation) + pacman_z_dim * Math.cos(actual_orientation)
+            pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) - pacman_z_dim / 2 * Math.sin(actual_orientation),
+            pacman.position.y + pacman_y_dim / 2,
+            pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) + pacman_z_dim / 2 * Math.cos(actual_orientation)
         );
 
         raycaster.set(top_back_right_vertex, new THREE.Vector3(
@@ -242,15 +242,15 @@ function animate() {
         actual_orientation = -camera.rotation.y;
 
         var pacman_top_front_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim * Math.cos(actual_orientation) + pacman_z_dim * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim,
-            pacman.position.z - pacman_x_dim * Math.sin(actual_orientation) - pacman_z_dim * Math.cos(actual_orientation)
+            pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
+            pacman.position.y + pacman_y_dim / 2,
+            pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
         );
 
         var top_back_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim * Math.cos(actual_orientation) - pacman_z_dim * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim,
-            pacman.position.z - pacman_x_dim * Math.sin(actual_orientation) + pacman_z_dim * Math.cos(actual_orientation)
+            pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) - pacman_z_dim / 2 * Math.sin(actual_orientation),
+            pacman.position.y + pacman_y_dim / 2,
+            pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) + pacman_z_dim / 2 * Math.cos(actual_orientation)
         );
 
         // ToDO Gotta find the direction for left
@@ -282,15 +282,15 @@ function animate() {
         actual_orientation = -camera.rotation.y;
 
         var pacman_top_front_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim * Math.cos(actual_orientation) + pacman_z_dim * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim,
-            pacman.position.z + pacman_x_dim * Math.sin(actual_orientation) - pacman_z_dim * Math.cos(actual_orientation)
+            pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
+            pacman.position.y + pacman_y_dim / 2,
+            pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
         );
 
         var top_back_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim * Math.cos(actual_orientation) - pacman_z_dim * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim,
-            pacman.position.z + pacman_x_dim * Math.sin(actual_orientation) + pacman_z_dim * Math.cos(actual_orientation)
+            pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) - pacman_z_dim / 2 * Math.sin(actual_orientation),
+            pacman.position.y + pacman_y_dim / 2,
+            pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) + pacman_z_dim / 2 * Math.cos(actual_orientation)
         );
 
         // ToDO Gotta find the direction for right
