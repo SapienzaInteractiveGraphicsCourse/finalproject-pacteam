@@ -258,14 +258,14 @@ function animate() {
         raycaster.set(pacman_top_front_left_vertex, new THREE.Vector3(
             -Math.cos(actual_orientation), 
             0, 
-            Math.sin(actual_orientation)
+            -Math.sin(actual_orientation)
         ));
         var intersects_top_front_left = raycaster.intersectObjects(collidable_objects);
 
         raycaster.set(top_back_left_vertex, new THREE.Vector3(
             -Math.cos(actual_orientation), 
             0, 
-            Math.sin(actual_orientation)
+            -Math.sin(actual_orientation)
         ));
         var intersects_top_back_left = raycaster.intersectObjects(collidable_objects);
 
@@ -295,14 +295,14 @@ function animate() {
         raycaster.set(top_back_right_vertex, new THREE.Vector3(
             Math.cos(actual_orientation), 
             0, 
-            -Math.sin(actual_orientation)
+            Math.sin(actual_orientation)
         ));
         var intersects_top_back_right = raycaster.intersectObjects(collidable_objects);
 
         raycaster.set(pacman_top_front_right_vertex, new THREE.Vector3(
             Math.cos(actual_orientation), 
             0, 
-            -Math.sin(actual_orientation)
+            Math.sin(actual_orientation)
         ));
         var intersects_top_front_right = raycaster.intersectObjects(collidable_objects);
 
