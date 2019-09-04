@@ -320,15 +320,9 @@ function animate() {
         }
     }
 
-    if (keyboard[37]) {
+    if (keyboard[37]) { // left arrow
 
         actual_orientation = -camera.rotation.y;
-
-        var top_front_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
-        );
 
         var top_front_left_vertex = new THREE.Vector3(
             pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
@@ -336,52 +330,19 @@ function animate() {
             pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
         );
 
-        var top_back_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) - pacman_z_dim / 2 * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) + pacman_z_dim / 2 * Math.cos(actual_orientation)
-        );
-
-        var top_back_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) - pacman_z_dim / 2 * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) + pacman_z_dim / 2 * Math.cos(actual_orientation)
-        );
-
-        //ToDO: Specify the correct directions for the rotations
-
-        raycaster.set(top_front_right_vertex, new THREE.Vector3(
-            Math.sin(actual_orientation), 
-            0, 
-            -Math.cos(actual_orientation)
-        ));
-        var intersects_top_front_right = raycaster.intersectObjects(collidable_objects);
-
         raycaster.set(top_front_left_vertex, new THREE.Vector3(
-            Math.sin(actual_orientation), 
+            -Math.cos(actual_orientation), 
             0, 
-            -Math.cos(actual_orientation)
+            -Math.sin(actual_orientation)
         ));
         var intersects_top_front_left = raycaster.intersectObjects(collidable_objects);
 
-        raycaster.set(top_back_right_vertex, new THREE.Vector3(
-            -Math.sin(actual_orientation), 
-            0, 
-            Math.cos(actual_orientation)
-        ));
-        var intersects_top_back_right = raycaster.intersectObjects(collidable_objects);
-
-        raycaster.set(top_back_left_vertex, new THREE.Vector3(
-            -Math.sin(actual_orientation), 
-            0, 
-            Math.cos(actual_orientation)
-        ));
-        var intersects_top_back_left = raycaster.intersectObjects(collidable_objects);
-
-        camera.rotation.y += player.turnSpeed;
+        if ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > 1.0) || intersects_top_front_left.length == 0) {
+            camera.rotation.y += player.turnSpeed;
+        }
     }
 
-    if (keyboard[39]) {
+    if (keyboard[39]) { // right arrow
 
         actual_orientation = -camera.rotation.y;
 
@@ -391,53 +352,16 @@ function animate() {
             pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
         );
 
-        var top_front_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
-        );
-
-        var top_back_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) - pacman_z_dim / 2 * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) + pacman_z_dim / 2 * Math.cos(actual_orientation)
-        );
-
-        var top_back_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) - pacman_z_dim / 2 * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) + pacman_z_dim / 2 * Math.cos(actual_orientation)
-        );
-
         raycaster.set(top_front_right_vertex, new THREE.Vector3(
-            Math.sin(actual_orientation), 
+            Math.cos(actual_orientation), 
             0, 
-            -Math.cos(actual_orientation)
+            Math.sin(actual_orientation)
         ));
         var intersects_top_front_right = raycaster.intersectObjects(collidable_objects);
 
-        raycaster.set(top_front_left_vertex, new THREE.Vector3(
-            Math.sin(actual_orientation), 
-            0, 
-            -Math.cos(actual_orientation)
-        ));
-        var intersects_top_front_left = raycaster.intersectObjects(collidable_objects);
-
-        raycaster.set(top_back_right_vertex, new THREE.Vector3(
-            -Math.sin(actual_orientation), 
-            0, 
-            Math.cos(actual_orientation)
-        ));
-        var intersects_top_back_right = raycaster.intersectObjects(collidable_objects);
-
-        raycaster.set(top_back_left_vertex, new THREE.Vector3(
-            -Math.sin(actual_orientation), 
-            0, 
-            Math.cos(actual_orientation)
-        ));
-        var intersects_top_back_left = raycaster.intersectObjects(collidable_objects);
-
-        camera.rotation.y -= player.turnSpeed;
+        if ((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > 1.0) || intersects_top_front_right.length == 0) {
+            camera.rotation.y -= player.turnSpeed;
+        }
     }
 
     if (keyboard[16]) {
