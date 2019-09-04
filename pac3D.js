@@ -7,6 +7,7 @@ var audio, playPauseBtn, muteBtn, volumeSlider;
 // settings button
 var settingBtn;
 
+// Textures
 var textureWall = new THREE.TextureLoader().load("textures/Grass/grass_01.png");
 textureWall.wrapS = THREE.RepeatWrapping;
 textureWall.wrapT = THREE.RepeatWrapping;
@@ -16,10 +17,11 @@ var textureFloor = new THREE.TextureLoader().load("textures/floor.png");
 textureFloor.wrapS = THREE.RepeatWrapping;
 textureFloor.wrapT = THREE.RepeatWrapping;
 textureFloor.repeat.set(50, 50);
+
+// Maze
 var cube;
 var unique_cube = new THREE.BoxGeometry(5, 50, 5);
 var cube_material = new THREE.MeshPhongMaterial({color: 0x228B22, wireframe:false, map:textureWall});
-
 var floor;
 var maze = new Array(42);
 for (i = 0; i < maze.length; i++) {
