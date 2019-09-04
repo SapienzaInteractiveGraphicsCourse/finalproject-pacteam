@@ -29,7 +29,7 @@ for (i = 0; i < maze.length; i++) {
 }
 
 var keyboard = {};
-var player = {height: 5, speed: 0.2, turnSpeed: Math.PI*0.02, wall_distance: 0.3};
+var player = {height: 5, speed: 0.2, turn_speed: Math.PI*0.02, wall_distance: 0.3, score: 0.0};
 
 // Pacman variables
 var pacman;
