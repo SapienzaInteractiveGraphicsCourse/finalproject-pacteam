@@ -29,7 +29,7 @@ for (i = 0; i < maze.length; i++) {
 }
 
 var keyboard = {};
-var player = {height: 5, speed: 0.2, turnSpeed: Math.PI*0.02};
+var player = {height: 5, speed: 0.2, turnSpeed: Math.PI*0.02, wall_distance: 0.3};
 
 // Pacman variables
 var pacman;
@@ -37,10 +37,6 @@ var pacman_x_dim = 1, pacman_y_dim = 1, pacman_z_dim = 1;
 
 // Collision variables
 var collidable_objects = [];
-var front_collision_distance = 0.3,
-    back_collision_distance = 0.3,
-    right_collision_distance = 0.3,
-    left_collision_distance = 0.3;
 
 function init() {
     // Create the scene
@@ -202,8 +198,8 @@ function animate() {
         ));
         var intersects_top_front_left = raycaster.intersectObjects(collidable_objects);
 
-        if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > front_collision_distance) || intersects_top_front_right.length == 0) && 
-            ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > front_collision_distance) || intersects_top_front_left.length == 0)) {
+        if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) && 
+            ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0)) {
             camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
             camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
         }
@@ -239,8 +235,8 @@ function animate() {
         ));
         var intersects_top_back_left = raycaster.intersectObjects(collidable_objects);
 
-        if (((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance > back_collision_distance) || intersects_top_back_right.length == 0) && 
-            ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance > back_collision_distance) || intersects_top_back_left.length == 0)) {
+        if (((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance > player.wall_distance) || intersects_top_back_right.length == 0) && 
+            ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance > player.wall_distance) || intersects_top_back_left.length == 0)) {
             camera.position.x += Math.sin(camera.rotation.y) * player.speed;
             camera.position.z += Math.cos(camera.rotation.y) * player.speed;
         }
@@ -276,8 +272,8 @@ function animate() {
         ));
         var intersects_top_back_left = raycaster.intersectObjects(collidable_objects);
 
-        if (((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > left_collision_distance) || intersects_top_front_left.length == 0) && 
-            ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance > left_collision_distance) || intersects_top_back_left.length == 0)) {
+        if (((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0) && 
+            ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance > player.wall_distance) || intersects_top_back_left.length == 0)) {
             camera.position.x += Math.sin(camera.rotation.y - Math.PI/2) * player.speed;
             camera.position.z += Math.cos(camera.rotation.y - Math.PI/2) * player.speed;
         }
@@ -313,8 +309,8 @@ function animate() {
         ));
         var intersects_top_front_right = raycaster.intersectObjects(collidable_objects);
 
-        if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > right_collision_distance) || intersects_top_front_right.length == 0) && 
-            ((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance > right_collision_distance) || intersects_top_back_right.length == 0)) {
+        if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) && 
+            ((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance > player.wall_distance) || intersects_top_back_right.length == 0)) {
             camera.position.x += Math.sin(camera.rotation.y + Math.PI/2) * player.speed;
             camera.position.z += Math.cos(camera.rotation.y + Math.PI/2) * player.speed;
         }
@@ -351,8 +347,8 @@ function animate() {
         var intersects_top_front_left = raycaster.intersectObjects(collidable_objects);
 
 
-        if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > 0.3) || intersects_top_front_right.length == 0) &&
-            ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > 0.3) || intersects_top_front_left.length == 0)) {
+        if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) &&
+            ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0)) {
             camera.rotation.y += player.turnSpeed;
         }
     }
@@ -387,16 +383,18 @@ function animate() {
         ));
         var intersects_top_front_left = raycaster.intersectObjects(collidable_objects);
 
-        if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > 0.3) || intersects_top_front_right.length == 0) &&
-            ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > 0.3) || intersects_top_front_left.length == 0)) {
+        if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) &&
+            ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0)) {
             camera.rotation.y -= player.turnSpeed;
         }
     }
 
     if (keyboard[16]) {
         player.speed = 0.4;
+        player.wall_distance = 0.6;
     } else {
         player.speed = 0.2;
+        player.wall_distance = 0.3;
     }
 
     //controls.update();
