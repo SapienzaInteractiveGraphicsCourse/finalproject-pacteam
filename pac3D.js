@@ -349,7 +349,7 @@ function animate() {
 
         if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) &&
             ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0)) {
-            camera.rotation.y += player.turnSpeed;
+            camera.rotation.y += player.turn_speed;
         }
     }
 
@@ -385,7 +385,7 @@ function animate() {
 
         if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) &&
             ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0)) {
-            camera.rotation.y -= player.turnSpeed;
+            camera.rotation.y -= player.turn_speed;
         }
     }
 
