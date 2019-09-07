@@ -1,11 +1,13 @@
+import Labirinth from './labirinth.js';
+
 var scene, camera, renderer;
-var mouse, raycaster;
+var raycaster;
 
 // audio variables
 var audio, playPauseBtn, muteBtn, volumeSlider;
 
 // settings button
-var settingBtn;
+var settingsBtn;
 
 // Textures
 var textureWall = new THREE.TextureLoader().load("textures/Grass/grass_01.png");
@@ -26,7 +28,7 @@ const unique_cube = new THREE.BoxGeometry(5, 50, 5);
 const cube_material = new THREE.MeshPhongMaterial({color: 0x228B22, wireframe:false, map:textureWall});
 
 var ball;
-const unique_ball = new THREE.SphereGeometry(1, 4, 4);
+const unique_ball = new THREE.SphereGeometry(1, 8, 8);
 const ball_material = new THREE.MeshPhongMaterial(0xffffff);
 
 var keyboard = {};
@@ -55,21 +57,16 @@ function init() {
     camera.position.set(10, player.height, -5);
     camera.lookAt(camera.position.x, camera.position.y, camera.position.z);
 
-    // Create and add a source of light
+    // Create a source of light
     var dirLight = new THREE.DirectionalLight();
-    dirLight.position.set(0, 10, 0);
+    dirLight.position.set(50, 100, -50);
     scene.add(dirLight);
 
+    // Create ambient light
     var ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
-
-    var pointLight = new THREE.PointLight(0xffffff, 0.8, 18);
-    pointLight.position.set(15, 30, -10);
-    pointLight.castShadow = true;
-    pointLight.shadow.camera.near = 0.1;
-    pointLight.shadow.camera.far = 500;
-    scene.add(pointLight);
- 
+    
+    // Create PacMan
     pacman = new THREE.Mesh(
         new THREE.BoxGeometry(pacman_x_dim, pacman_y_dim, pacman_z_dim),
         new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe:false}),
@@ -77,6 +74,7 @@ function init() {
     pacman.position.set(10, player.height, -10);
     scene.add(pacman);
     
+    // Create the floor
     floor = new THREE.Mesh(
         new THREE.PlaneGeometry(205, 211, 10, 10),
         new THREE.MeshPhongMaterial({color:0x808080, wireframe:false, map:textureFloor})
@@ -88,8 +86,7 @@ function init() {
     floor.position.z = -103;
     scene.add(floor);
     
-    //Create a raycaster instances useful to object picking and other things
-    mouse = {x: 0, y: 0};
+    //Create a raycaster instance
     raycaster = new THREE.Raycaster();
 
     initAudioPlayer();
@@ -146,14 +143,27 @@ function init() {
 	    }
     );
 
-    const labirinth = new Labirinth();
+    // Create an instance for the labirinth
+    var labirinth = new Labirinth();
     labirinth.createMaze();
     labirinth.createBalls();
 
     for (var i=0; i<labirinth.maze.length; i++) {
-        for (var j=0; j<labirinth.maze[0].length) {
+        for (var j=0; j<labirinth.maze[0].length; j++) {
             if (labirinth.maze[i][j] == 1) {
-                cube = new
+                cube = new THREE.Mesh(unique_cube, cube_material);
+                cube.castShadow = true;
+                cube.receiveShadow = true;
+                cube.position.set(5*j, 25, -5*i);
+                scene.add(cube);
+                collidable_objects.push(cube);
+            } 
+            else if (labirinth.maze[i][j] == 2) {
+                ball = new THREE.Mesh(unique_ball, ball_material);
+                ball.castShadow = true;
+                ball.receiveShadow = true;
+                ball.position.set(5*j, 2, -5*i);
+                scene.add(ball);
             }
         }
     }
@@ -165,7 +175,7 @@ function animate() {
 
     if (keyboard[87]) { // W key
 
-        actual_orientation = -camera.rotation.y;
+        var actual_orientation = -camera.rotation.y;
 
         var top_front_right_vertex = new THREE.Vector3(
             pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
@@ -202,7 +212,7 @@ function animate() {
 
     if (keyboard[83]) { // S key
 
-        actual_orientation = -camera.rotation.y;
+        var actual_orientation = -camera.rotation.y;
 
         var top_back_right_vertex = new THREE.Vector3(
             pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) - pacman_z_dim / 2 * Math.sin(actual_orientation),
@@ -239,7 +249,7 @@ function animate() {
 
     if (keyboard[65]) { // A key
 
-        actual_orientation = -camera.rotation.y;
+        var actual_orientation = -camera.rotation.y;
 
         var top_front_left_vertex = new THREE.Vector3(
             pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
@@ -276,7 +286,7 @@ function animate() {
 
     if (keyboard[68]) { // D key
 
-        actual_orientation = -camera.rotation.y;
+        var actual_orientation = -camera.rotation.y;
 
         var top_front_right_vertex = new THREE.Vector3(
             pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
@@ -313,7 +323,7 @@ function animate() {
 
     if (keyboard[37]) { // left arrow
 
-        actual_orientation = -camera.rotation.y;
+        var actual_orientation = -camera.rotation.y;
 
         var top_front_right_vertex = new THREE.Vector3(
             pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
@@ -350,7 +360,7 @@ function animate() {
 
     if (keyboard[39]) { // right arrow
 
-        actual_orientation = -camera.rotation.y;
+        var actual_orientation = -camera.rotation.y;
 
         var top_front_right_vertex = new THREE.Vector3(
             pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
@@ -392,7 +402,7 @@ function animate() {
         player.wall_distance = 0.3;
     }
 
-    //controls.update();
+    // Update pacman position
     pacman.position.set(camera.position.x + Math.cos(camera.rotation.y + Math.PI/2)*0.5, camera.position.y - 1, camera.position.z - Math.sin(camera.rotation.y + Math.PI/2)*0.5);
     pacman.rotation.set(camera.rotation.x, camera.rotation.y, camera.rotation.z);
     renderer.render(scene, camera);
@@ -418,7 +428,7 @@ function initAudioPlayer() {
     audio.volume = 20/100;
     
     // Event handling
-    playPauseBtn.onclick = function() {
+    playPauseBtn.onclick = () => {
         if (audio.paused) {
             audio.play();
             playPauseBtn.style.background = "url(images/pause.png) no-repeat";
@@ -428,7 +438,7 @@ function initAudioPlayer() {
         }
     };
 
-    muteBtn.onclick = function() {
+    muteBtn.onclick = () => {
         if (audio.muted) {
 		    audio.muted = false;
             muteBtn.style.background = "url(images/volume-high.png) no-repeat";
@@ -438,7 +448,7 @@ function initAudioPlayer() {
 	    }
     };
 
-    volumeSlider.oninput = function() {
+    volumeSlider.oninput = () => {
         audio.volume = volumeSlider.value/100;
     };
 }

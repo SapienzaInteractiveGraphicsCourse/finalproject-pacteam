@@ -4,14 +4,12 @@ A class to represents a Labirinth
 
 */
 
-
-
-class Labirinth {
+export default class Labirinth {
 
     constructor() {
         //Represents the maze's blocks
         this.maze = new Array(42);
-        for (i = 0; i < this.maze.length; i++) {
+        for (var i = 0; i < this.maze.length; i++) {
             this.maze[i] = new Array(41);
         }
 
@@ -20,8 +18,8 @@ class Labirinth {
     }
 
     createMaze() {
-        for (i=0; i < this.maze.length; i++) {
-            for (j=0; j < this.maze[0].length; j++) {
+        for (var i=0; i < this.maze.length; i++) {
+            for (var j=0; j < this.maze[0].length; j++) {
                 if (i == 0 || i == this.maze.length-1) {
                     this.maze[i][j] = 1;
                 }
@@ -106,12 +104,22 @@ class Labirinth {
     }
 
     createBalls() {
-        for (i=2; i<this.maze.length; i+=2) {
-            for (j=2; j<this.maze[0].length; j+=2) {
+        for (var i=2; i<this.maze.length - 6; i+=2) {
+            for (var j=2; j<this.maze[0].length; j+=2) {
+                if (this.maze[i][j] != 1) {
+                    this.maze[i][j] = 2;
+                }
+            }
+        }
+
+        for (var i=this.maze.length-6; i<this.maze.length; i+=3) {
+            for (var j=2; j<this.maze[0].length; j+=2) {
                 if (this.maze[i][j] != 1) {
                     this.maze[i][j] = 2;
                 }
             }
         }
     }
+
+
 }
