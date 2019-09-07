@@ -20,13 +20,15 @@ textureFloor.repeat.set(50, 50);
 
 // Maze
 var cube;
-var unique_cube = new THREE.BoxGeometry(5, 50, 5);
-var cube_material = new THREE.MeshPhongMaterial({color: 0x228B22, wireframe:false, map:textureWall});
+const unique_cube = new THREE.BoxGeometry(5, 50, 5);
+const cube_material = new THREE.MeshPhongMaterial({color: 0x228B22, wireframe:false, map:textureWall});
 var floor;
 var maze = new Array(42);
 for (i = 0; i < maze.length; i++) {
     maze[i] = new Array(41);
 }
+
+var balls = [];
 
 var keyboard = {};
 var player = {height: 5, speed: 0.2, turn_speed: Math.PI*0.02, wall_distance: 0.3, score: 0.0};
@@ -159,6 +161,11 @@ function init() {
                     collidable_objects.push(cube);
             }
         }
+    }
+
+    createBalls();
+    for (i=0; i< balls.length; i++) {
+        scene.add(balls[i]);
     }
 
     //controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -512,6 +519,20 @@ function createMaze() {
 
             if ( (i>20 && i<24) && (j==16 || j==24)) {
                 maze[i][j] = 1;
+            }
+        }
+    }
+}
+
+function createBalls() {
+    for (i=2; i<maze.length; i+=2) {
+        for (j=2; j<maze[0].length; j+=2) {
+            if (maze[i][j] != 1) {
+                var ball = new THREE.SphereGeometry(0.5, 16, 16);
+                var ball_material = new THREE.MeshPhongMaterial(0xffffff);
+                var ball_mesh = new THREE.Mesh(ball, ball_material);
+                ball_mesh.position.set(5*j, 2, -5*i);
+                balls.push(ball_mesh);
             }
         }
     }
