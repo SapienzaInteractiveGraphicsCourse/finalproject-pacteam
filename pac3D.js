@@ -19,16 +19,15 @@ textureFloor.wrapT = THREE.RepeatWrapping;
 textureFloor.repeat.set(50, 50);
 
 // Maze
+var floor;
+
 var cube;
 const unique_cube = new THREE.BoxGeometry(5, 50, 5);
 const cube_material = new THREE.MeshPhongMaterial({color: 0x228B22, wireframe:false, map:textureWall});
-var floor;
-var maze = new Array(42);
-for (i = 0; i < maze.length; i++) {
-    maze[i] = new Array(41);
-}
 
-var balls = [];
+var ball;
+const unique_ball = new THREE.SphereGeometry(1, 4, 4);
+const ball_material = new THREE.MeshPhongMaterial(0xffffff);
 
 var keyboard = {};
 var player = {height: 5, speed: 0.2, turn_speed: Math.PI*0.02, wall_distance: 0.3, score: 0.0};
@@ -90,9 +89,8 @@ function init() {
     scene.add(floor);
     
     //Create a raycaster instances useful to object picking and other things
-    mouse = {x : 0, y : 0};
+    mouse = {x: 0, y: 0};
     raycaster = new THREE.Raycaster();
-    renderer.domElement.addEventListener('click', raycast, false);
 
     initAudioPlayer();
     initSettings();
@@ -148,27 +146,17 @@ function init() {
 	    }
     );
 
-    createMaze();
-    for (i=0; i < maze.length; i++) {
-        for (j=0; j < maze[0].length; j++) {
-            switch (maze[i][j]) {
-                case 1:
-                    cube = new THREE.Mesh(unique_cube, cube_material);
-                    cube.castShadow = true;
-                    cube.receiveShadow = true;
-                    cube.position.set(5*j, 25, -5*i);
-                    scene.add(cube);
-                    collidable_objects.push(cube);
+    const labirinth = new Labirinth();
+    labirinth.createMaze();
+    labirinth.createBalls();
+
+    for (var i=0; i<labirinth.maze.length; i++) {
+        for (var j=0; j<labirinth.maze[0].length) {
+            if (labirinth.maze[i][j] == 1) {
+                cube = new
             }
         }
     }
-
-    createBalls();
-    for (i=0; i< balls.length; i++) {
-        scene.add(balls[i]);
-    }
-
-    //controls = new THREE.OrbitControls(camera, renderer.domElement);
 
     animate();
 }
@@ -411,133 +399,6 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
-function raycast(event) {
-
-    // Sets the mouse position with a coordinate system where the center of the screen is the origin
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-    // Set the picking ray from the camera position and mouse coordinates
-    raycaster.setFromCamera(mouse, camera);    
-
-    // Compute intersections
-    var intersects = raycaster.intersectObjects(scene.children);
-    /*
-        An intersection has the following properties :
-            - object : intersected object (THREE.Mesh)
-            - distance : distance from camera to intersection (number)
-            - face : intersected face (THREE.Face3)
-            - faceIndex : intersected face index (number)
-            - point : intersection point (THREE.Vector3)
-            - uv : intersection point in the object's UV coordinates (THREE.Vector2)
-    */
-
-    for (var i = 0; i < intersects.length; i++) {
-        console.log(intersects[i]); 
-        //intersects[i].object.material.color.setHex(0xffffff);
-    }
-}
-
-function createMaze() {
-    for (i=0; i < maze.length; i++) {
-        for (j=0; j < maze[0].length; j++) {
-            if (i == 0 || i == maze.length-1) {
-                maze[i][j] = 1;
-            }
-
-            if ( (j == 0 || j==maze[0].length-1) && (i < 17 || i > 27) ) {
-                maze[i][j] = 1;
-            }
-
-            if ( (i==16 || i== 28 || i==20 || i==24) && (j<8 || j>=32) ) {
-                maze[i][j] = 1;
-            }
-
-            if ( (j==8 || j==32) && ( (i>=16 && i<=20) || (i>=24 && i<=28) ) ) {
-                maze[i][j] = 1;
-            }
-
-            if (i == 4 && ( (j>3 && j<17) || j==20 || (j > 23 && j < 37) )) {
-                maze[i][j] = 1;
-            }
-
-            if ((i >= maze.length-4) && (j==20)) {
-                maze[i][j] = 1;
-            }
-
-            if ((i == maze.length - 6 || i == maze.length - 5) && ((j == 20) || (j >= 4 && j <= 8) || (j >= 12 && j <= 16) || (j >= 24 && j <= 28) || (j >= 32 && j <= 36))) {
-                maze[i][j] = 1;
-            }
-
-            if ((i == maze.length - 10) && ((j >= 4 && j <= 8) || (j == 12) || (j >= 16 && j <= 24) || (j == 28) || (j >= 32 && j <= 36))) {
-                maze[i][j] = 1;
-            }
-
-            if ((i <= maze.length - 11 && i >= maze.length - 14) && ((j == 12) || (j == 20) ||   (j == 28))) {
-                maze[i][j] = 1;
-            }
-
-            if ((i <= maze.length - 14 && i >= maze.length - 17) && ((j == 12) || (j == 28))) {
-                maze[i][j] = 1;
-            }
-
-            if ( (i == maze.length - 18) && ((j==12 || j==28) || (j>15 && j<25))) {
-                maze[i][j] = 1;
-            }
-
-            if ( (i>=5 && i<=7) && (j==12 || j==20 || j==28)) {
-                maze[i][j] = 1;
-            }
-
-            if ( (i==8) && (j<5 || j==8 || j==12 || (j>15 && j<25) || j==28 || j==32 || j>35)) {
-                maze[i][j] = 1;
-            }
-
-            if ( (i>8 && i<12) && (j==8 || j==32)) {
-                maze[i][j] = 1;
-            }
-
-            if ( (i==12) && ((j>3 && j<9) || (j>11 && j<17) || (j==20) || (j>23 && j<29) || (j>31 && j<37)) ) {
-                maze[i][j] = 1;
-            }
-
-            if ( (i>12 && i<16) && j==20) {
-                maze[i][j] = 1;
-            }
-
-            if ( (i==16) && ((j==12 || j==28) || (j>15 && j<25))) {
-                maze[i][j] = 1;
-            }
-
-            if ( (i>16 && i<20) && (j==12 || j==28)) {
-                maze[i][j] = 1;
-            }
-
-            if ( (i==20) && ((j==12 || j==28) || (j>15 && j<25))) {
-                maze[i][j] = 1;
-            }
-
-            if ( (i>20 && i<24) && (j==16 || j==24)) {
-                maze[i][j] = 1;
-            }
-        }
-    }
-}
-
-function createBalls() {
-    for (i=2; i<maze.length; i+=2) {
-        for (j=2; j<maze[0].length; j+=2) {
-            if (maze[i][j] != 1) {
-                var ball = new THREE.SphereGeometry(0.5, 16, 16);
-                var ball_material = new THREE.MeshPhongMaterial(0xffffff);
-                var ball_mesh = new THREE.Mesh(ball, ball_material);
-                ball_mesh.position.set(5*j, 2, -5*i);
-                balls.push(ball_mesh);
-            }
-        }
-    }
-}
-
 function initAudioPlayer() {
     audio = new Audio();
 
@@ -598,13 +459,6 @@ function keyUp(event) {
     keyboard[event.keyCode] = false;
 }
 
-// Arrows listeners
-window.addEventListener('keyup', keyUp);
-window.addEventListener('keydown', keyDown);
-
-// Resize listeners
-window.addEventListener('resize', onWindowResize, false);
-
 function onWindowResize() {
 
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -612,6 +466,13 @@ function onWindowResize() {
 
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
+
+// Arrows listeners
+window.addEventListener('keyup', keyUp);
+window.addEventListener('keydown', keyDown);
+
+// Resize listeners
+window.addEventListener('resize', onWindowResize, false);
 
 // This way the audio will be loaded after the page is fully loaded
 window.onload = init;
