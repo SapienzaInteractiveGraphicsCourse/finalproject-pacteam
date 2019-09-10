@@ -17,11 +17,11 @@ textureFloor.repeat.set(50, 50);
 
 var cube;
 const unique_cube = new THREE.BoxGeometry(5, 50, 5);
-const cube_material = new THREE.MeshPhongMaterial({color: 0x228B22, wireframe:false, map:textureWall});
+const cube_material = new THREE.MeshPhongMaterial({map:textureWall});
 
 var ball;
 const unique_ball = new THREE.SphereGeometry(1, 8, 8);
-const ball_material = new THREE.MeshPhongMaterial(0xffffff);
+const ball_material = new THREE.MeshPhongMaterial({color:0xFFFF35});
 
 export default class Maze {
 
