@@ -1,4 +1,4 @@
-import Labirinth from './labirinth.js';
+import Maze from './maze.js';
 
 var scene, camera, renderer;
 var raycaster;
@@ -9,28 +9,6 @@ var audio, playPauseBtn, muteBtn, volumeSlider;
 // settings button
 var settingsBtn;
 
-// Textures
-var textureWall = new THREE.TextureLoader().load("textures/Grass/grass_01.png");
-textureWall.wrapS = THREE.RepeatWrapping;
-textureWall.wrapT = THREE.RepeatWrapping;
-textureWall.generateMipmaps = true;
-textureWall.repeat.set(1, 10);
-var textureFloor = new THREE.TextureLoader().load("textures/floor.png");
-textureFloor.wrapS = THREE.RepeatWrapping;
-textureFloor.wrapT = THREE.RepeatWrapping;
-textureFloor.repeat.set(50, 50);
-
-// Maze
-var floor;
-
-var cube;
-const unique_cube = new THREE.BoxGeometry(5, 50, 5);
-const cube_material = new THREE.MeshPhongMaterial({color: 0x228B22, wireframe:false, map:textureWall});
-
-var ball;
-const unique_ball = new THREE.SphereGeometry(1, 8, 8);
-const ball_material = new THREE.MeshPhongMaterial(0xffffff);
-
 var keyboard = {};
 var player = {height: 5, speed: 0.2, turn_speed: Math.PI*0.02, wall_distance: 0.3, score: 0.0};
 
@@ -38,8 +16,8 @@ var player = {height: 5, speed: 0.2, turn_speed: Math.PI*0.02, wall_distance: 0.
 var pacman;
 var pacman_x_dim = 1, pacman_y_dim = 1, pacman_z_dim = 1;
 
-// Collision variables
-var collidable_objects = [];
+//Maze
+var maze;
 
 function init() {
     // Create the scene
@@ -73,18 +51,6 @@ function init() {
     );
     pacman.position.set(10, player.height, -10);
     scene.add(pacman);
-    
-    // Create the floor
-    floor = new THREE.Mesh(
-        new THREE.PlaneGeometry(205, 211, 10, 10),
-        new THREE.MeshPhongMaterial({color:0x808080, wireframe:false, map:textureFloor})
-    );
-    floor.castShadow = true;
-    floor.receiveShadow = true;
-    floor.rotation.x -= Math.PI / 2;
-    floor.position.x = 100;
-    floor.position.z = -103;
-    scene.add(floor);
     
     //Create a raycaster instance
     raycaster = new THREE.Raycaster();
@@ -143,30 +109,9 @@ function init() {
 	    }
     );
 
-    // Create an instance for the labirinth
-    var labirinth = new Labirinth();
-    labirinth.createMaze();
-    labirinth.createBalls();
-
-    for (var i=0; i<labirinth.maze.length; i++) {
-        for (var j=0; j<labirinth.maze[0].length; j++) {
-            if (labirinth.maze[i][j] == 1) {
-                cube = new THREE.Mesh(unique_cube, cube_material);
-                cube.castShadow = true;
-                cube.receiveShadow = true;
-                cube.position.set(5*j, 25, -5*i);
-                scene.add(cube);
-                collidable_objects.push(cube);
-            } 
-            else if (labirinth.maze[i][j] == 2) {
-                ball = new THREE.Mesh(unique_ball, ball_material);
-                ball.castShadow = true;
-                ball.receiveShadow = true;
-                ball.position.set(5*j, 2, -5*i);
-                scene.add(ball);
-            }
-        }
-    }
+    // Create an instance for the maze
+    maze = new Maze();
+    maze.initMaze(scene);
 
     animate();
 }
@@ -194,19 +139,38 @@ function animate() {
             0, 
             -Math.cos(actual_orientation)
         ));
-        var intersects_top_front_right = raycaster.intersectObjects(collidable_objects);
+        var intersects_top_front_right = raycaster.intersectObjects(maze.walls);
 
         raycaster.set(top_front_left_vertex, new THREE.Vector3(
             Math.sin(actual_orientation), 
             0, 
             -Math.cos(actual_orientation)
         ));
-        var intersects_top_front_left = raycaster.intersectObjects(collidable_objects);
+        var intersects_top_front_left = raycaster.intersectObjects(maze.walls);
 
         if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) && 
             ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0)) {
             camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
             camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
+        }
+
+        raycaster.set(new THREE.Vector3(pacman.position.x + 1.5*Math.cos(actual_orientation), pacman.position.y - 2, pacman.position.z - 1.5*Math.sin(actual_orientation)), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
+        var intersects_balls_left = raycaster.intersectObjects(maze.balls);
+
+        raycaster.set(new THREE.Vector3(pacman.position.x, pacman.position.y - 2, pacman.position.z), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
+        var intersects_balls_center = raycaster.intersectObjects(maze.balls);
+
+        raycaster.set(new THREE.Vector3(pacman.position.x - 1.5*Math.cos(actual_orientation), pacman.position.y - 2, pacman.position.z + 1.5*Math.sin(actual_orientation)), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
+        var intersects_balls_right = raycaster.intersectObjects(maze.balls);
+
+        if (intersects_balls_left.length > 0 && intersects_balls_left[0].distance < player.wall_distance) {
+            scene.remove(intersects_balls_left[0].object);
+        }
+        else if (intersects_balls_center.length > 0 && intersects_balls_center[0].distance < player.wall_distance) {
+            scene.remove(intersects_balls_center[0].object);
+        } 
+        else if (intersects_balls_right.length > 0 && intersects_balls_right[0].distance < player.wall_distance) {
+            scene.remove(intersects_balls_right[0].object);
         }
     }
 
@@ -231,14 +195,14 @@ function animate() {
             0, 
             Math.cos(actual_orientation)
         ));
-        var intersects_top_back_right = raycaster.intersectObjects(collidable_objects);
+        var intersects_top_back_right = raycaster.intersectObjects(maze.walls);
 
         raycaster.set(top_back_left_vertex, new THREE.Vector3(
             -Math.sin(actual_orientation), 
             0, 
             Math.cos(actual_orientation)
         ));
-        var intersects_top_back_left = raycaster.intersectObjects(collidable_objects);
+        var intersects_top_back_left = raycaster.intersectObjects(maze.walls);
 
         if (((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance > player.wall_distance) || intersects_top_back_right.length == 0) && 
             ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance > player.wall_distance) || intersects_top_back_left.length == 0)) {
@@ -268,14 +232,14 @@ function animate() {
             0, 
             -Math.sin(actual_orientation)
         ));
-        var intersects_top_front_left = raycaster.intersectObjects(collidable_objects);
+        var intersects_top_front_left = raycaster.intersectObjects(maze.walls);
 
         raycaster.set(top_back_left_vertex, new THREE.Vector3(
             -Math.cos(actual_orientation), 
             0, 
             -Math.sin(actual_orientation)
         ));
-        var intersects_top_back_left = raycaster.intersectObjects(collidable_objects);
+        var intersects_top_back_left = raycaster.intersectObjects(maze.walls);
 
         if (((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0) && 
             ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance > player.wall_distance) || intersects_top_back_left.length == 0)) {
@@ -305,14 +269,14 @@ function animate() {
             0, 
             Math.sin(actual_orientation)
         ));
-        var intersects_top_back_right = raycaster.intersectObjects(collidable_objects);
+        var intersects_top_back_right = raycaster.intersectObjects(maze.walls);
 
         raycaster.set(top_front_right_vertex, new THREE.Vector3(
             Math.cos(actual_orientation), 
             0, 
             Math.sin(actual_orientation)
         ));
-        var intersects_top_front_right = raycaster.intersectObjects(collidable_objects);
+        var intersects_top_front_right = raycaster.intersectObjects(maze.walls);
 
         if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) && 
             ((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance > player.wall_distance) || intersects_top_back_right.length == 0)) {
@@ -342,14 +306,14 @@ function animate() {
             0, 
             Math.sin(actual_orientation)
         ));
-        var intersects_top_front_right = raycaster.intersectObjects(collidable_objects);
+        var intersects_top_front_right = raycaster.intersectObjects(maze.walls);
 
         raycaster.set(top_front_left_vertex, new THREE.Vector3(
             -Math.cos(actual_orientation), 
             0, 
             -Math.sin(actual_orientation)
         ));
-        var intersects_top_front_left = raycaster.intersectObjects(collidable_objects);
+        var intersects_top_front_left = raycaster.intersectObjects(maze.walls);
 
 
         if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) &&
@@ -379,14 +343,14 @@ function animate() {
             0, 
             Math.sin(actual_orientation)
         ));
-        var intersects_top_front_right = raycaster.intersectObjects(collidable_objects);
+        var intersects_top_front_right = raycaster.intersectObjects(maze.walls);
 
         raycaster.set(top_front_left_vertex, new THREE.Vector3(
             -Math.cos(actual_orientation), 
             0, 
             -Math.sin(actual_orientation)
         ));
-        var intersects_top_front_left = raycaster.intersectObjects(collidable_objects);
+        var intersects_top_front_left = raycaster.intersectObjects(maze.walls);
 
         if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) &&
             ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0)) {
