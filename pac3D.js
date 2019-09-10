@@ -10,7 +10,7 @@ var audio, playPauseBtn, muteBtn, volumeSlider;
 var settingsBtn;
 
 var keyboard = {};
-var player = {height: 5, speed: 0.2, turn_speed: Math.PI*0.02, wall_distance: 0.3, score: 0.0};
+var player = {height: 5, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance: 0.3, score: 0.0};
 
 // Pacman variables
 var pacman;
@@ -41,7 +41,7 @@ function init() {
     scene.add(dirLight);
 
     // Create ambient light
-    var ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    var ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
     scene.add(ambientLight);
     
     // Create PacMan
