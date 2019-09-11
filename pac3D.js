@@ -288,76 +288,11 @@ function animate() {
     }
 
     if (keyboard[37]) { // left arrow
-
-        var actual_orientation = -camera.rotation.y;
-
-        var top_front_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
-        );
-
-        var top_front_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
-        );
-
-        raycaster.set(top_front_right_vertex, new THREE.Vector3(
-            Math.cos(actual_orientation), 
-            0, 
-            Math.sin(actual_orientation)
-        ));
-        var intersects_top_front_right = raycaster.intersectObjects(maze.walls.children);
-
-        raycaster.set(top_front_left_vertex, new THREE.Vector3(
-            -Math.cos(actual_orientation), 
-            0, 
-            -Math.sin(actual_orientation)
-        ));
-        var intersects_top_front_left = raycaster.intersectObjects(maze.walls.children);
-
-
-        if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) &&
-            ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0)) {
-            camera.rotation.y += player.turn_speed;
-        }
+        camera.rotation.y += player.turn_speed;
     }
 
     if (keyboard[39]) { // right arrow
-
-        var actual_orientation = -camera.rotation.y;
-
-        var top_front_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
-        );
-
-        var top_front_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
-        );
-
-        raycaster.set(top_front_right_vertex, new THREE.Vector3(
-            Math.cos(actual_orientation), 
-            0, 
-            Math.sin(actual_orientation)
-        ));
-        var intersects_top_front_right = raycaster.intersectObjects(maze.walls.children);
-
-        raycaster.set(top_front_left_vertex, new THREE.Vector3(
-            -Math.cos(actual_orientation), 
-            0, 
-            -Math.sin(actual_orientation)
-        ));
-        var intersects_top_front_left = raycaster.intersectObjects(maze.walls.children);
-
-        if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) &&
-            ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0)) {
-            camera.rotation.y -= player.turn_speed;
-        }
+        camera.rotation.y -= player.turn_speed;
     }
 
     if (keyboard[16]) {
