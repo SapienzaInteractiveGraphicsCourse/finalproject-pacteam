@@ -32,12 +32,12 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     // Set up the main camera
-    camera.position.set(10, player.height, -5);
+    camera.position.set(100, player.height, -5);
     camera.lookAt(camera.position.x, camera.position.y, camera.position.z);
 
     // Create a source of light
-    var dirLight = new THREE.DirectionalLight();
-    dirLight.position.set(50, 100, -50);
+    var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(100, 80, -50);
     scene.add(dirLight);
 
     // Create ambient light
@@ -46,10 +46,9 @@ function init() {
     
     // Create PacMan
     pacman = new THREE.Mesh(
-        new THREE.BoxGeometry(pacman_x_dim, pacman_y_dim, pacman_z_dim),
-        new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe:false}),
+        new THREE.SphereBufferGeometry(1, 32, 32),
+        new THREE.MeshPhongMaterial({color: 0xffff00}),
     );
-    pacman.position.set(10, player.height, -10);
     scene.add(pacman);
     
     //Create a raycaster instance
@@ -75,9 +74,8 @@ function init() {
 
             var textMaterial = new THREE.MeshPhongMaterial({color: 0xffff00});
             var mesh = new THREE.Mesh(text, textMaterial);
-            mesh.position.set(-11, 10, -50);
-
-            //scene.add(mesh);
+            mesh.position.set(camera.position.x-12, camera.position.y+4, camera.position.z-40);
+            scene.add(mesh);
 
             domEvents.addEventListener(mesh, "mouseover", event => {
                 mesh.material.color.setHex(0xffffff);
@@ -112,6 +110,10 @@ function init() {
     // Create an instance for the maze
     maze = new Maze();
     maze.initMaze(scene);
+    
+    scene.add(maze.floor)
+    scene.add(maze.walls);
+    scene.add(maze.balls);
 
     animate();
 }
@@ -139,14 +141,14 @@ function animate() {
             0, 
             -Math.cos(actual_orientation)
         ));
-        var intersects_top_front_right = raycaster.intersectObjects(maze.walls);
+        var intersects_top_front_right = raycaster.intersectObjects(maze.walls.children);
 
         raycaster.set(top_front_left_vertex, new THREE.Vector3(
             Math.sin(actual_orientation), 
             0, 
             -Math.cos(actual_orientation)
         ));
-        var intersects_top_front_left = raycaster.intersectObjects(maze.walls);
+        var intersects_top_front_left = raycaster.intersectObjects(maze.walls.children);
 
         if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) && 
             ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0)) {
@@ -154,23 +156,23 @@ function animate() {
             camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
         }
 
-        raycaster.set(new THREE.Vector3(pacman.position.x + 1.5*Math.cos(actual_orientation), pacman.position.y - 2, pacman.position.z - 1.5*Math.sin(actual_orientation)), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
-        var intersects_balls_left = raycaster.intersectObjects(maze.balls);
+        raycaster.set(new THREE.Vector3(pacman.position.x + 1.5*Math.cos(actual_orientation), pacman.position.y-0.5, pacman.position.z - 1.5*Math.sin(actual_orientation)), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
+        var intersects_balls_left = raycaster.intersectObjects(maze.balls.children);
 
-        raycaster.set(new THREE.Vector3(pacman.position.x, pacman.position.y - 2, pacman.position.z), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
-        var intersects_balls_center = raycaster.intersectObjects(maze.balls);
+        raycaster.set(new THREE.Vector3(pacman.position.x, pacman.position.y-0.5, pacman.position.z), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
+        var intersects_balls_center = raycaster.intersectObjects(maze.balls.children);
 
-        raycaster.set(new THREE.Vector3(pacman.position.x - 1.5*Math.cos(actual_orientation), pacman.position.y - 2, pacman.position.z + 1.5*Math.sin(actual_orientation)), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
-        var intersects_balls_right = raycaster.intersectObjects(maze.balls);
+        raycaster.set(new THREE.Vector3(pacman.position.x - 1.5*Math.cos(actual_orientation), pacman.position.y-0.5, pacman.position.z + 1.5*Math.sin(actual_orientation)), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
+        var intersects_balls_right = raycaster.intersectObjects(maze.balls.children);
 
         if (intersects_balls_left.length > 0 && intersects_balls_left[0].distance < player.wall_distance) {
-            scene.remove(intersects_balls_left[0].object);
+            maze.balls.remove(intersects_balls_left[0].object);
         }
         else if (intersects_balls_center.length > 0 && intersects_balls_center[0].distance < player.wall_distance) {
-            scene.remove(intersects_balls_center[0].object);
+            maze.balls.remove(intersects_balls_center[0].object);
         } 
         else if (intersects_balls_right.length > 0 && intersects_balls_right[0].distance < player.wall_distance) {
-            scene.remove(intersects_balls_right[0].object);
+            maze.balls.remove(intersects_balls_right[0].object);
         }
     }
 
@@ -195,14 +197,14 @@ function animate() {
             0, 
             Math.cos(actual_orientation)
         ));
-        var intersects_top_back_right = raycaster.intersectObjects(maze.walls);
+        var intersects_top_back_right = raycaster.intersectObjects(maze.walls.children);
 
         raycaster.set(top_back_left_vertex, new THREE.Vector3(
             -Math.sin(actual_orientation), 
             0, 
             Math.cos(actual_orientation)
         ));
-        var intersects_top_back_left = raycaster.intersectObjects(maze.walls);
+        var intersects_top_back_left = raycaster.intersectObjects(maze.walls.children);
 
         if (((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance > player.wall_distance) || intersects_top_back_right.length == 0) && 
             ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance > player.wall_distance) || intersects_top_back_left.length == 0)) {
@@ -232,14 +234,14 @@ function animate() {
             0, 
             -Math.sin(actual_orientation)
         ));
-        var intersects_top_front_left = raycaster.intersectObjects(maze.walls);
+        var intersects_top_front_left = raycaster.intersectObjects(maze.walls.children);
 
         raycaster.set(top_back_left_vertex, new THREE.Vector3(
             -Math.cos(actual_orientation), 
             0, 
             -Math.sin(actual_orientation)
         ));
-        var intersects_top_back_left = raycaster.intersectObjects(maze.walls);
+        var intersects_top_back_left = raycaster.intersectObjects(maze.walls.children);
 
         if (((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0) && 
             ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance > player.wall_distance) || intersects_top_back_left.length == 0)) {
@@ -269,14 +271,14 @@ function animate() {
             0, 
             Math.sin(actual_orientation)
         ));
-        var intersects_top_back_right = raycaster.intersectObjects(maze.walls);
+        var intersects_top_back_right = raycaster.intersectObjects(maze.walls.children);
 
         raycaster.set(top_front_right_vertex, new THREE.Vector3(
             Math.cos(actual_orientation), 
             0, 
             Math.sin(actual_orientation)
         ));
-        var intersects_top_front_right = raycaster.intersectObjects(maze.walls);
+        var intersects_top_front_right = raycaster.intersectObjects(maze.walls.children);
 
         if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) && 
             ((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance > player.wall_distance) || intersects_top_back_right.length == 0)) {
@@ -306,14 +308,14 @@ function animate() {
             0, 
             Math.sin(actual_orientation)
         ));
-        var intersects_top_front_right = raycaster.intersectObjects(maze.walls);
+        var intersects_top_front_right = raycaster.intersectObjects(maze.walls.children);
 
         raycaster.set(top_front_left_vertex, new THREE.Vector3(
             -Math.cos(actual_orientation), 
             0, 
             -Math.sin(actual_orientation)
         ));
-        var intersects_top_front_left = raycaster.intersectObjects(maze.walls);
+        var intersects_top_front_left = raycaster.intersectObjects(maze.walls.children);
 
 
         if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) &&
@@ -343,14 +345,14 @@ function animate() {
             0, 
             Math.sin(actual_orientation)
         ));
-        var intersects_top_front_right = raycaster.intersectObjects(maze.walls);
+        var intersects_top_front_right = raycaster.intersectObjects(maze.walls.children);
 
         raycaster.set(top_front_left_vertex, new THREE.Vector3(
             -Math.cos(actual_orientation), 
             0, 
             -Math.sin(actual_orientation)
         ));
-        var intersects_top_front_left = raycaster.intersectObjects(maze.walls);
+        var intersects_top_front_left = raycaster.intersectObjects(maze.walls.children);
 
         if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) &&
             ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0)) {
@@ -367,7 +369,7 @@ function animate() {
     }
 
     // Update pacman position
-    pacman.position.set(camera.position.x + Math.cos(camera.rotation.y + Math.PI/2)*0.5, camera.position.y - 1, camera.position.z - Math.sin(camera.rotation.y + Math.PI/2)*0.5);
+    pacman.position.set(camera.position.x + Math.cos(camera.rotation.y + Math.PI/2)*2.5, camera.position.y - 2, camera.position.z - Math.sin(camera.rotation.y + Math.PI/2)*2.5);
     pacman.rotation.set(camera.rotation.x, camera.rotation.y, camera.rotation.z);
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
