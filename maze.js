@@ -37,7 +37,7 @@ export default class Maze {
         //Represents the balls objects
         this.balls = new THREE.Group();
         //Represents the floor
-        this.floor = "none";
+        this.floor = undefined;
     }
 
     createMaze() {
