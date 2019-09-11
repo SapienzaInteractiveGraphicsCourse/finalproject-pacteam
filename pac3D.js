@@ -98,26 +98,17 @@ function init() {
                 mesh.material.color.setHex(0xffff00);
                 $('html,body').css('cursor', 'default');
             });
-        },
-        
-        function(xhr) {
-            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-        },
-
-        // onError callback
-	    function(err) {
-		    console.log('An error happened');
-	    }
+        }
     );
 
     // Create an instance for the maze
     maze = new Maze();
     maze.initMaze(scene);
-    
     scene.add(maze.floor)
     scene.add(maze.walls);
     scene.add(maze.balls);
 
+    // Start rendering
     animate();
 }
 
