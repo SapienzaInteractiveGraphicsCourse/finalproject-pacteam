@@ -360,7 +360,7 @@ function initAudioPlayer() {
 
     // Specify the source
     audio[0].src = "musics/pacman_remix.mp3";
-    audio[1].src = "musics/pacman_chomp.wav";
+    audio[1].src = "musics/pacman_eatfruit.wav";
     // The audio is gonna loop over the source
     audio[0].loop = true;
     audio[1].loop = false;
