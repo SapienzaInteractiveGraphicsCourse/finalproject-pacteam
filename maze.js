@@ -16,11 +16,11 @@ textureFloor.wrapT = THREE.RepeatWrapping;
 textureFloor.repeat.set(50, 50);
 
 var cube;
-const unique_cube = new THREE.BoxGeometry(5, 50, 5);
+const unique_cube = new THREE.BoxBufferGeometry(5, 50, 5);
 const cube_material = new THREE.MeshPhongMaterial({map:textureWall});
 
 var ball;
-const unique_ball = new THREE.SphereGeometry(1, 8, 8);
+const unique_ball = new THREE.SphereBufferGeometry(1, 16, 16);
 const ball_material = new THREE.MeshPhongMaterial({color:0xFFFF35});
 
 export default class Maze {
@@ -33,9 +33,19 @@ export default class Maze {
         }
 
         //Represents the walls objects
-        this.walls = [];
+        this.walls = new THREE.Group();
         //Represents the balls objects
-        this.balls = [];
+        this.balls = new THREE.Group();
+        //Represents the floor
+        this.floor = new THREE.Mesh(
+            new THREE.PlaneGeometry(205, 211, 10, 10),
+            new THREE.MeshPhongMaterial({map:textureFloor})
+        );
+        this.floor.castShadow = true;
+        this.floor.receiveShadow = true;
+        this.floor.rotation.x -= Math.PI / 2;
+        this.floor.position.x = 100;
+        this.floor.position.z = -103;
     }
 
     createMaze() {
@@ -142,21 +152,9 @@ export default class Maze {
         }
     }
 
-    initMaze(scene) {
+    initMaze() {
         this.createMaze()
         this.createBalls()
-
-        // Create the floor
-        var floor = new THREE.Mesh(
-            new THREE.PlaneGeometry(205, 211, 10, 10),
-            new THREE.MeshPhongMaterial({color:0x808080, wireframe:false, map:textureFloor})
-        );
-        floor.castShadow = true;
-        floor.receiveShadow = true;
-        floor.rotation.x -= Math.PI / 2;
-        floor.position.x = 100;
-        floor.position.z = -103;
-        scene.add(floor);
 
         for (var i=0; i<this.maze.length; i++) {
             for (var j=0; j<this.maze[0].length; j++) {
@@ -165,16 +163,14 @@ export default class Maze {
                     cube.castShadow = true;
                     cube.receiveShadow = true;
                     cube.position.set(5*j, 25, -5*i);
-                    scene.add(cube);
-                    this.walls.push(cube);
+                    this.walls.add(cube);
                 } 
                 else if (this.maze[i][j] == 2) {
                     ball = new THREE.Mesh(unique_ball, ball_material);
                     ball.castShadow = true;
                     ball.receiveShadow = true;
                     ball.position.set(5*j, 2, -5*i);
-                    scene.add(ball);
-                    this.balls.push(ball);
+                    this.balls.add(ball);
                 }
             }
         }
