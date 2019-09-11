@@ -41,7 +41,7 @@ function init() {
     scene.add(dirLight);
 
     // Create ambient light
-    var ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
+    var ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
     
     // Create PacMan
@@ -78,7 +78,7 @@ function init() {
             scene.add(mesh);
 
             domEvents.addEventListener(mesh, "mouseover", event => {
-                mesh.material.color.setHex(0xffffff);
+                mesh.material.color.setHex(0xffffcc);
                 $('html,body').css('cursor', 'pointer');
             });
 
