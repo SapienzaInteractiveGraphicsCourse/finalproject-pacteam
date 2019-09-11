@@ -28,8 +28,26 @@
 	<body>
         <button id="settings"></button>
         <button id="playpausebtn"></button>
-        <input type="range" class="custom-range" id="volumeslider">
-        <button id="mutebtn"></button>
+        
+        <div id='container' style="display:none">
+            <table id='settingsTable'>
+                <tbody>
+                    <tr>
+                        <td><button id='back'></button></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td class="badge text-wrap bg-danger">BackgroundVolume:</td>
+                        <td><input type="range" id="volumeslider"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td class="badge bg-danger">Mute audio:</td>
+                        <td><button id="mutebtn"></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </body>
     
 </html>
