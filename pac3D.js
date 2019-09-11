@@ -4,7 +4,8 @@ var scene, camera, renderer;
 var raycaster;
 
 // audio variables
-var audio, playPauseBtn, muteBtn, volumeSlider;
+var audio = new Array(2);
+var playPauseBtn, muteBtn, volumeSlider;
 
 // settings button
 var settingsBtn;
@@ -89,6 +90,8 @@ function init() {
                 muteBtn.style.display = "none";
                 settingsBtn.style.display = "none";
                 scene.remove(mesh);
+
+                camera.position.y = player.height;
             });
 
             domEvents.addEventListener(mesh, "mouseout", event => {
@@ -167,12 +170,15 @@ function animate() {
 
         if (intersects_balls_left.length > 0 && intersects_balls_left[0].distance < player.wall_distance) {
             maze.balls.remove(intersects_balls_left[0].object);
+            audio[1].play();
         }
         else if (intersects_balls_center.length > 0 && intersects_balls_center[0].distance < player.wall_distance) {
             maze.balls.remove(intersects_balls_center[0].object);
+            audio[1].play();
         } 
         else if (intersects_balls_right.length > 0 && intersects_balls_right[0].distance < player.wall_distance) {
             maze.balls.remove(intersects_balls_right[0].object);
+            audio[1].play();
         }
     }
 
@@ -349,46 +355,54 @@ function animate() {
 }
 
 function initAudioPlayer() {
-    audio = new Audio();
+    audio[0] = new Audio();
+    audio[1] = new Audio();
 
     // Specify the source
-    audio.src = "background_music/pacman_remix.mp3";
+    audio[0].src = "musics/pacman_remix.mp3";
+    audio[1].src = "musics/pacman_chomp.wav";
     // The audio is gonna loop over the source
-    audio.loop = true;
+    audio[0].loop = true;
+    audio[1].loop = false;
     // Put the audio in pause
-    audio.pause();
+    audio[0].pause();
+    audio[1].pause();
+    // Set the volume
+    audio[0].volume = 0.2;
+    audio[1].volume = 1;
+    // Setting speed of playback
+    audio[0].playbackRate = 1;
+    audio[1].playbackRate = 2;
 
     playPauseBtn = document.getElementById("playpausebtn");
     muteBtn = document.getElementById("mutebtn");
     volumeSlider = document.getElementById("volumeslider");
 
-    // Setting up the correct volume
     volumeSlider.value = 20;
-    audio.volume = 20/100;
     
     // Event handling
     playPauseBtn.onclick = () => {
-        if (audio.paused) {
-            audio.play();
+        if (audio[0].paused) {
+            audio[0].play();
             playPauseBtn.style.background = "url(images/pause.png) no-repeat";
         } else {
-            audio.pause();
+            audio[0].pause();
             playPauseBtn.style.background = "url(images/play.png) no-repeat";
         }
     };
 
     muteBtn.onclick = () => {
-        if (audio.muted) {
-		    audio.muted = false;
+        if (audio[0].muted) {
+		    audio[0].muted = false;
             muteBtn.style.background = "url(images/volume-high.png) no-repeat";
 	    } else {
-		    audio.muted = true;
+		    audio[0].muted = true;
 		    muteBtn.style.background = "url(images/muted.png) no-repeat";
 	    }
     };
 
     volumeSlider.oninput = () => {
-        audio.volume = volumeSlider.value/100;
+        audio[0].volume = volumeSlider.value/100;
     };
 }
 
