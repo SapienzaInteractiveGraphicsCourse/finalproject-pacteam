@@ -32,7 +32,7 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     // Set up the main camera
-    camera.position.set(100, player.height, -5);
+    camera.position.set(100, player.height+80, -5);
     camera.lookAt(camera.position.x, camera.position.y, camera.position.z);
 
     // Create a source of light
