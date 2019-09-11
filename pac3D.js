@@ -8,7 +8,8 @@ var audio = new Array(2);
 var playPauseBtn, muteBtn, volumeSlider;
 
 // settings button
-var settingsBtn;
+var settingsBtn, settingsTable, backBtn;
+var stopped = false;
 
 var keyboard = {};
 var player = {height: 5, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance: 0.3, score: 0.0};
@@ -19,6 +20,8 @@ var pacman_x_dim = 1.5, pacman_y_dim = 1.5, pacman_z_dim = 1.5;
 
 //Maze
 var maze;
+
+var paused = true;
 
 function init() {
     // Create the scene
@@ -85,13 +88,10 @@ function init() {
 
             domEvents.addEventListener(mesh, "click", event => {
                 // Hides the buttons
-                volumeSlider.style.display = "none";
-                playPauseBtn.style.display = "none";
-                muteBtn.style.display = "none";
-                settingsBtn.style.display = "none";
                 scene.remove(mesh);
-
                 camera.position.y = player.height;
+                paused = false;
+                audio[0].play();
             });
 
             domEvents.addEventListener(mesh, "mouseout", event => {
@@ -113,6 +113,12 @@ function init() {
 }
 
 function animate() {
+
+    if (paused) {
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+        return;
+    }
 
     if (keyboard[87]) { // W key
 
@@ -360,7 +366,7 @@ function initAudioPlayer() {
     audio[1].pause();
     // Set the volume
     audio[0].volume = 0.2;
-    audio[1].volume = 1;
+    audio[1].volume = 0.6;
     // Setting speed of playback
     audio[0].playbackRate = 1;
     audio[1].playbackRate = 2;
@@ -400,7 +406,27 @@ function initAudioPlayer() {
 function initSettings() {
 
     settingsBtn = document.getElementById("settings");
-    // ToDO
+    settingsTable = document.getElementById("container");
+    backBtn = document.getElementById("back");
+
+    settingsBtn.onclick = () => {
+        paused = true;
+        settingsTable.style.display = 'initial';
+        if (!audio[0].paused) {
+            audio[0].pause();
+            stopped = true;
+        }
+    }
+
+    backBtn.onclick = () => {
+        settingsTable.style.display = 'none';
+        if (stopped) {
+            audio[0].play();
+            stopped = false;
+        }
+        paused = false;
+
+    }
 }
 
 function keyDown(event) {
