@@ -21,7 +21,7 @@ var pacman_x_dim = 1.5, pacman_y_dim = 1.5, pacman_z_dim = 1.5;
 //Maze
 var maze;
 
-var paused = true;
+var paused = true, settinged = false;
 
 function init() {
     // Create the scene
@@ -50,7 +50,7 @@ function init() {
     
     // Create PacMan
     pacman = new THREE.Mesh(
-        new THREE.SphereBufferGeometry(1, 32, 32),
+        new THREE.SphereBufferGeometry(1, 32, 32, 0, 2*Math.PI, 0, 0.5 * Math.PI/2),
         new THREE.MeshPhongMaterial({color: 0xffff00}),
     );
     scene.add(pacman);
@@ -115,7 +115,7 @@ function init() {
 
 function animate() {
 
-    if (paused) {
+    if (paused || settinged) {
         renderer.render(scene, camera);
         requestAnimationFrame(animate);
         return;
@@ -358,49 +358,11 @@ function animate() {
     }
 
     if (keyboard[37]) { // left arrow
-
-        var actual_orientation = -camera.rotation.y;
-
-        var top_front_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
-        );
-
-        raycaster.set(top_front_left_vertex, new THREE.Vector3(
-            -Math.cos(actual_orientation), 
-            0, 
-            -Math.sin(actual_orientation)
-        ));
-        var intersects_top_front_left = raycaster.intersectObjects(maze.walls.children);
-
-
-        if (((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0)) {
-            camera.rotation.y += player.turn_speed;
-        }
+        camera.rotation.y += player.turn_speed;
     }
 
     if (keyboard[39]) { // right arrow
-
-        var actual_orientation = -camera.rotation.y;
-
-        var top_front_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
-        );
-
-        raycaster.set(top_front_right_vertex, new THREE.Vector3(
-            Math.cos(actual_orientation), 
-            0, 
-            Math.sin(actual_orientation)
-        ));
-        var intersects_top_front_right = raycaster.intersectObjects(maze.walls.children);
-
-
-        if ((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) {
-            camera.rotation.y -= player.turn_speed;
-        }
+        camera.rotation.y -= player.turn_speed;
     }
 
     if (keyboard[16]) {
@@ -477,7 +439,7 @@ function initSettings() {
     backBtn = document.getElementById("back");
 
     settingsBtn.onclick = () => {
-        paused = true;
+        settinged = true;
         settingsTable.style.display = 'initial';
         if (!audio[0].paused) {
             audio[0].pause();
@@ -491,8 +453,7 @@ function initSettings() {
             audio[0].play();
             stopped = false;
         }
-        paused = false;
-
+        settinged = false;
     }
 }
 
