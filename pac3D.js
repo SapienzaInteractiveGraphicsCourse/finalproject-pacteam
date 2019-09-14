@@ -21,6 +21,8 @@ var pacman_x_dim = 1.5, pacman_y_dim = 1.5, pacman_z_dim = 1.5;
 //Maze
 var maze;
 
+var left_portal_collision, right_portal_collision;
+
 var paused = true, settinged = false;
 
 function init() {
@@ -151,26 +153,23 @@ function animate() {
         ));
         var intersects_top_front_left = raycaster.intersectObjects(maze.walls.children);
 
-        if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) && 
-            ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0)) {
+        left_portal_collision = intersects_top_front_right[0].object.name == 'left' || intersects_top_front_left[0].object.name == 'left';
+        right_portal_collision = intersects_top_front_right[0].object.name == 'right' || intersects_top_front_left[0].object.name == 'right';
+
+        if ((((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) && 
+            ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0)) ||
+            (left_portal_collision || right_portal_collision)) {
+
             camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
             camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
-        }
 
-        if ((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance < 5)) {
-            if (intersects_top_front_right[0].object.name == 'left') {
+            if (left_portal_collision) {
                 camera.position.x = 195;
-            } else if (intersects_top_front_right[0].object.name == 'right') {
+            }
+            else if (right_portal_collision) {
                 camera.position.x = 5;
             }
-        }
 
-        if ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance < 5)) {
-            if (intersects_top_front_left[0].object.name == 'left') {
-                camera.position.x = 195;
-            } else if (intersects_top_front_left[0].object.name == 'right') {
-                camera.position.x = 5;
-            }
         }
 
         raycaster.set(new THREE.Vector3(pacman.position.x + 1.5*Math.cos(actual_orientation), pacman.position.y-0.5, pacman.position.z - 1.5*Math.sin(actual_orientation)), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
@@ -226,29 +225,23 @@ function animate() {
         ));
         var intersects_top_back_left = raycaster.intersectObjects(maze.walls.children);
 
-        if (((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance > player.wall_distance) || intersects_top_back_right.length == 0) && 
-            ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance > player.wall_distance) || intersects_top_back_left.length == 0)) {
+        left_portal_collision = intersects_top_back_right[0].object.name == 'left' || intersects_top_back_left[0].object.name == 'left'
+        right_portal_collision = intersects_top_back_right[0].object.name == 'right' || intersects_top_back_left[0].object.name == 'right';
+
+        if ((((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance > player.wall_distance) || intersects_top_back_right.length == 0) && 
+            ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance > player.wall_distance) || intersects_top_back_left.length == 0)) ||
+            (left_portal_collision || right_portal_collision)) {
+
             camera.position.x += Math.sin(camera.rotation.y) * player.speed;
             camera.position.z += Math.cos(camera.rotation.y) * player.speed;
-        }
 
-        if ((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance < 5)) {
-            if (intersects_top_back_right[0].object.name == 'left') {
+            if (left_portal_collision) {
                 camera.position.x = 195;
-            } else if (intersects_top_back_right[0].object.name == 'right') {
+            }
+            else if (right_portal_collision) {
                 camera.position.x = 5;
             }
         }
-
-        if ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance < 5)) {
-            if (intersects_top_back_left[0].object.name == 'left') {
-                camera.position.x = 195;
-            } else if (intersects_top_back_left[0].object.name == 'right') {
-                camera.position.x = 5;
-            }
-        }
-
-        
     }
 
     if (keyboard[65]) { // A key
@@ -281,24 +274,20 @@ function animate() {
         ));
         var intersects_top_back_left = raycaster.intersectObjects(maze.walls.children);
 
-        if (((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0) && 
-            ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance > player.wall_distance) || intersects_top_back_left.length == 0)) {
+        left_portal_collision = intersects_top_front_left[0].object.name == 'left' || intersects_top_front_right[0].object.name == 'left';
+        right_portal_collision = intersects_top_front_left[0].object.name == 'right' || intersects_top_front_right[0].object.name == 'right';
+
+        if ((((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance > player.wall_distance) || intersects_top_front_left.length == 0) && 
+            ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance > player.wall_distance) || intersects_top_back_left.length == 0)) ||
+            (left_portal_collision || right_portal_collision)) {
+
             camera.position.x += Math.sin(camera.rotation.y - Math.PI/2) * player.speed;
             camera.position.z += Math.cos(camera.rotation.y - Math.PI/2) * player.speed;
-        }
 
-        if ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance < 5)) {
-            if (intersects_top_front_left[0].object.name == 'left') {
+            if (left_portal_collision) {
                 camera.position.x = 195;
-            } else if (intersects_top_front_left[0].object.name == 'right') {
-                camera.position.x = 5;
             }
-        }
-
-        if ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance < 5)) {
-            if (intersects_top_back_left[0].object.name == 'left') {
-                camera.position.x = 195;
-            } else if (intersects_top_back_left[0].object.name == 'right') {
+            else if (right_portal_collision) {
                 camera.position.x = 5;
             }
         }
@@ -334,24 +323,20 @@ function animate() {
         ));
         var intersects_top_front_right = raycaster.intersectObjects(maze.walls.children);
 
-        if (((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) && 
-            ((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance > player.wall_distance) || intersects_top_back_right.length == 0)) {
+        left_portal_collision = intersects_top_back_right[0].object.name == 'left' || intersects_top_back_left[0].object.name == 'left';
+        right_portal_collision = intersects_top_back_right[0].object.name == 'right' || intersects_top_back_left[0].object.name == 'right';
+
+        if ((((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance > player.wall_distance) || intersects_top_front_right.length == 0) && 
+            ((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance > player.wall_distance) || intersects_top_back_right.length == 0)) ||
+            (left_portal_collision || right_portal_collision)) {
+
             camera.position.x += Math.sin(camera.rotation.y + Math.PI/2) * player.speed;
             camera.position.z += Math.cos(camera.rotation.y + Math.PI/2) * player.speed;
-        }
 
-        if ((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance < 5)) {
-            if (intersects_top_back_right[0].object.name == 'left') {
+            if (left_portal_collision) {
                 camera.position.x = 195;
-            } else if (intersects_top_back_right[0].object.name == 'right') {
-                camera.position.x = 5;
             }
-        }
-
-        if ((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance < 5)) {
-            if (intersects_top_front_right[0].object.name == 'left') {
-                camera.position.x = 195;
-            } else if (intersects_top_front_right[0].object.name == 'right') {
+            else if (right_portal_collision) {
                 camera.position.x = 5;
             }
         }
