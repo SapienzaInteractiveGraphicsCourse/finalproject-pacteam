@@ -50,7 +50,7 @@ function init() {
     
     // Create PacMan
     pacman = new THREE.Mesh(
-        new THREE.SphereBufferGeometry(1, 32, 32, 0, 2*Math.PI, 0, 0.5 * Math.PI/2),
+        new THREE.SphereBufferGeometry(1, 32, 32),//, 0, 2*Math.PI, 0, 0.5 * Math.PI/2),
         new THREE.MeshPhongMaterial({color: 0xffff00}),
     );
     scene.add(pacman);
