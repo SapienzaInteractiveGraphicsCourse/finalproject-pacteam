@@ -156,6 +156,22 @@ function animate() {
             camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
         }
 
+        if ((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance < 5)) {
+            if (intersects_top_front_right[0].object.name == 'left') {
+                camera.position.x = 195;
+            } else if (intersects_top_front_right[0].object.name == 'right') {
+                camera.position.x = 5;
+            }
+        }
+
+        if ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance < 5)) {
+            if (intersects_top_front_left[0].object.name == 'left') {
+                camera.position.x = 195;
+            } else if (intersects_top_front_left[0].object.name == 'right') {
+                camera.position.x = 5;
+            }
+        }
+
         raycaster.set(new THREE.Vector3(pacman.position.x + 1.5*Math.cos(actual_orientation), pacman.position.y-0.5, pacman.position.z - 1.5*Math.sin(actual_orientation)), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
         var intersects_balls_left = raycaster.intersectObjects(maze.balls.children);
 
@@ -214,6 +230,24 @@ function animate() {
             camera.position.x += Math.sin(camera.rotation.y) * player.speed;
             camera.position.z += Math.cos(camera.rotation.y) * player.speed;
         }
+
+        if ((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance < 5)) {
+            if (intersects_top_back_right[0].object.name == 'left') {
+                camera.position.x = 195;
+            } else if (intersects_top_back_right[0].object.name == 'right') {
+                camera.position.x = 5;
+            }
+        }
+
+        if ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance < 5)) {
+            if (intersects_top_back_left[0].object.name == 'left') {
+                camera.position.x = 195;
+            } else if (intersects_top_back_left[0].object.name == 'right') {
+                camera.position.x = 5;
+            }
+        }
+
+        
     }
 
     if (keyboard[65]) { // A key
@@ -251,6 +285,22 @@ function animate() {
             camera.position.x += Math.sin(camera.rotation.y - Math.PI/2) * player.speed;
             camera.position.z += Math.cos(camera.rotation.y - Math.PI/2) * player.speed;
         }
+
+        if ((intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance < 5)) {
+            if (intersects_top_front_left[0].object.name == 'left') {
+                camera.position.x = 195;
+            } else if (intersects_top_front_left[0].object.name == 'right') {
+                camera.position.x = 5;
+            }
+        }
+
+        if ((intersects_top_back_left.length > 0 && intersects_top_back_left[0].distance < 5)) {
+            if (intersects_top_back_left[0].object.name == 'left') {
+                camera.position.x = 195;
+            } else if (intersects_top_back_left[0].object.name == 'right') {
+                camera.position.x = 5;
+            }
+        }
     }
 
     if (keyboard[68]) { // D key
@@ -287,6 +337,22 @@ function animate() {
             ((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance > player.wall_distance) || intersects_top_back_right.length == 0)) {
             camera.position.x += Math.sin(camera.rotation.y + Math.PI/2) * player.speed;
             camera.position.z += Math.cos(camera.rotation.y + Math.PI/2) * player.speed;
+        }
+
+        if ((intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance < 5)) {
+            if (intersects_top_back_right[0].object.name == 'left') {
+                camera.position.x = 195;
+            } else if (intersects_top_back_right[0].object.name == 'right') {
+                camera.position.x = 5;
+            }
+        }
+
+        if ((intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance < 5)) {
+            if (intersects_top_front_right[0].object.name == 'left') {
+                camera.position.x = 195;
+            } else if (intersects_top_front_right[0].object.name == 'right') {
+                camera.position.x = 5;
+            }
         }
     }
 

@@ -37,7 +37,7 @@ export default class Maze {
         //Represents the balls objects
         this.balls = new THREE.Group();
         //Represents the floor
-        this.floor = undefined;
+        this.floor = new THREE.Mesh();
     }
 
     createMaze() {
@@ -148,10 +148,8 @@ export default class Maze {
         this.createMaze()
         this.createBalls()
 
-        this.floor = new THREE.Mesh(
-            new THREE.PlaneGeometry(205, 211, 10, 10),
-            new THREE.MeshPhongMaterial({map:textureFloor})
-        );
+        this.floor.geometry = new THREE.PlaneGeometry(205, 211, 10, 10);
+        this.floor.material = new THREE.MeshPhongMaterial({map:textureFloor});
         this.floor.castShadow = true;
         this.floor.receiveShadow = true;
         this.floor.rotation.x -= Math.PI / 2;
@@ -176,6 +174,26 @@ export default class Maze {
                 }
             }
         }
+
+        cube = new THREE.Mesh(
+            new THREE.BoxBufferGeometry(1, 50, 15),
+            new THREE.MeshBasicMaterial({color:0xffffff})
+        );
+        cube.material.opacity = 0;
+        cube.material.transparent = true;
+        cube.position.set(0, 25, -110);
+        cube.name = 'left';
+        this.walls.add(cube);
+
+        cube = new THREE.Mesh(
+            new THREE.BoxBufferGeometry(1, 50, 15),
+            new THREE.MeshBasicMaterial({color:0xffffff})
+        );
+        cube.material.opacity = 0;
+        cube.material.transparent = true;
+        cube.position.set(200, 25, -110);
+        cube.name = 'right';
+        this.walls.add(cube);
     }
 
 
