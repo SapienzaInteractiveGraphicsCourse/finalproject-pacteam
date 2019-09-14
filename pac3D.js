@@ -91,6 +91,7 @@ function init() {
                 scene.remove(mesh);
                 camera.position.y = player.height;
                 paused = false;
+                document.getElementById("playpausebtn").style.background = "url(images/pause.png) no-repeat";
                 audio[0].play();
             });
 
