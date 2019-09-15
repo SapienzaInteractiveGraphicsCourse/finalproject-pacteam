@@ -16,7 +16,7 @@ var player = {height: 5, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance: 
 
 // Pacman variables
 var pacman;
-var pacman_x_dim = 1, pacman_y_dim = 1, pacman_z_dim = 1;
+var pacman_x_dim = 1.5, pacman_y_dim = 1.5, pacman_z_dim = 1.5;
 
 //Maze
 var maze;
@@ -266,6 +266,7 @@ function animate() {
             -Math.sin(actual_orientation)
         ));
         var intersects_top_front_left = raycaster.intersectObjects(maze.walls.children);
+        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
         raycaster.set(top_back_left_vertex, new THREE.Vector3(
             -Math.cos(actual_orientation), 
@@ -273,6 +274,7 @@ function animate() {
             -Math.sin(actual_orientation)
         ));
         var intersects_top_back_left = raycaster.intersectObjects(maze.walls.children);
+        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000) );
 
         var left_portal_collision = (intersects_top_front_right > 0 && intersects_top_front_right[0].object.name == 'left') || (intersects_top_front_left > 0 && intersects_top_front_left[0].object.name == 'left');
         var right_portal_collision = (intersects_top_front_right > 0 && intersects_top_front_right[0].object.name == 'right') || (intersects_top_front_left > 0 && intersects_top_front_left[0].object.name == 'right');
@@ -355,7 +357,7 @@ function animate() {
         //scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
         var intersections = raycaster.intersectObjects(maze.walls.children);
 
-        if ((intersections.length > 0 && intersections[0].distance > player.wall_distance + 2) || intersections.length == 0) {
+        if ((intersections.length > 0 && intersections[0].distance > player.wall_distance) || intersections.length == 0) {
             camera.rotation.y += player.turn_speed;
         }
 
@@ -372,17 +374,17 @@ function animate() {
         ));
         var intersections = raycaster.intersectObjects(maze.walls.children);
 
-        if ((intersections.length > 0 && intersections[0].distance > player.wall_distance+2) || intersections.length == 0) {
+        if ((intersections.length > 0 && intersections[0].distance > player.wall_distance) || intersections.length == 0) {
             camera.rotation.y -= player.turn_speed;
         }
     }
 
     if (keyboard[16]) {
         player.speed = 0.4;
-        player.wall_distance = 0.6;
+        player.wall_distance = 1;
     } else {
         player.speed = 0.2;
-        player.wall_distance = 0.3;
+        player.wall_distance = 0.5;
     }
 
     // Update pacman position
