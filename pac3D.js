@@ -1,4 +1,5 @@
 import Maze from './maze.js';
+import Ghost from './ghost.js';
 
 var scene, camera, renderer;
 var raycaster;
@@ -21,8 +22,6 @@ var pacman_x_dim = 1.5, pacman_y_dim = 1.5, pacman_z_dim = 1.5;
 //Maze
 var maze;
 
-var left_portal_collision, right_portal_collision;
-
 var paused = true, settinged = false;
 
 function init() {
@@ -40,6 +39,12 @@ function init() {
     // Set up the main camera
     camera.position.set(100, player.height+80, -5);
     camera.lookAt(camera.position.x, camera.position.y, camera.position.z);
+
+    var ghost = new Ghost();
+    ghost.init_ghost(1, 1, 1, 0xf000ff, 1, 0xf2008f, 
+        1, 0xf0f01f, 0.2, 0.2, 0.2, 0xf2008f, 
+        camera.position);
+    scene.add(ghost);
 
     // Create a source of light
     var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
