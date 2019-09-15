@@ -1,7 +1,7 @@
 export default class Ghost {
 
     constructor(torso_width, torso_height, torso_depth, eye_ray, head_ray, leg_height, leg_width) {
-        this.ghost = new THREE.Object3D();
+        this.ghost = new THREE.Group();
     }
 
     init_ghost(torso_width, torso_height, torso_depth, torso_color, head_ray, head_color, 
@@ -20,11 +20,11 @@ export default class Ghost {
                 new THREE.BoxBufferGeometry(leg_width, leg_height, leg_depth),
                 new THREE.MeshPhongMaterial({color: leg_color}));
 
-        torso.position = torso_pos;
+        torso.position.set(torso_pos.x, torso_pos.y, torso_pos.z);
         torso.receiveShadow = true;
         torso.castShadow = true;
 
-        head.position = torso.position;
+        head.position.set(torso.position.x, torso.position.y, torso.position.z);
         head.position.y += torso_height;
         head.receiveShadow = true;
         head.castShadow = true;

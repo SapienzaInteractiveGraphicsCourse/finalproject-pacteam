@@ -40,12 +40,6 @@ function init() {
     camera.position.set(100, player.height+80, -5);
     camera.lookAt(camera.position.x, camera.position.y, camera.position.z);
 
-    var ghost = new Ghost();
-    ghost.init_ghost(1, 1, 1, 0xf000ff, 1, 0xf2008f, 
-        1, 0xf0f01f, 0.2, 0.2, 0.2, 0xf2008f, 
-        camera.position);
-    scene.add(ghost.ghost);
-
     // Create a source of light
     var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
     dirLight.position.set(100, 80, -50);
@@ -61,7 +55,11 @@ function init() {
         new THREE.MeshPhongMaterial({color: 0xffff00}),
     );
     scene.add(pacman);
-    
+
+    var ghost = new Ghost();
+    ghost.init_ghost(1, 1, 1, 0xf000ff, 1, 0xf2008f, 1, 0xf0f01f, 0.2, 0.2, 0.2, 0xf2008f, new THREE.Vector3(100, player.height, -6));
+    scene.add(ghost.ghost);
+    console.log(ghost.ghost);
     //Create a raycaster instance
     raycaster = new THREE.Raycaster();
 
