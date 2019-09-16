@@ -48,13 +48,6 @@ function init() {
     // Create ambient light
     var ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
-    
-    // Create PacMan
-    /* pacman = new THREE.Mesh(
-        new THREE.SphereBufferGeometry(1, 32, 32),//, 0, 2*Math.PI, 0, 0.5 * Math.PI/2),
-        new THREE.MeshPhongMaterial({color: 0xffff00}),
-    );
-    scene.add(pacman); */
 
     var loader = new THREE.OBJLoader();
 
@@ -76,7 +69,7 @@ function init() {
             
             pacman = object;
             pacman.position.set(110, player.height, -10);
-            scene.add(object);
+            scene.add(pacman);
 
         });
 
