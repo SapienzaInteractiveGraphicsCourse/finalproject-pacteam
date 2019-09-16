@@ -438,8 +438,8 @@ function animate() {
     renderer.render( scene, camera );
     renderer.clearDepth();
  	renderer.setScissorTest(true);
-    renderer.setScissor( 16, window.innerHeight - insetHeight - 16, insetWidth, insetHeight );
-    renderer.setViewport(16,window.innerHeight - insetHeight - 16, insetWidth, insetHeight );
+    renderer.setScissor( window.innerWidth-insetWidth, window.innerHeight - insetHeight, insetWidth, insetHeight );
+    renderer.setViewport(window.innerWidth-insetWidth, window.innerHeight - insetHeight, insetWidth, insetHeight );
 	renderer.render(scene, cameraOrtho);
     renderer.setScissorTest( false );
     requestAnimationFrame(animate);
@@ -570,8 +570,8 @@ function onWindowResize() {
 
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    insetWidth = window.innerHeight / 4;
-    insetHeight = window.innerHeight / 4;
+    insetWidth = window.innerHeight / 8;
+    insetHeight = window.innerHeight / 8;
 
     cameraOrtho.aspect = insetWidth / insetHeight;
     cameraOrtho.updateProjectionMatrix(); 
