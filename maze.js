@@ -10,7 +10,7 @@ textureWall.wrapS = THREE.RepeatWrapping;
 textureWall.wrapT = THREE.RepeatWrapping;
 textureWall.generateMipmaps = true;
 textureWall.repeat.set(1, 10);
-var textureFloor = new THREE.TextureLoader().load("textures/floor.png");
+var textureFloor = new THREE.TextureLoader().load("textures/ground.jpg");
 textureFloor.wrapS = THREE.RepeatWrapping;
 textureFloor.wrapT = THREE.RepeatWrapping;
 textureFloor.repeat.set(50, 50);
@@ -175,22 +175,22 @@ export default class Maze {
             }
         }
 
+        var textureTeleport = new THREE.TextureLoader().load("textures/teleport.jpg");
+        textureTeleport.wrapS = THREE.RepeatWrapping;
+        textureTeleport.wrapT = THREE.RepeatWrapping;
+
         cube = new THREE.Mesh(
             new THREE.BoxBufferGeometry(1, 50, 15),
-            new THREE.MeshBasicMaterial({color:0xffffff})
+            new THREE.MeshBasicMaterial({map:textureTeleport})
         );
-        cube.material.opacity = 0;
-        cube.material.transparent = true;
         cube.position.set(0, 25, -110);
         cube.name = 'left';
         this.walls.add(cube);
 
         cube = new THREE.Mesh(
             new THREE.BoxBufferGeometry(1, 50, 15),
-            new THREE.MeshBasicMaterial({color:0xffffff})
+            new THREE.MeshBasicMaterial({map:textureTeleport})
         );
-        cube.material.opacity = 0;
-        cube.material.transparent = true;
         cube.position.set(200, 25, -110);
         cube.name = 'right';
         this.walls.add(cube);
