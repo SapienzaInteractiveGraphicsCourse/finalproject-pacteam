@@ -15,7 +15,7 @@ var settingsBtn, settingsTable, backBtn;
 var stopped = false;
 
 var keyboard = {};
-var player = {height: 10, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance: 0.5, score: 0.0};
+var player = {height: 6, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance: 0.5, score: 0.0};
 
 // Pacman variables
 var pacman;
@@ -54,7 +54,6 @@ function init() {
 
     // Set up the main camera
     camera.position.set(100, player.height+80, -5);
-    camera.lookAt(camera.position.x, camera.position.y, camera.position.z);
 
     // Create a source of light
     var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -82,7 +81,7 @@ function init() {
         // called when resource is loaded
         function (object) {
 
-            object.scale.set(0.08, 0.08, 0.08);
+            object.scale.set(0.06, 0.06, 0.06);
             object.rotation.y -= Math.PI*50/126;
             object.rotation.z += 0.15;
             object.traverse( (child) => {
@@ -137,7 +136,6 @@ function init() {
                 // Hides the buttons
                 scene.remove(mesh);
                 camera.position.y = player.height;
-                camera.lookAt(camera.position.x + Math.cos(camera.rotation.y + Math.PI/2)*8, camera.position.y-3, camera.position.z - Math.sin(camera.rotation.y + Math.PI/2)*8);
                 paused = false;
                 document.getElementById("playpausebtn").style.background = "url(images/pause.png) no-repeat";
                 audio[0].play();
@@ -432,7 +430,7 @@ function animate() {
 
     // Update pacman position
     pacman.position.set(camera.position.x + Math.cos(camera.rotation.y + Math.PI/2)*3.5, 1, camera.position.z - Math.sin(camera.rotation.y + Math.PI/2)*3.5);
-    pacman.rotation.set(camera.rotation.x, camera.rotation.y - 1.28, camera.rotation.z + 0.15);
+    pacman.rotation.set(camera.rotation.x, camera.rotation.y - 1.28, camera.rotation.z + 0.22);
     
     renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
     renderer.render( scene, camera );
