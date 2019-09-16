@@ -5,7 +5,7 @@ var scene, camera, renderer;
 var raycaster;
 
 // audio variables
-var audio = new Array(2);
+var audio = new Array(5);
 var playPauseBtn, muteBtn, volumeSlider;
 
 // settings button
@@ -19,7 +19,7 @@ var player = {height: 10, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance:
 var pacman;
 var pacman_x_dim = 1.5, pacman_y_dim = 1.5, pacman_z_dim = 1.5;
 
-//Maze
+// Maze
 var maze;
 
 var paused = true, settinged = false;
