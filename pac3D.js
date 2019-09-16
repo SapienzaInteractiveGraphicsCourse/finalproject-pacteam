@@ -13,7 +13,7 @@ var settingsBtn, settingsTable, backBtn;
 var stopped = false;
 
 var keyboard = {};
-var player = {height: 5, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance: 0.5, score: 0.0};
+var player = {height: 10, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance: 0.5, score: 0.0};
 
 // Pacman variables
 var pacman;
@@ -65,7 +65,7 @@ function init() {
         // called when resource is loaded
         function (object) {
 
-            object.scale.set(0.02, 0.02, 0.02);
+            object.scale.set(0.08, 0.08, 0.08);
             object.rotation.y -= Math.PI*50/126;
             object.rotation.z += 0.15;
             object.traverse( (child) => {
@@ -119,6 +119,7 @@ function init() {
                 // Hides the buttons
                 scene.remove(mesh);
                 camera.position.y = player.height;
+                camera.lookAt(camera.position.x + Math.cos(camera.rotation.y + Math.PI/2)*8, camera.position.y-3, camera.position.z - Math.sin(camera.rotation.y + Math.PI/2)*8);
                 paused = false;
                 document.getElementById("playpausebtn").style.background = "url(images/pause.png) no-repeat";
                 audio[0].play();
@@ -423,7 +424,7 @@ function animate() {
     }
 
     // Update pacman position
-    pacman.position.set(camera.position.x + Math.cos(camera.rotation.y + Math.PI/2)*2.5, camera.position.y - 2, camera.position.z - Math.sin(camera.rotation.y + Math.PI/2)*2.5);
+    pacman.position.set(camera.position.x + Math.cos(camera.rotation.y + Math.PI/2)*3.5, 1, camera.position.z - Math.sin(camera.rotation.y + Math.PI/2)*3.5);
     pacman.rotation.set(camera.rotation.x, camera.rotation.y - 1.28, camera.rotation.z + 0.15);
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
