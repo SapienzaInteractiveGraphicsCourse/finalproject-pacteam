@@ -204,13 +204,13 @@ function animate() {
             camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
         }
 
-        raycaster.set(new THREE.Vector3(pacman.position.x + 1.5*Math.cos(actual_orientation), pacman.position.y-0.5, pacman.position.z - 1.5*Math.sin(actual_orientation)), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
+        raycaster.set(new THREE.Vector3(pacman.position.x + 1.5*Math.cos(actual_orientation), pacman.position.y+1, pacman.position.z - 1.5*Math.sin(actual_orientation)), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
         var intersects_balls_left = raycaster.intersectObjects(maze.balls.children);
 
-        raycaster.set(new THREE.Vector3(pacman.position.x, pacman.position.y-0.5, pacman.position.z), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
+        raycaster.set(new THREE.Vector3(pacman.position.x, pacman.position.y+1, pacman.position.z), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
         var intersects_balls_center = raycaster.intersectObjects(maze.balls.children);
 
-        raycaster.set(new THREE.Vector3(pacman.position.x - 1.5*Math.cos(actual_orientation), pacman.position.y-0.5, pacman.position.z + 1.5*Math.sin(actual_orientation)), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
+        raycaster.set(new THREE.Vector3(pacman.position.x - 1.5*Math.cos(actual_orientation), pacman.position.y+1, pacman.position.z + 1.5*Math.sin(actual_orientation)), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
         var intersects_balls_right = raycaster.intersectObjects(maze.balls.children);
 
         if (intersects_balls_left.length > 0 && intersects_balls_left[0].distance < player.wall_distance) {
