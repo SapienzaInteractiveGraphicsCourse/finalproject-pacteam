@@ -5,7 +5,7 @@ A class to represents a Maze
 */
 
 // Textures
-var textureWall = new THREE.TextureLoader().load("textures/Grass/grass_01.png");
+var textureWall = new THREE.TextureLoader().load("textures/grass.png");
 textureWall.wrapS = THREE.RepeatWrapping;
 textureWall.wrapT = THREE.RepeatWrapping;
 textureWall.generateMipmaps = true;
