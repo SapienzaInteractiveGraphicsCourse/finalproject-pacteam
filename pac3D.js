@@ -1,8 +1,10 @@
 import Maze from './maze.js';
 import Ghost from './ghost.js';
 
-var scene, camera, renderer;
+var scene, camera, cameraOrtho, renderer;
 var raycaster;
+
+var insetWidth, insetHeight;
 
 // audio variables
 var audio = new Array(5);
@@ -24,12 +26,26 @@ var maze;
 
 var paused = true, settinged = false;
 
+
 function init() {
     // Create the scene
     scene = new THREE.Scene();
 
     // Create the main camera
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    cameraOrtho = new THREE.OrthographicCamera( 
+        -0, //Left
+        201,   //Right
+        205,   //Top 
+        -0,  //Bottom
+        -1000,
+        1000 );
+    
+    cameraOrtho.up = new THREE.Vector3(0,0,-1);
+	cameraOrtho.lookAt( new THREE.Vector3(0,-1,0) );
+    scene.add( cameraOrtho );
+
+    console.log(cameraOrtho.position);
 
     // Create the renderer
     renderer = new THREE.WebGLRenderer({alpha:true});
@@ -142,6 +158,7 @@ function init() {
     scene.add(maze.balls);
 
     // Start rendering
+    onWindowResize();
     animate();
 }
 
@@ -417,7 +434,14 @@ function animate() {
     pacman.position.set(camera.position.x + Math.cos(camera.rotation.y + Math.PI/2)*3.5, 1, camera.position.z - Math.sin(camera.rotation.y + Math.PI/2)*3.5);
     pacman.rotation.set(camera.rotation.x, camera.rotation.y - 1.28, camera.rotation.z + 0.15);
     
-    renderer.render(scene, camera);
+    renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
+    renderer.render( scene, camera );
+    renderer.clearDepth();
+ 	renderer.setScissorTest(true);
+    renderer.setScissor( 16, window.innerHeight - insetHeight - 16, insetWidth, insetHeight );
+    renderer.setViewport(16,window.innerHeight - insetHeight - 16, insetWidth, insetHeight );
+	renderer.render(scene, cameraOrtho);
+    renderer.setScissorTest( false );
     requestAnimationFrame(animate);
 }
 
@@ -545,6 +569,12 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
 
     renderer.setSize(window.innerWidth, window.innerHeight);
+
+    insetWidth = window.innerHeight / 4;
+    insetHeight = window.innerHeight / 4;
+
+    cameraOrtho.aspect = insetWidth / insetHeight;
+    cameraOrtho.updateProjectionMatrix(); 
 }
 
 // Arrows listeners
