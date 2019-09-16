@@ -432,22 +432,42 @@ function animate() {
 function initAudioPlayer() {
     audio[0] = new Audio();
     audio[1] = new Audio();
+    audio[2] = new Audio();
+    audio[3] = new Audio();
+    audio[4] = new Audio();
 
     // Specify the source
     audio[0].src = "musics/pacman_remix.mp3";
     audio[1].src = "musics/pacman_eatfruit.wav";
+    audio[2].src = "musics/pacman_change_volume_ringtone.wav";
+    audio[3].src = "musics/pacman_death.wav";
+    audio[4].src = "musics/pacman_eatghost.wav";
+
     // The audio is gonna loop over the source
     audio[0].loop = true;
     audio[1].loop = false;
+    audio[2].loop = false;
+    audio[3].loop = false;
+    audio[4].loop = false;
+
     // Put the audio in pause
     audio[0].pause();
     audio[1].pause();
+    audio[2].pause();
+    audio[3].pause();
+    audio[4].pause();
+
     // Set the volume
     audio[0].volume = 0.2;
-    audio[1].volume = 0.6;
+    audio[1].volume = 0.2;
+    audio[2].volume = 0.2;
+    audio[3].volume = 0.2;
+    audio[4].volume = 0.2;
+
     // Setting speed of playback
     audio[0].playbackRate = 1;
     audio[1].playbackRate = 2;
+    audio[2].playbackRate = 1.15;
 
     playPauseBtn = document.getElementById("playpausebtn");
     muteBtn = document.getElementById("mutebtn");
@@ -468,16 +488,27 @@ function initAudioPlayer() {
 
     muteBtn.onclick = () => {
         if (audio[0].muted) {
-		    audio[0].muted = false;
+            audio[0].muted = false;
+            audio[1].muted = false;
+            audio[3].muted = false;
+            audio[4].muted = false;
             muteBtn.style.background = "url(images/volume-high.png) no-repeat";
 	    } else {
-		    audio[0].muted = true;
+            audio[0].muted = true;
+            audio[1].muted = true;
+            audio[3].muted = true;
+            audio[4].muted = true;
 		    muteBtn.style.background = "url(images/muted.png) no-repeat";
 	    }
     };
 
-    volumeSlider.oninput = () => {
+    volumeSlider.onchange = () => {
         audio[0].volume = volumeSlider.value/100;
+        audio[1].volume = volumeSlider.value/100;
+        audio[2].volume = volumeSlider.value/100;
+        audio[3].volume = volumeSlider.value/100;
+        audio[4].volume = volumeSlider.value/100;
+        audio[2].play();
     };
 }
 
