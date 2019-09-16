@@ -195,6 +195,4 @@ export default class Maze {
         cube.name = 'right';
         this.walls.add(cube);
     }
-
-
 }
