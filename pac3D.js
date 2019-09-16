@@ -155,31 +155,29 @@ function animate() {
 
     if (keyboard[87]) { // W key
 
-        var actual_orientation = -camera.rotation.y;
-
         var top_front_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
+            pacman.position.x + pacman_x_dim / 2 * Math.cos(-camera.rotation.y) + pacman_z_dim / 2 * Math.sin(-camera.rotation.y),
             pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
+            pacman.position.z + pacman_x_dim / 2 * Math.sin(-camera.rotation.y) - pacman_z_dim / 2 * Math.cos(-camera.rotation.y)
         );
 
         var top_front_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
+            pacman.position.x - pacman_x_dim / 2 * Math.cos(-camera.rotation.y) + pacman_z_dim / 2 * Math.sin(-camera.rotation.y),
             pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
+            pacman.position.z - pacman_x_dim / 2 * Math.sin(-camera.rotation.y) - pacman_z_dim / 2 * Math.cos(-camera.rotation.y)
         );
         
         raycaster.set(top_front_right_vertex, new THREE.Vector3(
-            Math.sin(actual_orientation), 
+            Math.sin(-camera.rotation.y), 
             0, 
-            -Math.cos(actual_orientation)
+            -Math.cos(-camera.rotation.y)
         ));
         var intersects_top_front_right = raycaster.intersectObjects(maze.walls.children);
 
         raycaster.set(top_front_left_vertex, new THREE.Vector3(
-            Math.sin(actual_orientation), 
+            Math.sin(-camera.rotation.y), 
             0, 
-            -Math.cos(actual_orientation)
+            -Math.cos(-camera.rotation.y)
         ));
         var intersects_top_front_left = raycaster.intersectObjects(maze.walls.children);
 
@@ -204,13 +202,13 @@ function animate() {
             camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
         }
 
-        raycaster.set(new THREE.Vector3(pacman.position.x + 1.5*Math.cos(actual_orientation), pacman.position.y+1, pacman.position.z - 1.5*Math.sin(actual_orientation)), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
+        raycaster.set(new THREE.Vector3(pacman.position.x + 1.5*Math.cos(-camera.rotation.y), pacman.position.y+1, pacman.position.z - 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
         var intersects_balls_left = raycaster.intersectObjects(maze.balls.children);
 
-        raycaster.set(new THREE.Vector3(pacman.position.x, pacman.position.y+1, pacman.position.z), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
+        raycaster.set(new THREE.Vector3(pacman.position.x, pacman.position.y+1, pacman.position.z), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
         var intersects_balls_center = raycaster.intersectObjects(maze.balls.children);
 
-        raycaster.set(new THREE.Vector3(pacman.position.x - 1.5*Math.cos(actual_orientation), pacman.position.y+1, pacman.position.z + 1.5*Math.sin(actual_orientation)), new THREE.Vector3(Math.sin(actual_orientation), 0, -Math.cos(actual_orientation)));
+        raycaster.set(new THREE.Vector3(pacman.position.x - 1.5*Math.cos(-camera.rotation.y), pacman.position.y+1, pacman.position.z + 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
         var intersects_balls_right = raycaster.intersectObjects(maze.balls.children);
 
         if (intersects_balls_left.length > 0 && intersects_balls_left[0].distance < player.wall_distance) {
@@ -229,31 +227,29 @@ function animate() {
 
     if (keyboard[83]) { // S key
 
-        var actual_orientation = -camera.rotation.y;
-
         var top_back_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) - pacman_z_dim / 2 * Math.sin(actual_orientation),
+            pacman.position.x + pacman_x_dim / 2 * Math.cos(-camera.rotation.y) - pacman_z_dim / 2 * Math.sin(-camera.rotation.y),
             pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) + pacman_z_dim / 2 * Math.cos(actual_orientation)
+            pacman.position.z + pacman_x_dim / 2 * Math.sin(-camera.rotation.y) + pacman_z_dim / 2 * Math.cos(-camera.rotation.y)
         );
 
         var top_back_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) - pacman_z_dim / 2 * Math.sin(actual_orientation),
+            pacman.position.x - pacman_x_dim / 2 * Math.cos(-camera.rotation.y) - pacman_z_dim / 2 * Math.sin(-camera.rotation.y),
             pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) + pacman_z_dim / 2 * Math.cos(actual_orientation)
+            pacman.position.z - pacman_x_dim / 2 * Math.sin(-camera.rotation.y) + pacman_z_dim / 2 * Math.cos(-camera.rotation.y)
         );
 
         raycaster.set(top_back_right_vertex, new THREE.Vector3(
-            -Math.sin(actual_orientation), 
+            -Math.sin(-camera.rotation.y), 
             0, 
-            Math.cos(actual_orientation)
+            Math.cos(-camera.rotation.y)
         ));
         var intersects_top_back_right = raycaster.intersectObjects(maze.walls.children);
 
         raycaster.set(top_back_left_vertex, new THREE.Vector3(
-            -Math.sin(actual_orientation), 
+            -Math.sin(-camera.rotation.y), 
             0, 
-            Math.cos(actual_orientation)
+            Math.cos(-camera.rotation.y)
         ));
         var intersects_top_back_left = raycaster.intersectObjects(maze.walls.children);
         
@@ -281,31 +277,29 @@ function animate() {
 
     if (keyboard[65]) { // A key
 
-        var actual_orientation = -camera.rotation.y;
-
         var top_front_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
+            pacman.position.x - pacman_x_dim / 2 * Math.cos(-camera.rotation.y) + pacman_z_dim / 2 * Math.sin(-camera.rotation.y),
             pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
+            pacman.position.z - pacman_x_dim / 2 * Math.sin(-camera.rotation.y) - pacman_z_dim / 2 * Math.cos(-camera.rotation.y)
         );
 
         var top_back_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim / 2 * Math.cos(actual_orientation) - pacman_z_dim / 2 * Math.sin(actual_orientation),
+            pacman.position.x - pacman_x_dim / 2 * Math.cos(-camera.rotation.y) - pacman_z_dim / 2 * Math.sin(-camera.rotation.y),
             pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z - pacman_x_dim / 2 * Math.sin(actual_orientation) + pacman_z_dim / 2 * Math.cos(actual_orientation)
+            pacman.position.z - pacman_x_dim / 2 * Math.sin(-camera.rotation.y) + pacman_z_dim / 2 * Math.cos(-camera.rotation.y)
         );
 
         raycaster.set(top_front_left_vertex, new THREE.Vector3(
-            -Math.cos(actual_orientation), 
+            -Math.cos(-camera.rotation.y), 
             0, 
-            -Math.sin(actual_orientation)
+            -Math.sin(-camera.rotation.y)
         ));
         var intersects_top_front_left = raycaster.intersectObjects(maze.walls.children);
 
         raycaster.set(top_back_left_vertex, new THREE.Vector3(
-            -Math.cos(actual_orientation), 
+            -Math.cos(-camera.rotation.y), 
             0, 
-            -Math.sin(actual_orientation)
+            -Math.sin(-camera.rotation.y)
         ));
         var intersects_top_back_left = raycaster.intersectObjects(maze.walls.children);
 
@@ -333,31 +327,29 @@ function animate() {
 
     if (keyboard[68]) { // D key
 
-        var actual_orientation = -camera.rotation.y;
-
         var top_front_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) + pacman_z_dim / 2 * Math.sin(actual_orientation),
+            pacman.position.x + pacman_x_dim / 2 * Math.cos(-camera.rotation.y) + pacman_z_dim / 2 * Math.sin(-camera.rotation.y),
             pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) - pacman_z_dim / 2 * Math.cos(actual_orientation)
+            pacman.position.z + pacman_x_dim / 2 * Math.sin(-camera.rotation.y) - pacman_z_dim / 2 * Math.cos(-camera.rotation.y)
         );
 
         var top_back_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim / 2 * Math.cos(actual_orientation) - pacman_z_dim / 2 * Math.sin(actual_orientation),
+            pacman.position.x + pacman_x_dim / 2 * Math.cos(-camera.rotation.y) - pacman_z_dim / 2 * Math.sin(-camera.rotation.y),
             pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z + pacman_x_dim / 2 * Math.sin(actual_orientation) + pacman_z_dim / 2 * Math.cos(actual_orientation)
+            pacman.position.z + pacman_x_dim / 2 * Math.sin(-camera.rotation.y) + pacman_z_dim / 2 * Math.cos(-camera.rotation.y)
         );
 
         raycaster.set(top_back_right_vertex, new THREE.Vector3(
-            Math.cos(actual_orientation), 
+            Math.cos(-camera.rotation.y), 
             0, 
-            Math.sin(actual_orientation)
+            Math.sin(-camera.rotation.y)
         ));
         var intersects_top_back_right = raycaster.intersectObjects(maze.walls.children);
 
         raycaster.set(top_front_right_vertex, new THREE.Vector3(
-            Math.cos(actual_orientation), 
+            Math.cos(-camera.rotation.y), 
             0, 
-            Math.sin(actual_orientation)
+            Math.sin(-camera.rotation.y)
         ));
         var intersects_top_front_right = raycaster.intersectObjects(maze.walls.children);
 
@@ -385,12 +377,10 @@ function animate() {
 
     if (keyboard[37]) { // left arrow
 
-        var actual_orientation = -camera.rotation.y;
-
         raycaster.set(pacman.position, new THREE.Vector3(
-            -Math.cos(actual_orientation), 
+            -Math.cos(-camera.rotation.y), 
             0, 
-            -Math.sin(actual_orientation)
+            -Math.sin(-camera.rotation.y)
         ));
 
         var intersections = raycaster.intersectObjects(maze.walls.children);
@@ -403,12 +393,10 @@ function animate() {
 
     if (keyboard[39]) { // right arrow
 
-        var actual_orientation = -camera.rotation.y;
-
         raycaster.set(pacman.position, new THREE.Vector3(
-            Math.cos(actual_orientation), 
+            Math.cos(-camera.rotation.y), 
             0, 
-            Math.sin(actual_orientation)
+            Math.sin(-camera.rotation.y)
         ));
         var intersections = raycaster.intersectObjects(maze.walls.children);
 
@@ -428,6 +416,7 @@ function animate() {
     // Update pacman position
     pacman.position.set(camera.position.x + Math.cos(camera.rotation.y + Math.PI/2)*3.5, 1, camera.position.z - Math.sin(camera.rotation.y + Math.PI/2)*3.5);
     pacman.rotation.set(camera.rotation.x, camera.rotation.y - 1.28, camera.rotation.z + 0.15);
+    
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
 }
