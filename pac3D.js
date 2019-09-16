@@ -5,7 +5,7 @@ var scene, camera, renderer;
 var raycaster;
 
 // audio variables
-var audio = new Array(2);
+var audio = new Array(5);
 var playPauseBtn, muteBtn, volumeSlider;
 
 // settings button
