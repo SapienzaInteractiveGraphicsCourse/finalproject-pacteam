@@ -25,7 +25,7 @@ export default class Ghost {
         torso.castShadow = true;
 
         head.position.set(torso.position.x, torso.position.y, torso.position.z);
-        head.position.y += torso_height;
+        head.position.y += torso_height / 2.2;
         head.receiveShadow = true;
         head.castShadow = true;
 

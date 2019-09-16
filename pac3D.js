@@ -50,11 +50,43 @@ function init() {
     scene.add(ambientLight);
     
     // Create PacMan
-    pacman = new THREE.Mesh(
+    /* pacman = new THREE.Mesh(
         new THREE.SphereBufferGeometry(1, 32, 32),//, 0, 2*Math.PI, 0, 0.5 * Math.PI/2),
         new THREE.MeshPhongMaterial({color: 0xffff00}),
     );
-    scene.add(pacman);
+    scene.add(pacman); */
+
+    var loader = new THREE.OBJLoader();
+
+    // load a resource
+    loader.load(
+        // resource URL
+        '3DModels/pacman.obj',
+        // called when resource is loaded
+        function (object) {
+
+            object.scale.set(0.05, 0.05, 0.05);
+            object.rotation.x += Math.PI/2;
+            
+            pacman = object;
+            
+
+            scene.add(object);
+
+        },
+        // called when loading is in progresses
+        function ( xhr ) {
+
+            console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+
+        },
+        // called when loading has errors
+        function ( error ) {
+
+            console.log( 'An error happened' );
+
+        }
+    );
 
     var ghost = new Ghost();
     ghost.init_ghost(1, 1, 1, 0xf000ff, 1, 0xf2008f, 1, 0xf0f01f, 0.2, 0.2, 0.2, 0xf2008f, new THREE.Vector3(100, player.height, -6));
