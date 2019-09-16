@@ -55,8 +55,9 @@ function init() {
         new THREE.MeshPhongMaterial({color: 0xffff00}),
     );
     scene.add(pacman); */
-
-    var loader = new THREE.OBJLoader();
+    
+    var manager = new THREE.LoadingManager();
+    var loader = new THREE.OBJLoader(manager);
 
     // load a resource
     loader.load(
@@ -76,13 +77,15 @@ function init() {
             
             pacman = object;
             pacman.position.set(110, player.height, -10);
-            scene.add(object);
-
         });
 
     var ghost = new Ghost();
-    ghost.constructor.init_ghost(ghost);
-    scene.add(ghost.ghost);
+    ghost.loadGhost(loader);
+    manager.onLoad = () => {
+        console.log("Caricamento completato");
+        scene.add(pacman, ghost.ghost);
+    }
+    
     //Create a raycaster instance
     raycaster = new THREE.Raycaster();
 

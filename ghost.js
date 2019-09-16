@@ -1,16 +1,11 @@
-var loader = new THREE.OBJLoader();
 
 export default class Ghost {
     constructor() {
         this.ghost = undefined;
     }
 
-    static init_ghost(ghost) {
-
-        var ghost;
-        
+    loadGhost(loader) {
         loader.load(
-            
             '3DModels/pacman_ghost2.obj', 
     
 			(object) => {
@@ -25,8 +20,10 @@ export default class Ghost {
 					}
                 }); */
 
-                ghost.ghost = object;
+                this.ghost = object;
             }
         );
+
+
     }
 }
