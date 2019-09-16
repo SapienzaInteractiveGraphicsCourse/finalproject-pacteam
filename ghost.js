@@ -11,7 +11,7 @@ export default class Ghost {
         
         loader.load(
             
-            '3DModels/pacman_ghost2.obj', 
+            '3DModels/pacman_ghost.obj', 
     
 			(object) => {
 				object.scale.set(0.15, 0.15, 0.15);
