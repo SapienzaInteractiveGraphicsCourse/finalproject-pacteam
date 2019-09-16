@@ -430,7 +430,7 @@ function animate() {
 
     // Update pacman position
     pacman.position.set(camera.position.x + Math.cos(camera.rotation.y + Math.PI/2)*3.5, 1, camera.position.z - Math.sin(camera.rotation.y + Math.PI/2)*3.5);
-    pacman.rotation.set(camera.rotation.x, camera.rotation.y - 1.28, camera.rotation.z + 0.22);
+    pacman.rotation.set(camera.rotation.x, camera.rotation.y - 1.28, camera.rotation.z + 0.21);
     
     renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
     renderer.render( scene, camera );
@@ -568,8 +568,8 @@ function onWindowResize() {
 
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    insetWidth = window.innerHeight / 8;
-    insetHeight = window.innerHeight / 8;
+    insetWidth = window.innerHeight / 6;
+    insetHeight = window.innerHeight / 6;
 
     cameraOrtho.aspect = insetWidth / insetHeight;
     cameraOrtho.updateProjectionMatrix(); 
