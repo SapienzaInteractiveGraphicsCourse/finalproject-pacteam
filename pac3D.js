@@ -65,28 +65,20 @@ function init() {
         // called when resource is loaded
         function (object) {
 
-            object.scale.set(0.05, 0.05, 0.05);
-            object.rotation.x += Math.PI/2;
+            object.scale.set(0.02, 0.02, 0.02);
+            object.rotation.y -= Math.PI*50/126;
+            object.rotation.z += 0.15;
+            object.traverse( (child) => {
+                if (child instanceof THREE.Mesh ) {
+                    child.material.color.setHex(0xffff00);
+                }
+            });
             
             pacman = object;
-            
-
+            pacman.position.set(110, player.height, -10);
             scene.add(object);
 
-        },
-        // called when loading is in progresses
-        function ( xhr ) {
-
-            console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-
-        },
-        // called when loading has errors
-        function ( error ) {
-
-            console.log( 'An error happened' );
-
-        }
-    );
+        });
 
     var ghost = new Ghost();
     ghost.init_ghost(1, 1, 1, 0xf000ff, 1, 0xf2008f, 1, 0xf0f01f, 0.2, 0.2, 0.2, 0xf2008f, new THREE.Vector3(100, player.height, -6));
@@ -432,7 +424,7 @@ function animate() {
 
     // Update pacman position
     pacman.position.set(camera.position.x + Math.cos(camera.rotation.y + Math.PI/2)*2.5, camera.position.y - 2, camera.position.z - Math.sin(camera.rotation.y + Math.PI/2)*2.5);
-    pacman.rotation.set(camera.rotation.x, camera.rotation.y, camera.rotation.z);
+    pacman.rotation.set(camera.rotation.x, camera.rotation.y - 1.28, camera.rotation.z + 0.15);
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
 }
