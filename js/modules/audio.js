@@ -46,6 +46,7 @@ var AudioInitializer = () => {
     audio[0].playbackRate = 1;
     audio[1].playbackRate = 2.75;
     audio[2].playbackRate = 1.15;
+    audio[5].playbackRate = 2;
 
     var playPauseBtn = document.getElementById("playpausebtn");
     var muteBtn = document.getElementById("mutebtn");
@@ -68,6 +69,7 @@ var AudioInitializer = () => {
         if (audio[0].muted) {
             audio[0].muted = false;
             audio[1].muted = false;
+            audio[2].muted = false;
             audio[3].muted = false;
             audio[4].muted = false;
             audio[5].muted = false;
@@ -75,6 +77,7 @@ var AudioInitializer = () => {
         } else {
             audio[0].muted = true;
             audio[1].muted = true;
+            audio[2].muted = true;
             audio[3].muted = true;
             audio[4].muted = true;
             audio[5].muted = true;
