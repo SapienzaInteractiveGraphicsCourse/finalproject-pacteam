@@ -48,7 +48,7 @@ window.onload = function init() {
     scene.add(dirLight);
 
     // Create ambient light
-    var ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    var ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
     scene.add(ambientLight);
     
     var manager = new THREE.LoadingManager();
@@ -110,7 +110,7 @@ window.onload = function init() {
         }
     );
 
-    spotLight = new THREE.SpotLight(0xffffff, 0.8, 1000, Math.PI/8);
+    spotLight = new THREE.SpotLight(0xffffff, 0.9, 200, Math.PI/4, 1, 2);
     spotLight.castShadow = true;
     scene.add(spotLight);
     target_object = new THREE.Object3D();
