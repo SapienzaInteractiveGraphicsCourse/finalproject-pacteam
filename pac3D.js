@@ -16,7 +16,7 @@ var settingsBtn, settingsTable, backBtn;
 var stopped = false, paused = true, settinged = false;
 
 var keyboard = {};
-var player = {height: 6, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance: 1, score: 0.0};
+var player = {height: 6, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance: 4, score: 0.0};
 
 // Pacman.pacman variables
 var pacman;
@@ -151,6 +151,7 @@ function animate() {
             -Math.cos(-camera.rotation.y)
         ));
         var intersects_top_front_right = raycaster.intersectObjects(maze.walls.children);
+        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
         raycaster.set(top_front_left_vertex, new THREE.Vector3(
             Math.sin(-camera.rotation.y), 
@@ -158,6 +159,7 @@ function animate() {
             -Math.cos(-camera.rotation.y)
         ));
         var intersects_top_front_left = raycaster.intersectObjects(maze.walls.children);
+        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
         if (intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance < player.wall_distance) {
 
@@ -223,6 +225,7 @@ function animate() {
             Math.cos(-camera.rotation.y)
         ));
         var intersects_top_back_right = raycaster.intersectObjects(maze.walls.children);
+        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
         raycaster.set(top_back_left_vertex, new THREE.Vector3(
             -Math.sin(-camera.rotation.y), 
@@ -230,6 +233,7 @@ function animate() {
             Math.cos(-camera.rotation.y)
         ));
         var intersects_top_back_left = raycaster.intersectObjects(maze.walls.children);
+        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
         
         if (intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance < player.wall_distance) {
 
@@ -273,6 +277,7 @@ function animate() {
             -Math.sin(-camera.rotation.y)
         ));
         var intersects_top_front_left = raycaster.intersectObjects(maze.walls.children);
+        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
         raycaster.set(top_back_left_vertex, new THREE.Vector3(
             -Math.cos(-camera.rotation.y), 
@@ -280,6 +285,7 @@ function animate() {
             -Math.sin(-camera.rotation.y)
         ));
         var intersects_top_back_left = raycaster.intersectObjects(maze.walls.children);
+        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
         if (intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance < player.wall_distance) {
 
@@ -323,6 +329,7 @@ function animate() {
             Math.sin(-camera.rotation.y)
         ));
         var intersects_top_back_right = raycaster.intersectObjects(maze.walls.children);
+        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
         raycaster.set(top_front_right_vertex, new THREE.Vector3(
             Math.cos(-camera.rotation.y), 
@@ -330,6 +337,7 @@ function animate() {
             Math.sin(-camera.rotation.y)
         ));
         var intersects_top_front_right = raycaster.intersectObjects(maze.walls.children);
+        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
         if (intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance < player.wall_distance) {
 
