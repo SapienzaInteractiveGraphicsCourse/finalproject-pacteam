@@ -41,6 +41,18 @@ var maze;
 var spotLight;
 var target_object;
 
+function finish_power_up() {
+    super_pacman = false;
+    audio[5].pause();
+    audio[0].play();
+}
+
+/* function ghost_spawn() {
+    if (n_ghosts < max_number_ghosts[difficulty_level]) {
+
+    }
+} */
+
 window.onload = function init() {
 
     // Create the scene
@@ -224,17 +236,21 @@ function animate() {
         if (intersects_balls_left.length > 0 && intersects_balls_left[0].distance > 0) {
             maze.balls.remove(intersects_balls_left[0].object);
             audio[1].play();
+            player.score += fruit_points[difficulty_level];
         }
         else if (intersects_balls_center.length > 0 && intersects_balls_center[0].distance > 0) {
             maze.balls.remove(intersects_balls_center[0].object);
             audio[1].play();
+            player.score += fruit_points[difficulty_level];
         } 
         else if (intersects_balls_right.length > 0 && intersects_balls_right[0].distance > 0) {
             maze.balls.remove(intersects_balls_right[0].object);
             audio[1].play();
+            player.score += fruit_points[difficulty_level];
         }
 
-        /* raycaster.set(new THREE.Vector3(pacman.pacman.position.x + 1.5*Math.cos(-camera.rotation.y), pacman.pacman.position.y+1, pacman.pacman.position.z - 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
+        // super balls interactions
+        raycaster.set(new THREE.Vector3(pacman.pacman.position.x + 1.5*Math.cos(-camera.rotation.y), pacman.pacman.position.y+1, pacman.pacman.position.z - 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
         var intersects_super_balls_left = raycaster.intersectObjects(maze.super_balls.children);
 
         raycaster.set(new THREE.Vector3(pacman.pacman.position.x, pacman.pacman.position.y+1, pacman.pacman.position.z), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
@@ -243,18 +259,30 @@ function animate() {
         raycaster.set(new THREE.Vector3(pacman.pacman.position.x - 1.5*Math.cos(-camera.rotation.y), pacman.pacman.position.y+1, pacman.pacman.position.z + 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
         var intersects_super_balls_right = raycaster.intersectObjects(maze.super_balls.children);
 
-        if (intersects_balls_left.length > 0 && intersects_balls_left[0].distance > 0) {
-            maze.balls.remove(intersects_balls_left[0].object);
+        if (intersects_super_balls_left.length > 0 && intersects_super_balls_left[0].distance > 0) {
+            maze.balls.remove(intersects_super_balls_left[0].object);
+            super_pacman = true;
+            setTimeout(finish_power_up, super_pacman_time[difficulty_level]);
             audio[5].play();
+            audio[0].pause();
+            player.score += fruit_points[difficulty_level];
         }
-        else if (intersects_balls_center.length > 0 && intersects_balls_center[0].distance > 0) {
-            maze.balls.remove(intersects_balls_center[0].object);
+        else if (intersects_super_balls_center.length > 0 && intersects_super_balls_center[0].distance > 0) {
+            maze.balls.remove(intersects_super_balls_center[0].object);
+            super_pacman = true;
+            setTimeout(finish_power_up, super_pacman_time[difficulty_level]);
             audio[5].play();
+            audio[0].pause();
+            player.score += fruit_points[difficulty_level];
         } 
-        else if (intersects_balls_right.length > 0 && intersects_balls_right[0].distance > 0) {
-            maze.balls.remove(intersects_balls_right[0].object);
+        else if (intersects_super_balls_right.length > 0 && intersects_super_balls_right[0].distance > 0) {
+            maze.balls.remove(intersects_super_balls_right[0].object);
+            super_pacman = true;
+            setTimeout(finish_power_up, super_pacman_time[difficulty_level]);
             audio[5].play();
-        } */
+            audio[0].pause();
+            player.score += fruit_points[difficulty_level];
+        }
     }
 
     if (keyboard[83]) { // S key
