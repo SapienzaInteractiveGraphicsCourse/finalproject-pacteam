@@ -19,6 +19,9 @@ var pacman;
 // Maze
 var maze;
 
+var spotLight;
+var target_object;
+
 window.onload = function init() {
 
     // Create the scene
@@ -106,6 +109,15 @@ window.onload = function init() {
             });
         }
     );
+
+    spotLight = new THREE.SpotLight(0xffffff, 0.8, 1000, Math.PI/8);
+    spotLight.castShadow = true;
+    scene.add(spotLight);
+    target_object = new THREE.Object3D();
+    target_object.position.set(100, player.height, -10);
+    scene.add(target_object);
+    spotLight.target = target_object;
+    
 
     // Create an instance for the maze
     maze = new Maze();
@@ -384,8 +396,10 @@ function animate() {
     }
 
     // Update pacman position
-    pacman.pacman.position.set(camera.position.x + Math.cos(camera.rotation.y + Math.PI/2)*3.5, 1, camera.position.z - Math.sin(camera.rotation.y + Math.PI/2)*3.5);
+    pacman.pacman.position.set(camera.position.x + Math.sin(-camera.rotation.y)*3.5, 1, camera.position.z - Math.cos(-camera.rotation.y)*3.5);
     pacman.pacman.rotation.set(camera.rotation.x, camera.rotation.y - 1.28, camera.rotation.z + 0.21);
+    target_object.position.set(camera.position.x + Math.sin(-camera.rotation.y)*10, 1, camera.position.z - Math.cos(-camera.rotation.y)*10);
+    spotLight.position.set(camera.position.x, camera.position.y, camera.position.z);
     
     renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
     renderer.render( scene, camera );
