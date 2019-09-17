@@ -1,21 +1,16 @@
 import Maze from './maze.js';
 import Ghost from './ghost.js';
 import Pacman from './pacman.js';
+import {AudioInitializer, audio} from './audio.js';
+import {Settings, settinged} from './settings.js';
+import {keyboard, addKeyboardListeners} from './keyboard_controls.js';
 
 let scene, camera, cameraOrtho, renderer;
 var raycaster;
 
 var insetWidth, insetHeight;
 
-// audio variables
-var audio = new Array(6);
-var playPauseBtn, muteBtn, volumeSlider;
-
-// settings button
-var settingsBtn, settingsTable, backBtn;
-var stopped = false, paused = true, settinged = false;
-
-var keyboard = {};
+var paused = true;
 var player = {height: 6, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance: 4, score: 0.0};
 
 // Pacman.pacman variables
@@ -25,6 +20,7 @@ var pacman;
 var maze;
 
 window.onload = function init() {
+
     // Create the scene
     scene = new THREE.Scene();
 
@@ -60,20 +56,20 @@ window.onload = function init() {
 
     var ghost = new Ghost();
     ghost.loadGhost(loader);
-    manager.onLoad = () => {
-        scene.add(pacman.pacman, ghost.ghost);
-    }
     
     //Create a raycaster instance
     raycaster = new THREE.Raycaster();
     raycaster.far = 2.5;
-    initAudioPlayer();
-    initSettings();
+    // Set the settings
+    Settings();
+    // Set the audio
+    AudioInitializer();
 
     //Used to add events listenders
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement);
 
     var loader = new THREE.FontLoader();
+    var play;
     loader.load("fonts/Super_Mario_256.json", 
     
         function(font) {
@@ -86,18 +82,17 @@ window.onload = function init() {
             });
 
             var textMaterial = new THREE.MeshPhongMaterial({color: 0xffff00});
-            var mesh = new THREE.Mesh(text, textMaterial);
-            mesh.position.set(camera.position.x-12, camera.position.y+4, camera.position.z-40);
-            scene.add(mesh);
+            play = new THREE.Mesh(text, textMaterial);
+            play.position.set(camera.position.x-12, camera.position.y+4, camera.position.z-40);
 
-            domEvents.addEventListener(mesh, "mouseover", event => {
-                mesh.material.color.setHex(0xffffcc);
+            domEvents.addEventListener(play, "mouseover", event => {
+                play.material.color.setHex(0xffffcc);
                 $('html,body').css('cursor', 'pointer');
             });
 
-            domEvents.addEventListener(mesh, "click", event => {
+            domEvents.addEventListener(play, "click", event => {
                 // Hides the buttons
-                scene.remove(mesh);
+                scene.remove(play);
                 camera.position.y = player.height;
                 paused = false;
                 document.getElementById("playpausebtn").style.background = "url(images/pause.png) no-repeat";
@@ -105,8 +100,8 @@ window.onload = function init() {
                 scene.remove(dirLight);
             });
 
-            domEvents.addEventListener(mesh, "mouseout", event => {
-                mesh.material.color.setHex(0xffff00);
+            domEvents.addEventListener(play, "mouseout", event => {
+                play.material.color.setHex(0xffff00);
                 $('html,body').css('cursor', 'default');
             });
         }
@@ -115,15 +110,22 @@ window.onload = function init() {
     // Create an instance for the maze
     maze = new Maze();
     maze.initMaze(scene);
-    scene.add(maze.floor)
-    scene.add(maze.walls);
-    scene.add(maze.balls);
-    scene.add(maze.super_balls);
+    manager.onLoad = () => {
+        scene.add(
+            play, 
+            pacman.pacman, 
+            ghost.ghost,
+            maze.floor,
+            maze.walls,
+            maze.balls,
+            maze.super_balls);
+    };
 
     // Start rendering
     onWindowResize();
+    addKeyboardListeners();
     animate();
-}
+};
 
 function animate() {
 
@@ -396,132 +398,6 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
-function initAudioPlayer() {
-    audio[0] = new Audio();
-    audio[1] = new Audio();
-    audio[2] = new Audio();
-    audio[3] = new Audio();
-    audio[4] = new Audio();
-    audio[5] = new Audio();
-
-    // Specify the source
-    audio[0].src = "musics/pacman_remix.mp3";
-    audio[1].src = "musics/pacman_eatfruit.wav";
-    audio[2].src = "musics/pacman_change_volume_ringtone.wav";
-    audio[3].src = "musics/pacman_death.wav";
-    audio[4].src = "musics/pacman_eatghost.wav";
-    audio[5].src = "musics/pacman_chomp.wav";
-
-    // The audio is gonna loop over the source
-    audio[0].loop = true;
-    audio[1].loop = false;
-    audio[2].loop = false;
-    audio[3].loop = false;
-    audio[4].loop = false;
-    audio[5].loop = true;
-
-    // Put the audio in pause
-    audio[0].pause();
-    audio[1].pause();
-    audio[2].pause();
-    audio[3].pause();
-    audio[4].pause();
-    audio[5].pause();
-
-    // Set the volume
-    audio[0].volume = 0.2;
-    audio[1].volume = 0.2;
-    audio[2].volume = 0.2;
-    audio[3].volume = 0.2;
-    audio[4].volume = 0.2;
-    audio[5].volume = 0.2;
-
-    // Setting speed of playback
-    audio[0].playbackRate = 1;
-    audio[1].playbackRate = 2.75;
-    audio[2].playbackRate = 1.15;
-
-    playPauseBtn = document.getElementById("playpausebtn");
-    muteBtn = document.getElementById("mutebtn");
-    volumeSlider = document.getElementById("volumeslider");
-
-    volumeSlider.value = 20;
-    
-    // Event handling
-    playPauseBtn.onclick = () => {
-        if (audio[0].paused) {
-            audio[0].play();
-            playPauseBtn.style.background = "url(images/pause.png) no-repeat";
-        } else {
-            audio[0].pause();
-            playPauseBtn.style.background = "url(images/play.png) no-repeat";
-        }
-    };
-
-    muteBtn.onclick = () => {
-        if (audio[0].muted) {
-            audio[0].muted = false;
-            audio[1].muted = false;
-            audio[3].muted = false;
-            audio[4].muted = false;
-            audio[5].muted = false;
-            muteBtn.style.background = "url(images/volume-high.png) no-repeat";
-	    } else {
-            audio[0].muted = true;
-            audio[1].muted = true;
-            audio[3].muted = true;
-            audio[4].muted = true;
-            audio[5].muted = true;
-		    muteBtn.style.background = "url(images/muted.png) no-repeat";
-	    }
-    };
-
-    volumeSlider.onchange = () => {
-        audio[0].volume = volumeSlider.value/100;
-        audio[1].volume = volumeSlider.value/100;
-        audio[2].volume = volumeSlider.value/100;
-        audio[3].volume = volumeSlider.value/100;
-        audio[4].volume = volumeSlider.value/100;
-        audio[5].volume = volumeSlider.value/100;
-        audio[2].play();
-    };
-}
-
-function initSettings() {
-
-    settingsBtn = document.getElementById("settings");
-    settingsTable = document.getElementById("container");
-    backBtn = document.getElementById("back");
-
-    settingsBtn.onclick = () => {
-        settinged = true;
-        settingsTable.style.display = 'initial';
-        if (!audio[0].paused) {
-            audio[0].pause();
-            stopped = true;
-        }
-    }
-
-    backBtn.onclick = () => {
-        settingsTable.style.display = 'none';
-        if (stopped) {
-            audio[0].play();
-            stopped = false;
-        }
-        settinged = false;
-    }
-}
-
-function keyDown(event) {
-    // When you click on keyboard set true to start moving
-    keyboard[event.keyCode] = true;
-}
-
-function keyUp(event) {
-    // When you let the keyboard key, set false to stop moving
-    keyboard[event.keyCode] = false;
-}
-
 function onWindowResize() {
 
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -536,9 +412,6 @@ function onWindowResize() {
     cameraOrtho.updateProjectionMatrix(); 
 }
 
-// Arrows listeners
-window.addEventListener('keyup', keyUp);
-window.addEventListener('keydown', keyDown);
 
 // Resize listeners
 window.addEventListener('resize', onWindowResize, false);
