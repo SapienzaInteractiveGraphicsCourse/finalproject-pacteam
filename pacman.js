@@ -1,9 +1,9 @@
 export default class Pacman {
     constructor() {
         this.pacman;
-        this.x_dim = 4;
-        this.y_dim = 4;
-        this.z_dim = 4;
+        this.x_dim = 3;
+        this.y_dim = 3;
+        this.z_dim = 3;
     }
 
     loadPacman(loader) {
