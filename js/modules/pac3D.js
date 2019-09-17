@@ -10,25 +10,37 @@ var raycaster;
 
 var insetWidth, insetHeight;
 
-const fruit_points = [2, 5, 10] , ghost_points = [20, 50, 100];
-const super_pacman_time = [20000, 15000, 10000];
-const max_number_ghosts = [3, 4, 5];
-const max_number_pink_ghosts = [3, 2, 1],
-      max_number_blue_ghosts = [2, 2, 1],
-      max_number_orange_ghosts = [1, 2, 3],
-      max_number_red_ghosts = [1, 2, 3];
-const pink_ghost_rate = [0.6, 0.3, 0.1],
-      blue_ghost_rate = [0.5, 0.4, 0.2],
-      orange_ghost_rate = [0.2, 0.4, 0.5],
-      red_ghost_rate = [0.1, 0.3, 0.6];
-const ghost_spawn_time = [10000, 20000, 30000];
-const spawn_tile_location = [100, -130];
+const FRUIT_POINTS = [2, 5, 10] , GHOST_POINTS = [20, 50, 100];
+const SUPER_PACMAN_TIME = [20000, 15000, 10000];
+const GHOSTS_MAX_NUMBER = [3, 4, 5];
+const GHOSTS_MAX_NUMBER_PINK = [3, 2, 1],
+      GHOSTS_MAX_NUMBER_BLUE = [2, 2, 1],
+      GHOSTS_MAX_NUMBER_ORANGE = [1, 2, 3],
+      GHOSTS_MAX_NUMBER_RED = [1, 2, 3];
+const GHOST_RATE_PINK = [0.6, 0.3, 0.1],
+      GHOST_RATE_BLUE = [0.5, 0.4, 0.2],
+      GHOST_RATE_ORANGE = [0.2, 0.4, 0.5],
+      GHOST_RATE_RED = [0.1, 0.3, 0.6];
+const GHOST_SPAWN_TIME = [10000, 20000, 30000],
+      FIRST_GHOST_SPAWN_TIME = [12000, 8000, 4000];
+
+const GHOST_TYPE_RED = "red",
+      GHOST_TYPE_ORANGE = "orange",
+      GHOST_TYPE_BLUE = "blue",
+      GHOST_TYPE_PINK = "pink";
+
+const GHOST_COLOR_RED = 0xffff00,
+      GHOST_COLOR_ORANGE = 0xffb852,
+      GHOST_COLOR_BLUE = 0x00ffff,
+      GHOST_COLOR_PINK = 0xffb8ff;
 
 var n_ghosts = 0;
 var difficulty_level = 1;
 
+var ghosts = [];
+
 var paused = true;
-var player = {height: 6, speed: 0.15, turn_speed: Math.PI*0.015, score: 0.0};
+var player = {height: 6, speed: 0.25, turn_speed: Math.PI*0.015, score: 0.0};
 
 // Pacman.pacman variables
 var pacman;
@@ -40,6 +52,8 @@ var maze;
 
 var spotLight;
 var target_object;
+
+var ghost_loader;
 
 function finish_power_up() {
     super_pacman = false;
@@ -64,8 +78,8 @@ window.onload = function init() {
     
     // Create minimap camera
     cameraOrtho = new THREE.OrthographicCamera(0, 201, 205, 0, -1000, 1000);
-    cameraOrtho.up = new THREE.Vector3(0,0,-1);
-	cameraOrtho.lookAt(new THREE.Vector3(0,-1,0));
+    cameraOrtho.up = new THREE.Vector3(0, 0, -1);
+	cameraOrtho.lookAt(new THREE.Vector3(0, -1, 0));
     scene.add(cameraOrtho);
 
     // Create the renderer
@@ -83,13 +97,10 @@ window.onload = function init() {
     scene.add(ambientLight);
     
     var manager = new THREE.LoadingManager();
-    var loader = new THREE.OBJLoader(manager);
+    ghost_loader = new THREE.OBJLoader(manager);
 
     pacman = new Pacman();
-    pacman.loadPacman(loader);
-
-    var ghost = new Ghost();
-    ghost.loadGhost(loader);
+    pacman.loadPacman(ghost_loader);
     
     //Create a raycaster instance
     raycaster = new THREE.Raycaster();
@@ -156,8 +167,7 @@ window.onload = function init() {
     manager.onLoad = () => {
         scene.add(
             play, 
-            pacman.pacman, 
-            ghost.ghost,
+            pacman.pacman,
             maze.floor,
             maze.walls,
             maze.balls,
@@ -240,17 +250,17 @@ function animate() {
         if (intersects_balls_left.length > 0 && intersects_balls_left[0].distance > 0) {
             maze.balls.remove(intersects_balls_left[0].object);
             audio[1].play();
-            player.score += fruit_points[difficulty_level];
+            player.score += FRUIT_POINTS[difficulty_level];
         }
         else if (intersects_balls_center.length > 0 && intersects_balls_center[0].distance > 0) {
             maze.balls.remove(intersects_balls_center[0].object);
             audio[1].play();
-            player.score += fruit_points[difficulty_level];
+            player.score += FRUIT_POINTS[difficulty_level];
         } 
         else if (intersects_balls_right.length > 0 && intersects_balls_right[0].distance > 0) {
             maze.balls.remove(intersects_balls_right[0].object);
             audio[1].play();
-            player.score += fruit_points[difficulty_level];
+            player.score += FRUIT_POINTS[difficulty_level];
         }
         // super balls interactions
         if (intersects_super_balls_left.length > 0 && intersects_super_balls_left[0].distance > 0) {
@@ -259,7 +269,7 @@ function animate() {
             setTimeout(finish_power_up, super_pacman_time[difficulty_level]);
             audio[5].play();
             audio[0].pause();
-            player.score += fruit_points[difficulty_level];
+            player.score += FRUIT_POINTS[difficulty_level];
         }
         else if (intersects_super_balls_center.length > 0 && intersects_super_balls_center[0].distance > 0) {
             maze.super_balls.remove(intersects_super_balls_center[0].object);
@@ -267,7 +277,7 @@ function animate() {
             setTimeout(finish_power_up, super_pacman_time[difficulty_level]);
             audio[5].play();
             audio[0].pause();
-            player.score += fruit_points[difficulty_level];
+            player.score += FRUIT_POINTS[difficulty_level];
         } 
         else if (intersects_super_balls_right.length > 0 && intersects_super_balls_right[0].distance > 0) {
             maze.super_balls.remove(intersects_super_balls_right[0].object);
@@ -275,7 +285,7 @@ function animate() {
             setTimeout(finish_power_up, super_pacman_time[difficulty_level]);
             audio[5].play();
             audio[0].pause();
-            player.score += fruit_points[difficulty_level];
+            player.score += FRUIT_POINTS[difficulty_level];
         }
     }
 
@@ -450,13 +460,51 @@ function animate() {
         }
     }
 
-    if (keyboard[16]) {
-        player.speed = 0.4;
-        player.wall_distance = 1.5;
-    } else {
-        player.speed = 0.2;
-        player.wall_distance = 0.5;
-    }
+    /* for (var i = 0; i < ghosts.length; i++) {
+        if (super_pacman) {
+            // Run away from pacman
+            // Turn blue and white alternatively
+        }
+        else {
+            switch(ghosts[i].type) {
+                case GHOST_TYPE_RED:
+
+                case GHOST_TYPE_ORANGE:
+
+                case GHOST_TYPE_BLUE:
+                
+                case GHOST_TYPE_PINK:
+
+            }
+        }
+    } */
+
+    setTimeout(() => {
+        var val = Math.random();
+
+        var ghost;
+        if (val < GHOST_RATE_PINK[difficulty_level]) {
+            ghost = new Ghost(GHOST_TYPE_PINK);
+            ghost.loadGhost(ghost_loader, GHOST_COLOR_PINK);
+        }
+        else if (val < GHOST_RATE_PINK[difficulty_level] + GHOST_RATE_BLUE[difficulty_level]) {
+            ghost = new Ghost(GHOST_TYPE_BLUE);
+            ghost.loadGhost(ghost_loader, GHOST_COLOR_BLUE);
+        }
+        else if (val < GHOST_RATE_PINK[difficulty_level] + GHOST_RATE_BLUE[difficulty_level] + GHOST_RATE_ORANGE[difficulty_level]) {
+            ghost = new Ghost(GHOST_TYPE_ORANGE);
+            ghost.loadGhost(ghost_loader, GHOST_COLOR_ORANGE);
+        }
+        else {
+            ghost = new Ghost(GHOST_TYPE_RED);
+            ghost.loadGhost(ghost_loader, GHOST_COLOR_RED);
+        }
+
+        scene.add(ghost.ghost);
+        n_ghosts++;
+        ghosts.push(ghost);
+
+    }, GHOST_SPAWN_TIME)
 
     // Update pacman position
     pacman.pacman.position.set(camera.position.x + Math.sin(-camera.rotation.y)*3.5, 1, camera.position.z - Math.cos(-camera.rotation.y)*3.5);
