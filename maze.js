@@ -17,11 +17,15 @@ textureFloor.repeat.set(50, 50);
 
 var cube;
 const unique_cube = new THREE.BoxBufferGeometry(5, 50, 5);
-const cube_material = new THREE.MeshPhongMaterial({map:textureWall});
+const unique_cube_material = new THREE.MeshPhongMaterial({map:textureWall});
 
 var ball;
 const unique_ball = new THREE.SphereBufferGeometry(1, 16, 16);
-const ball_material = new THREE.MeshPhongMaterial({color:0xFFFF35});
+const unique_ball_material = new THREE.MeshPhongMaterial({color:0xFFFF35});
+
+var super_ball;
+const unique_super_ball = new THREE.SphereBufferGeometry(2, 16, 16);
+const unique_super_ball_material = new THREE.MeshPhongMaterial({color:0xFFFF00})
 
 export default class Maze {
 
@@ -140,7 +144,7 @@ export default class Maze {
         }
 
         for (var i = this.maze.length - 6; i < this.maze.length; i += 3) {
-            for (var j = 2; j < this.maze[0].length; j+=2) {
+            for (var j = 2; j < this.maze[0].length; j += 2) {
                 if (this.maze[i][j] != 1) {
                     this.maze[i][j] = 2;
                 }
@@ -155,10 +159,16 @@ export default class Maze {
                                 [[18], [22]], [[22], [22]], [[26], [22]], [[28], [22]], 
                                 [[18], [24]], [[26], [24]],
                                 [[16], [26]], [[18], [26]], [[20], [26]], [[22], [26]], [[24], [26]], [[26], [26]], 
-                                [[22], [28]]];
+                                [[22], [28]],
+                                [[36], [2]], [[36], [38]]];
 
         for (var i = 0; i < no_balls_indices.length; i++) {
             this.maze[no_balls_indices[i][0]][no_balls_indices[i][1]] = 0;
+        }
+
+        var super_balls_indices = [[[10], [2]], [[10], [38]], [[37], [2]], [[37], [38]]];
+        for (var i = 0; i < super_balls_indices.length; i++) {
+            this.maze[super_balls_indices[i][0]][super_balls_indices[i][1]] = 3;
         }
     }
 
@@ -177,18 +187,25 @@ export default class Maze {
         for (var i=0; i<this.maze.length; i++) {
             for (var j=0; j<this.maze[0].length; j++) {
                 if (this.maze[i][j] == 1) {
-                    cube = new THREE.Mesh(unique_cube, cube_material);
+                    cube = new THREE.Mesh(unique_cube, unique_cube_material);
                     cube.castShadow = true;
                     cube.receiveShadow = true;
                     cube.position.set(5*j, 25, -5*i);
                     this.walls.add(cube);
                 } 
                 else if (this.maze[i][j] == 2) {
-                    ball = new THREE.Mesh(unique_ball, ball_material);
+                    ball = new THREE.Mesh(unique_ball, unique_ball_material);
                     ball.castShadow = true;
                     ball.receiveShadow = true;
                     ball.position.set(5*j, 2, -5*i);
                     this.balls.add(ball);
+                }
+                else if (this.maze[i][j] == 3) {
+                    super_ball = new THREE.Mesh(unique_super_ball, unique_super_ball_material);
+                    super_ball.castShadow = true;
+                    super_ball.receiveShadow = true;
+                    super_ball.position.set(5*j, 2, -5*i);
+                    this.balls.add(super_ball);
                 }
             }
         }
