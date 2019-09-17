@@ -257,7 +257,6 @@ function animate() {
             -Math.sin(-camera.rotation.y)
         ));
         var intersects_center = raycaster.intersectObjects(maze.walls.children);
-        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
         raycaster.set(pacman.pacman.position, new THREE.Vector3(
             Math.cos(camera.rotation.y + 3*Math.PI/4), 
@@ -265,7 +264,6 @@ function animate() {
             -Math.sin(camera.rotation.y + 3*Math.PI/4)
         ));
         var intersects_right = raycaster.intersectObjects(maze.walls.children);
-        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
         raycaster.set(pacman.pacman.position, new THREE.Vector3(
             Math.cos(camera.rotation.y + 5*Math.PI/4), 
@@ -273,8 +271,7 @@ function animate() {
             -Math.sin(camera.rotation.y + 5*Math.PI/4)
         ));
         var intersects_left = raycaster.intersectObjects(maze.walls.children);
-        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
-        
+
         if (intersects_center.length > 0) {
             if (intersects_center[0].object.name == 'left') {
                 camera.position.x = 195;
