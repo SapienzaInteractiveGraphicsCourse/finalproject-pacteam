@@ -11,7 +11,7 @@ var raycaster;
 var insetWidth, insetHeight;
 
 var paused = true;
-var player = {height: 6, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance: 4, score: 0.0};
+var player = {height: 6, speed: 0.15, turn_speed: Math.PI*0.015, score: 0.0};
 
 // Pacman.pacman variables
 var pacman;
@@ -202,15 +202,15 @@ function animate() {
         raycaster.set(new THREE.Vector3(pacman.pacman.position.x - 1.5*Math.cos(-camera.rotation.y), pacman.pacman.position.y+1, pacman.pacman.position.z + 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
         var intersects_balls_right = raycaster.intersectObjects(maze.balls.children);
 
-        if (intersects_balls_left.length > 0 && intersects_balls_left[0].distance < player.wall_distance) {
+        if (intersects_balls_left.length > 0 && intersects_balls_left[0].distance > 0) {
             maze.balls.remove(intersects_balls_left[0].object);
             audio[1].play();
         }
-        else if (intersects_balls_center.length > 0 && intersects_balls_center[0].distance < player.wall_distance) {
+        else if (intersects_balls_center.length > 0 && intersects_balls_center[0].distance > 0) {
             maze.balls.remove(intersects_balls_center[0].object);
             audio[1].play();
         } 
-        else if (intersects_balls_right.length > 0 && intersects_balls_right[0].distance < player.wall_distance) {
+        else if (intersects_balls_right.length > 0 && intersects_balls_right[0].distance > 0) {
             maze.balls.remove(intersects_balls_right[0].object);
             audio[1].play();
         }
