@@ -18,7 +18,7 @@ var stopped = false, paused = true, settinged = false;
 var keyboard = {};
 var player = {height: 6, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance: 0.5, score: 0.0};
 
-// Pacman variables
+// Pacman.pacman variables
 var pacman;
 
 // Maze
@@ -61,7 +61,7 @@ window.onload = function init() {
     var ghost = new Ghost();
     ghost.loadGhost(loader);
     manager.onLoad = () => {
-        scene.add(pacman, ghost.ghost);
+        scene.add(pacman.pacman, ghost.ghost);
     }
     
     //Create a raycaster instance
@@ -134,15 +134,15 @@ function animate() {
     if (keyboard[87]) { // W key
 
         var top_front_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim / 2 * Math.cos(-camera.rotation.y) + pacman_z_dim / 2 * Math.sin(-camera.rotation.y),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z + pacman_x_dim / 2 * Math.sin(-camera.rotation.y) - pacman_z_dim / 2 * Math.cos(-camera.rotation.y)
+            pacman.pacman.position.x + pacman.x_dim / 2 * Math.cos(-camera.rotation.y) + pacman.z_dim / 2 * Math.sin(-camera.rotation.y),
+            pacman.pacman.position.y + pacman.y_dim / 2,
+            pacman.pacman.position.z + pacman.x_dim / 2 * Math.sin(-camera.rotation.y) - pacman.z_dim / 2 * Math.cos(-camera.rotation.y)
         );
 
         var top_front_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim / 2 * Math.cos(-camera.rotation.y) + pacman_z_dim / 2 * Math.sin(-camera.rotation.y),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z - pacman_x_dim / 2 * Math.sin(-camera.rotation.y) - pacman_z_dim / 2 * Math.cos(-camera.rotation.y)
+            pacman.pacman.position.x - pacman.x_dim / 2 * Math.cos(-camera.rotation.y) + pacman.z_dim / 2 * Math.sin(-camera.rotation.y),
+            pacman.pacman.position.y + pacman.y_dim / 2,
+            pacman.pacman.position.z - pacman.x_dim / 2 * Math.sin(-camera.rotation.y) - pacman.z_dim / 2 * Math.cos(-camera.rotation.y)
         );
         
         raycaster.set(top_front_right_vertex, new THREE.Vector3(
@@ -180,13 +180,13 @@ function animate() {
             camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
         }
 
-        raycaster.set(new THREE.Vector3(pacman.position.x + 1.5*Math.cos(-camera.rotation.y), pacman.position.y+1, pacman.position.z - 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
+        raycaster.set(new THREE.Vector3(pacman.pacman.position.x + 1.5*Math.cos(-camera.rotation.y), pacman.pacman.position.y+1, pacman.pacman.position.z - 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
         var intersects_balls_left = raycaster.intersectObjects(maze.balls.children);
 
-        raycaster.set(new THREE.Vector3(pacman.position.x, pacman.position.y+1, pacman.position.z), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
+        raycaster.set(new THREE.Vector3(pacman.pacman.position.x, pacman.pacman.position.y+1, pacman.pacman.position.z), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
         var intersects_balls_center = raycaster.intersectObjects(maze.balls.children);
 
-        raycaster.set(new THREE.Vector3(pacman.position.x - 1.5*Math.cos(-camera.rotation.y), pacman.position.y+1, pacman.position.z + 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
+        raycaster.set(new THREE.Vector3(pacman.pacman.position.x - 1.5*Math.cos(-camera.rotation.y), pacman.pacman.position.y+1, pacman.pacman.position.z + 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
         var intersects_balls_right = raycaster.intersectObjects(maze.balls.children);
 
         if (intersects_balls_left.length > 0 && intersects_balls_left[0].distance < player.wall_distance) {
@@ -206,15 +206,15 @@ function animate() {
     if (keyboard[83]) { // S key
 
         var top_back_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim / 2 * Math.cos(-camera.rotation.y) - pacman_z_dim / 2 * Math.sin(-camera.rotation.y),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z + pacman_x_dim / 2 * Math.sin(-camera.rotation.y) + pacman_z_dim / 2 * Math.cos(-camera.rotation.y)
+            pacman.pacman.position.x + pacman.x_dim / 2 * Math.cos(-camera.rotation.y) - pacman.z_dim / 2 * Math.sin(-camera.rotation.y),
+            pacman.pacman.position.y + pacman.y_dim / 2,
+            pacman.pacman.position.z + pacman.x_dim / 2 * Math.sin(-camera.rotation.y) + pacman.z_dim / 2 * Math.cos(-camera.rotation.y)
         );
 
         var top_back_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim / 2 * Math.cos(-camera.rotation.y) - pacman_z_dim / 2 * Math.sin(-camera.rotation.y),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z - pacman_x_dim / 2 * Math.sin(-camera.rotation.y) + pacman_z_dim / 2 * Math.cos(-camera.rotation.y)
+            pacman.pacman.position.x - pacman.x_dim / 2 * Math.cos(-camera.rotation.y) - pacman.z_dim / 2 * Math.sin(-camera.rotation.y),
+            pacman.pacman.position.y + pacman.y_dim / 2,
+            pacman.pacman.position.z - pacman.x_dim / 2 * Math.sin(-camera.rotation.y) + pacman.z_dim / 2 * Math.cos(-camera.rotation.y)
         );
 
         raycaster.set(top_back_right_vertex, new THREE.Vector3(
@@ -256,15 +256,15 @@ function animate() {
     if (keyboard[65]) { // A key
 
         var top_front_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim / 2 * Math.cos(-camera.rotation.y) + pacman_z_dim / 2 * Math.sin(-camera.rotation.y),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z - pacman_x_dim / 2 * Math.sin(-camera.rotation.y) - pacman_z_dim / 2 * Math.cos(-camera.rotation.y)
+            pacman.pacman.position.x - pacman.x_dim / 2 * Math.cos(-camera.rotation.y) + pacman.z_dim / 2 * Math.sin(-camera.rotation.y),
+            pacman.pacman.position.y + pacman.y_dim / 2,
+            pacman.pacman.position.z - pacman.x_dim / 2 * Math.sin(-camera.rotation.y) - pacman.z_dim / 2 * Math.cos(-camera.rotation.y)
         );
 
         var top_back_left_vertex = new THREE.Vector3(
-            pacman.position.x - pacman_x_dim / 2 * Math.cos(-camera.rotation.y) - pacman_z_dim / 2 * Math.sin(-camera.rotation.y),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z - pacman_x_dim / 2 * Math.sin(-camera.rotation.y) + pacman_z_dim / 2 * Math.cos(-camera.rotation.y)
+            pacman.pacman.position.x - pacman.x_dim / 2 * Math.cos(-camera.rotation.y) - pacman.z_dim / 2 * Math.sin(-camera.rotation.y),
+            pacman.pacman.position.y + pacman.y_dim / 2,
+            pacman.pacman.position.z - pacman.x_dim / 2 * Math.sin(-camera.rotation.y) + pacman.z_dim / 2 * Math.cos(-camera.rotation.y)
         );
 
         raycaster.set(top_front_left_vertex, new THREE.Vector3(
@@ -306,15 +306,15 @@ function animate() {
     if (keyboard[68]) { // D key
 
         var top_front_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim / 2 * Math.cos(-camera.rotation.y) + pacman_z_dim / 2 * Math.sin(-camera.rotation.y),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z + pacman_x_dim / 2 * Math.sin(-camera.rotation.y) - pacman_z_dim / 2 * Math.cos(-camera.rotation.y)
+            pacman.pacman.position.x + pacman.x_dim / 2 * Math.cos(-camera.rotation.y) + pacman.z_dim / 2 * Math.sin(-camera.rotation.y),
+            pacman.pacman.position.y + pacman.y_dim / 2,
+            pacman.pacman.position.z + pacman.x_dim / 2 * Math.sin(-camera.rotation.y) - pacman.z_dim / 2 * Math.cos(-camera.rotation.y)
         );
 
         var top_back_right_vertex = new THREE.Vector3(
-            pacman.position.x + pacman_x_dim / 2 * Math.cos(-camera.rotation.y) - pacman_z_dim / 2 * Math.sin(-camera.rotation.y),
-            pacman.position.y + pacman_y_dim / 2,
-            pacman.position.z + pacman_x_dim / 2 * Math.sin(-camera.rotation.y) + pacman_z_dim / 2 * Math.cos(-camera.rotation.y)
+            pacman.pacman.position.x + pacman.x_dim / 2 * Math.cos(-camera.rotation.y) - pacman.z_dim / 2 * Math.sin(-camera.rotation.y),
+            pacman.pacman.position.y + pacman.y_dim / 2,
+            pacman.pacman.position.z + pacman.x_dim / 2 * Math.sin(-camera.rotation.y) + pacman.z_dim / 2 * Math.cos(-camera.rotation.y)
         );
 
         raycaster.set(top_back_right_vertex, new THREE.Vector3(
@@ -355,7 +355,7 @@ function animate() {
 
     if (keyboard[37]) { // left arrow
 
-        raycaster.set(pacman.position, new THREE.Vector3(
+        raycaster.set(pacman.pacman.position, new THREE.Vector3(
             -Math.cos(-camera.rotation.y), 
             0, 
             -Math.sin(-camera.rotation.y)
@@ -371,7 +371,7 @@ function animate() {
 
     if (keyboard[39]) { // right arrow
 
-        raycaster.set(pacman.position, new THREE.Vector3(
+        raycaster.set(pacman.pacman.position, new THREE.Vector3(
             Math.cos(-camera.rotation.y), 
             0, 
             Math.sin(-camera.rotation.y)
@@ -392,8 +392,8 @@ function animate() {
     }
 
     // Update pacman position
-    pacman.position.set(camera.position.x + Math.cos(camera.rotation.y + Math.PI/2)*3.5, 1, camera.position.z - Math.sin(camera.rotation.y + Math.PI/2)*3.5);
-    pacman.rotation.set(camera.rotation.x, camera.rotation.y - 1.28, camera.rotation.z + 0.21);
+    pacman.pacman.position.set(camera.position.x + Math.cos(camera.rotation.y + Math.PI/2)*3.5, 1, camera.position.z - Math.sin(camera.rotation.y + Math.PI/2)*3.5);
+    pacman.pacman.rotation.set(camera.rotation.x, camera.rotation.y - 1.28, camera.rotation.z + 0.21);
     
     renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
     renderer.render( scene, camera );
