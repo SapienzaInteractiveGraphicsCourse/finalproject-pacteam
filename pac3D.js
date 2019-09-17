@@ -1,7 +1,7 @@
 import Maze from './maze.js';
 import Ghost from './ghost.js';
 
-var scene, camera, cameraOrtho, renderer;
+let scene, camera, cameraOrtho, renderer;
 var raycaster;
 
 var insetWidth, insetHeight;
@@ -33,28 +33,19 @@ function init() {
 
     // Create the main camera
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    cameraOrtho = new THREE.OrthographicCamera( 
-        -0, //Left
-        201,   //Right
-        205,   //Top 
-        -0,  //Bottom
-        -1000,
-        1000 );
+    camera.position.set(100, player.height+80, -5);
     
+    // Create minimap camera
+    cameraOrtho = new THREE.OrthographicCamera(0, 201, 205, 0, -1000, 1000);
     cameraOrtho.up = new THREE.Vector3(0,0,-1);
-	cameraOrtho.lookAt( new THREE.Vector3(0,-1,0) );
-    scene.add( cameraOrtho );
-
-    console.log(cameraOrtho.position);
+	cameraOrtho.lookAt(new THREE.Vector3(0,-1,0));
+    scene.add(cameraOrtho);
 
     // Create the renderer
     renderer = new THREE.WebGLRenderer({alpha:true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
-
-    // Set up the main camera
-    camera.position.set(100, player.height+80, -5);
-
+    
     // Create a source of light
     var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
     dirLight.position.set(100, 80, -50);
@@ -63,13 +54,6 @@ function init() {
     // Create ambient light
     var ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
-    
-    // Create PacMan
-    /* pacman = new THREE.Mesh(
-        new THREE.SphereBufferGeometry(1, 32, 32),//, 0, 2*Math.PI, 0, 0.5 * Math.PI/2),
-        new THREE.MeshPhongMaterial({color: 0xffff00}),
-    );
-    scene.add(pacman); */
     
     var manager = new THREE.LoadingManager();
     var loader = new THREE.OBJLoader(manager);
@@ -436,10 +420,10 @@ function animate() {
     renderer.render( scene, camera );
     renderer.clearDepth();
  	renderer.setScissorTest(true);
-    renderer.setScissor( window.innerWidth-insetWidth, window.innerHeight - insetHeight, insetWidth, insetHeight );
-    renderer.setViewport(window.innerWidth-insetWidth, window.innerHeight - insetHeight, insetWidth, insetHeight );
+    renderer.setScissor(window.innerWidth-insetWidth, window.innerHeight - insetHeight, insetWidth, insetHeight);
+    renderer.setViewport(window.innerWidth-insetWidth, window.innerHeight - insetHeight, insetWidth, insetHeight);
 	renderer.render(scene, cameraOrtho);
-    renderer.setScissorTest( false );
+    renderer.setScissorTest(false);
     requestAnimationFrame(animate);
 }
 
