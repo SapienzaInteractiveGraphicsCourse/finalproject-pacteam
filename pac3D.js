@@ -102,6 +102,7 @@ window.onload = function init() {
                 paused = false;
                 document.getElementById("playpausebtn").style.background = "url(images/pause.png) no-repeat";
                 audio[0].play();
+                scene.remove(dirLight);
             });
 
             domEvents.addEventListener(mesh, "mouseout", event => {
