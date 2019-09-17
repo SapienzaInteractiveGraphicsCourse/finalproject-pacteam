@@ -11,16 +11,13 @@ var raycaster;
 var insetWidth, insetHeight;
 
 var paused = true;
-var player = {height: 6, speed: 0.15, turn_speed: Math.PI*0.015, score: 0.0};
+var player = {height: 6, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance: 4, score: 0.0};
 
 // Pacman.pacman variables
 var pacman;
 
 // Maze
 var maze;
-
-var spotLight;
-var target_object;
 
 window.onload = function init() {
 
@@ -48,7 +45,7 @@ window.onload = function init() {
     scene.add(dirLight);
 
     // Create ambient light
-    var ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+    var ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
     
     var manager = new THREE.LoadingManager();
@@ -109,15 +106,6 @@ window.onload = function init() {
             });
         }
     );
-
-    spotLight = new THREE.SpotLight(0xffffff, 0.9, 200, Math.PI/4, 1, 2);
-    spotLight.castShadow = true;
-    scene.add(spotLight);
-    target_object = new THREE.Object3D();
-    target_object.position.set(100, player.height, -10);
-    scene.add(target_object);
-    spotLight.target = target_object;
-    
 
     // Create an instance for the maze
     maze = new Maze();
@@ -202,15 +190,15 @@ function animate() {
         raycaster.set(new THREE.Vector3(pacman.pacman.position.x - 1.5*Math.cos(-camera.rotation.y), pacman.pacman.position.y+1, pacman.pacman.position.z + 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
         var intersects_balls_right = raycaster.intersectObjects(maze.balls.children);
 
-        if (intersects_balls_left.length > 0 && intersects_balls_left[0].distance > 0) {
+        if (intersects_balls_left.length > 0 && intersects_balls_left[0].distance < player.wall_distance) {
             maze.balls.remove(intersects_balls_left[0].object);
             audio[1].play();
         }
-        else if (intersects_balls_center.length > 0 && intersects_balls_center[0].distance > 0) {
+        else if (intersects_balls_center.length > 0 && intersects_balls_center[0].distance < player.wall_distance) {
             maze.balls.remove(intersects_balls_center[0].object);
             audio[1].play();
         } 
-        else if (intersects_balls_right.length > 0 && intersects_balls_right[0].distance > 0) {
+        else if (intersects_balls_right.length > 0 && intersects_balls_right[0].distance < player.wall_distance) {
             maze.balls.remove(intersects_balls_right[0].object);
             audio[1].play();
         }
@@ -396,10 +384,8 @@ function animate() {
     }
 
     // Update pacman position
-    pacman.pacman.position.set(camera.position.x + Math.sin(-camera.rotation.y)*3.5, 1, camera.position.z - Math.cos(-camera.rotation.y)*3.5);
+    pacman.pacman.position.set(camera.position.x + Math.cos(camera.rotation.y + Math.PI/2)*3.5, 1, camera.position.z - Math.sin(camera.rotation.y + Math.PI/2)*3.5);
     pacman.pacman.rotation.set(camera.rotation.x, camera.rotation.y - 1.28, camera.rotation.z + 0.21);
-    target_object.position.set(camera.position.x + Math.sin(-camera.rotation.y)*10, 1, camera.position.z - Math.cos(-camera.rotation.y)*10);
-    spotLight.position.set(camera.position.x, camera.position.y, camera.position.z);
     
     renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
     renderer.render( scene, camera );
