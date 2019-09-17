@@ -239,13 +239,13 @@ export default class Maze {
         ball = new THREE.Mesh(unique_ball, unique_ball_material);
         ball.castShadow = true;
         ball.receiveShadow = true;
-        ball.position.set(90, 2, 182.5);
+        ball.position.set(90, 2, -182.5);
         this.balls.add(ball);
 
         ball = new THREE.Mesh(unique_ball, unique_ball_material);
         ball.castShadow = true;
         ball.receiveShadow = true;
-        ball.position.set(110, 2, 182.5);
+        ball.position.set(110, 2, -182.5);
         this.balls.add(ball);
 
         ball = new THREE.Mesh(unique_ball, unique_ball_material);
