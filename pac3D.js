@@ -480,7 +480,7 @@ function initAudioPlayer() {
 
     // Setting speed of playback
     audio[0].playbackRate = 1;
-    audio[1].playbackRate = 2;
+    audio[1].playbackRate = 2.75;
     audio[2].playbackRate = 1.15;
 
     playPauseBtn = document.getElementById("playpausebtn");
