@@ -135,23 +135,25 @@ export default class Maze {
     }
 
     createBalls() {
-        for (var i = 2; i < this.maze.length - 6; i += 2) {
-            for (var j = 2; j < this.maze[0].length; j += 2) {
+        for (var i = 2; i < this.maze.length-6; i += 2) {
+            for (var j = 2; j < this.maze[0].length-1; j += 2) {
                 if (this.maze[i][j] != 1) {
                     this.maze[i][j] = 2;
                 }
             }
         }
 
-        for (var i = this.maze.length - 6; i < this.maze.length; i += 3) {
-            for (var j = 2; j < this.maze[0].length; j += 2) {
+        for (var i = this.maze.length-6; i < this.maze.length; i += 3) {
+            for (var j = 2; j < this.maze[0].length-1; j += 2) {
                 if (this.maze[i][j] != 1) {
                     this.maze[i][j] = 2;
                 }
             }
         }
 
-        var no_balls_indices = [[[22], [12]],
+        var no_balls_indices = [[[18], [2]], [[18], [4]], [[18], [6]], [[18], [34]], [[18], [36]], [[18], [38]], 
+                                [[26], [2]], [[26], [4]], [[26], [6]], [[26], [34]], [[26], [36]], [[26], [38]], 
+                                [[22], [12]],
                                 [[16], [14]], [[18], [14]], [[20], [14]], [[22], [14]], [[24], [14]], [[26], [14]], 
                                 [[26], [16]], [[18], [16]],
                                 [[18], [18]], [[22], [18]], [[26], [18]], [[28], [18]],
@@ -160,13 +162,18 @@ export default class Maze {
                                 [[18], [24]], [[26], [24]],
                                 [[16], [26]], [[18], [26]], [[20], [26]], [[22], [26]], [[24], [26]], [[26], [26]], 
                                 [[22], [28]],
-                                [[36], [2]], [[36], [38]]];
+                                [[2], [20]],
+                                // super balls
+                                [[36], [2]], [[36], [38]], [[10], [2]], [[10], [38]],
+                                //disaligned balls
+                                [[36], [10]], [[36], [18]], [[36], [22]], [[36], [30]]];
+
 
         for (var i = 0; i < no_balls_indices.length; i++) {
             this.maze[no_balls_indices[i][0]][no_balls_indices[i][1]] = 0;
         }
 
-        var super_balls_indices = [[[10], [2]], [[10], [38]], [[37], [2]], [[37], [38]]];
+        var super_balls_indices = [[[10], [2]], [[10], [38]]];
         for (var i = 0; i < super_balls_indices.length; i++) {
             this.maze[super_balls_indices[i][0]][super_balls_indices[i][1]] = 3;
         }
@@ -209,6 +216,43 @@ export default class Maze {
                 }
             }
         }
+
+        // Adding some, otherwise, non-aligned balls
+        super_ball = new THREE.Mesh(unique_super_ball, unique_super_ball_material);
+        super_ball.castShadow = true;
+        super_ball.receiveShadow = true;
+        super_ball.position.set(190, 2, -182.5);
+        this.balls.add(super_ball);
+
+        super_ball = new THREE.Mesh(unique_super_ball, unique_super_ball_material);
+        super_ball.castShadow = true;
+        super_ball.receiveShadow = true;
+        super_ball.position.set(10, 2, -182.5);
+        this.balls.add(super_ball);
+
+        ball = new THREE.Mesh(unique_ball, unique_ball_material);
+        ball.castShadow = true;
+        ball.receiveShadow = true;
+        ball.position.set(50, 2, -182.5);
+        this.balls.add(ball);
+
+        ball = new THREE.Mesh(unique_ball, unique_ball_material);
+        ball.castShadow = true;
+        ball.receiveShadow = true;
+        ball.position.set(90, 2, 182.5);
+        this.balls.add(ball);
+
+        ball = new THREE.Mesh(unique_ball, unique_ball_material);
+        ball.castShadow = true;
+        ball.receiveShadow = true;
+        ball.position.set(110, 2, 182.5);
+        this.balls.add(ball);
+
+        ball = new THREE.Mesh(unique_ball, unique_ball_material);
+        ball.castShadow = true;
+        ball.receiveShadow = true;
+        ball.position.set(150, 2, -182.5);
+        this.balls.add(ball);
 
         var textureTeleport = new THREE.TextureLoader().load("textures/teleport.jpg");
         textureTeleport.wrapS = THREE.RepeatWrapping;
