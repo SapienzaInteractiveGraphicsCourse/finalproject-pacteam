@@ -539,8 +539,8 @@ function onWindowResize() {
 
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    insetWidth = window.innerHeight / 6;
-    insetHeight = window.innerHeight / 6;
+    insetWidth = window.innerHeight / 3;
+    insetHeight = window.innerHeight / 3;
 
     cameraOrtho.aspect = insetWidth / insetHeight;
     cameraOrtho.updateProjectionMatrix(); 
