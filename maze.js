@@ -41,25 +41,25 @@ export default class Maze {
     }
 
     createMaze() {
-        for (var i=0; i < this.maze.length; i++) {
-            for (var j=0; j < this.maze[0].length; j++) {
+        for (var i = 0; i < this.maze.length; i++) {
+            for (var j = 0; j < this.maze[0].length; j++) {
                 if (i == 0 || i == this.maze.length-1) {
                     this.maze[i][j] = 1;
                 }
     
-                if ( (j == 0 || j==this.maze[0].length-1) && (i < 17 || i > 27) ) {
+                if ((j == 0 || j == this.maze[0].length-1) && (i < 17 || i > 27)) {
                     this.maze[i][j] = 1;
                 }
     
-                if ( (i==16 || i== 28 || i==20 || i==24) && (j<8 || j>=32) ) {
+                if ((i==16 || i == 28 || i == 20 || i == 24) && (j < 8 || j >= 32)) {
                     this.maze[i][j] = 1;
                 }
     
-                if ( (j==8 || j==32) && ( (i>=16 && i<=20) || (i>=24 && i<=28) ) ) {
+                if ((j == 8 || j == 32) && ((i >= 16 && i <= 20) || (i >= 24 && i <= 28))) {
                     this.maze[i][j] = 1;
                 }
     
-                if (i == 4 && ( (j>3 && j<17) || j==20 || (j > 23 && j < 37) )) {
+                if (i == 4 && ((j > 3 && j < 17) || j == 20 || (j > 23 && j < 37))) {
                     this.maze[i][j] = 1;
                 }
     
@@ -75,7 +75,7 @@ export default class Maze {
                     this.maze[i][j] = 1;
                 }
     
-                if ((i <= this.maze.length - 11 && i >= this.maze.length - 14) && ((j == 12) || (j == 20) ||   (j == 28))) {
+                if ((i <= this.maze.length - 11 && i >= this.maze.length - 14) && ((j == 12) || (j == 20) || (j == 28))) {
                     this.maze[i][j] = 1;
                 }
     
@@ -83,7 +83,11 @@ export default class Maze {
                     this.maze[i][j] = 1;
                 }
     
-                if ( (i == this.maze.length - 18) && ((j==12 || j==28) || (j>15 && j<25))) {
+                if ((i == this.maze.length - 18) && ((j == 12 || j == 28) || (j > 15 && j < 25))) {
+                    this.maze[i][j] = 1;
+                }
+
+                if ((i == this.maze.length - 14) && ((j >= 13 && j <= 16) || (j >= 24 && j <= 27))) {
                     this.maze[i][j] = 1;
                 }
     
@@ -127,20 +131,34 @@ export default class Maze {
     }
 
     createBalls() {
-        for (var i=2; i<this.maze.length - 6; i+=2) {
-            for (var j=2; j<this.maze[0].length; j+=2) {
+        for (var i = 2; i < this.maze.length - 6; i += 2) {
+            for (var j = 2; j < this.maze[0].length; j += 2) {
                 if (this.maze[i][j] != 1) {
                     this.maze[i][j] = 2;
                 }
             }
         }
 
-        for (var i=this.maze.length-6; i<this.maze.length; i+=3) {
-            for (var j=2; j<this.maze[0].length; j+=2) {
+        for (var i = this.maze.length - 6; i < this.maze.length; i += 3) {
+            for (var j = 2; j < this.maze[0].length; j+=2) {
                 if (this.maze[i][j] != 1) {
                     this.maze[i][j] = 2;
                 }
             }
+        }
+
+        var no_balls_indices = [[[22], [12]],
+                                [[16], [14]], [[18], [14]], [[20], [14]], [[22], [14]], [[24], [14]], [[26], [14]], 
+                                [[26], [16]], [[18], [16]],
+                                [[18], [18]], [[22], [18]], [[26], [18]], [[28], [18]],
+                                [[18], [20]], [[22], [20]], [[26], [20]], 
+                                [[18], [22]], [[22], [22]], [[26], [22]], [[28], [22]], 
+                                [[18], [24]], [[26], [24]],
+                                [[16], [26]], [[18], [26]], [[20], [26]], [[22], [26]], [[24], [26]], [[26], [26]], 
+                                [[22], [28]]];
+
+        for (var i = 0; i < no_balls_indices.length; i++) {
+            this.maze[no_balls_indices[i][0]][no_balls_indices[i][1]] = 0;
         }
     }
 
