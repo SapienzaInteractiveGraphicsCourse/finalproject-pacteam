@@ -8,7 +8,7 @@ var raycaster;
 var insetWidth, insetHeight;
 
 // audio variables
-var audio = new Array(5);
+var audio = new Array(6);
 var playPauseBtn, muteBtn, volumeSlider;
 
 // settings button
@@ -153,7 +153,7 @@ function animate() {
             -Math.cos(-camera.rotation.y)
         ));
         var intersects_top_front_right = raycaster.intersectObjects(maze.walls.children);
-        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
+        //scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
         raycaster.set(top_front_left_vertex, new THREE.Vector3(
             Math.sin(-camera.rotation.y), 
@@ -161,7 +161,7 @@ function animate() {
             -Math.cos(-camera.rotation.y)
         ));
         var intersects_top_front_left = raycaster.intersectObjects(maze.walls.children);
-        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
+        //scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
         if (intersects_top_front_right.length > 0 && intersects_top_front_right[0].distance < player.wall_distance) {
 
@@ -227,7 +227,7 @@ function animate() {
             Math.cos(-camera.rotation.y)
         ));
         var intersects_top_back_right = raycaster.intersectObjects(maze.walls.children);
-        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
+        //scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
         raycaster.set(top_back_left_vertex, new THREE.Vector3(
             -Math.sin(-camera.rotation.y), 
@@ -235,7 +235,7 @@ function animate() {
             Math.cos(-camera.rotation.y)
         ));
         var intersects_top_back_left = raycaster.intersectObjects(maze.walls.children);
-        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
+        //scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
         
         if (intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance < player.wall_distance) {
 
@@ -279,7 +279,7 @@ function animate() {
             -Math.sin(-camera.rotation.y)
         ));
         var intersects_top_front_left = raycaster.intersectObjects(maze.walls.children);
-        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
+        //scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
         raycaster.set(top_back_left_vertex, new THREE.Vector3(
             -Math.cos(-camera.rotation.y), 
@@ -287,7 +287,7 @@ function animate() {
             -Math.sin(-camera.rotation.y)
         ));
         var intersects_top_back_left = raycaster.intersectObjects(maze.walls.children);
-        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
+        //scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
         if (intersects_top_front_left.length > 0 && intersects_top_front_left[0].distance < player.wall_distance) {
 
@@ -331,7 +331,7 @@ function animate() {
             Math.sin(-camera.rotation.y)
         ));
         var intersects_top_back_right = raycaster.intersectObjects(maze.walls.children);
-        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
+        //scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
         raycaster.set(top_front_right_vertex, new THREE.Vector3(
             Math.cos(-camera.rotation.y), 
@@ -339,7 +339,7 @@ function animate() {
             Math.sin(-camera.rotation.y)
         ));
         var intersects_top_front_right = raycaster.intersectObjects(maze.walls.children);
-        scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
+        //scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000));
 
         if (intersects_top_back_right.length > 0 && intersects_top_back_right[0].distance < player.wall_distance) {
 
@@ -422,6 +422,7 @@ function initAudioPlayer() {
     audio[2] = new Audio();
     audio[3] = new Audio();
     audio[4] = new Audio();
+    audio[5] = new Audio();
 
     // Specify the source
     audio[0].src = "musics/pacman_remix.mp3";
@@ -429,6 +430,7 @@ function initAudioPlayer() {
     audio[2].src = "musics/pacman_change_volume_ringtone.wav";
     audio[3].src = "musics/pacman_death.wav";
     audio[4].src = "musics/pacman_eatghost.wav";
+    audio[5].src = "musics/pacman_chomp.wav";
 
     // The audio is gonna loop over the source
     audio[0].loop = true;
@@ -436,6 +438,7 @@ function initAudioPlayer() {
     audio[2].loop = false;
     audio[3].loop = false;
     audio[4].loop = false;
+    audio[5].loop = true;
 
     // Put the audio in pause
     audio[0].pause();
@@ -443,6 +446,7 @@ function initAudioPlayer() {
     audio[2].pause();
     audio[3].pause();
     audio[4].pause();
+    audio[5].pause();
 
     // Set the volume
     audio[0].volume = 0.2;
@@ -450,6 +454,7 @@ function initAudioPlayer() {
     audio[2].volume = 0.2;
     audio[3].volume = 0.2;
     audio[4].volume = 0.2;
+    audio[5].volume = 0.2;
 
     // Setting speed of playback
     audio[0].playbackRate = 1;
@@ -479,12 +484,14 @@ function initAudioPlayer() {
             audio[1].muted = false;
             audio[3].muted = false;
             audio[4].muted = false;
+            audio[5].muted = false;
             muteBtn.style.background = "url(images/volume-high.png) no-repeat";
 	    } else {
             audio[0].muted = true;
             audio[1].muted = true;
             audio[3].muted = true;
             audio[4].muted = true;
+            audio[5].muted = true;
 		    muteBtn.style.background = "url(images/muted.png) no-repeat";
 	    }
     };
@@ -495,6 +502,7 @@ function initAudioPlayer() {
         audio[2].volume = volumeSlider.value/100;
         audio[3].volume = volumeSlider.value/100;
         audio[4].volume = volumeSlider.value/100;
+        audio[5].volume = volumeSlider.value/100;
         audio[2].play();
     };
 }
