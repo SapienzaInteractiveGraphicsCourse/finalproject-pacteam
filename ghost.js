@@ -1,7 +1,6 @@
-
 export default class Ghost {
     constructor() {
-        this.ghost = undefined;
+        this.ghost;
     }
 
     loadGhost(loader) {

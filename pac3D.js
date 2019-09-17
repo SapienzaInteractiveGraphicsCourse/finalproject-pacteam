@@ -1,5 +1,6 @@
 import Maze from './maze.js';
 import Ghost from './ghost.js';
+import Pacman from './pacman.js';
 
 let scene, camera, cameraOrtho, renderer;
 var raycaster;
@@ -12,22 +13,18 @@ var playPauseBtn, muteBtn, volumeSlider;
 
 // settings button
 var settingsBtn, settingsTable, backBtn;
-var stopped = false;
+var stopped = false, paused = true, settinged = false;
 
 var keyboard = {};
 var player = {height: 6, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance: 0.5, score: 0.0};
 
 // Pacman variables
 var pacman;
-var pacman_x_dim = 1.5, pacman_y_dim = 1.5, pacman_z_dim = 1.5;
 
 // Maze
 var maze;
 
-var paused = true, settinged = false;
-
-
-function init() {
+window.onload = function init() {
     // Create the scene
     scene = new THREE.Scene();
 
@@ -58,30 +55,12 @@ function init() {
     var manager = new THREE.LoadingManager();
     var loader = new THREE.OBJLoader(manager);
 
-    // load a resource
-    loader.load(
-        // resource URL
-        '3DModels/pacman.obj',
-        // called when resource is loaded
-        function (object) {
-
-            object.scale.set(0.06, 0.06, 0.06);
-            object.rotation.y -= Math.PI*50/126;
-            object.rotation.z += 0.15;
-            object.traverse( (child) => {
-                if (child instanceof THREE.Mesh ) {
-                    child.material.color.setHex(0xffff00);
-                }
-            });
-            
-            pacman = object;
-            pacman.position.set(110, player.height, -10);
-        });
+    pacman = new Pacman();
+    pacman.loadPacman(loader);
 
     var ghost = new Ghost();
     ghost.loadGhost(loader);
     manager.onLoad = () => {
-        console.log("Caricamento completato");
         scene.add(pacman, ghost.ghost);
     }
     
@@ -565,6 +544,3 @@ window.addEventListener('keydown', keyDown);
 
 // Resize listeners
 window.addEventListener('resize', onWindowResize, false);
-
-// This way the audio will be loaded after the page is fully loaded
-window.onload = init;
