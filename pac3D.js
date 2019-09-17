@@ -118,6 +118,7 @@ window.onload = function init() {
     scene.add(maze.floor)
     scene.add(maze.walls);
     scene.add(maze.balls);
+    scene.add(maze.super_balls);
 
     // Start rendering
     onWindowResize();
