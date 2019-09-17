@@ -32,6 +32,7 @@ var player = {height: 6, speed: 0.15, turn_speed: Math.PI*0.015, score: 0.0};
 
 // Pacman.pacman variables
 var pacman;
+var ghost;
 
 var super_pacman = false;
 
@@ -88,7 +89,7 @@ window.onload = function init() {
     pacman = new Pacman();
     pacman.loadPacman(loader);
 
-    var ghost = new Ghost();
+    ghost = new Ghost();
     ghost.loadGhost(loader);
     
     //Create a raycaster instance
@@ -132,6 +133,7 @@ window.onload = function init() {
                 document.getElementById("playpausebtn").style.background = "url(images/pause.png) no-repeat";
                 audio[0].play();
                 scene.remove(dirLight);
+                //setInterval(moveGhost, 500);
             });
 
             domEvents.addEventListener(play, "mouseout", event => {
@@ -153,6 +155,8 @@ window.onload = function init() {
     // Create an instance for the maze
     maze = new Maze();
     maze.initMaze(scene);
+
+    //Add all to scene when models has been loaded
     manager.onLoad = () => {
         scene.add(
             play, 
@@ -167,8 +171,24 @@ window.onload = function init() {
     // Start rendering
     onWindowResize();
     addKeyboardListeners();
+    console.log(maze.maze[22][6]);
     animate();
 };
+
+function moveGhost() {
+    var pos_x = ghost.ghost.position.x / 5,
+        pos_z = -ghost.ghost.position.z / 5;
+    
+    if (!(-ghost.ghost.position.z % 5 == 0 && ghost.ghost.position.x % 5 == 0)) {
+        ghost.ghost.position.z -= 0.5;
+    } else {
+        console.log(pos_x, pos_z);
+        console.log("Up: " + maze.maze[pos_x][pos_z-1]);
+        console.log("Down: " + maze.maze[pos_x][pos_z+1]);
+        console.log("Left: " + maze.maze[pos_x-1][pos_z]);
+        console.log("Right: " + maze.maze[pos_x+1][pos_z]);
+    }
+}
 
 function animate() {
 
@@ -177,6 +197,8 @@ function animate() {
         requestAnimationFrame(animate);
         return;
     }
+
+    moveGhost();
 
     if (keyboard[87]) { // W key
         
@@ -252,6 +274,7 @@ function animate() {
             audio[1].play();
             player.score += fruit_points[difficulty_level];
         }
+
         // super balls interactions
         if (intersects_super_balls_left.length > 0 && intersects_super_balls_left[0].distance > 0) {
             maze.super_balls.remove(intersects_super_balls_left[0].object);
