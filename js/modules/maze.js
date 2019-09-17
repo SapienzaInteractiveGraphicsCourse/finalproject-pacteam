@@ -36,6 +36,10 @@ export default class Maze {
             this.maze[i] = new Array(41);
         }
 
+        for (var i=0; i < this.maze.length; i++) {
+            for (var j=0; j<this.maze[0].length; j++) this.maze[i][j] = 0;
+        }
+
         // Represents the walls objects
         this.walls = new THREE.Group();
         // Represents the balls objects
