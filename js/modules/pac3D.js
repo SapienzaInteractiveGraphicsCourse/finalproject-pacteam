@@ -260,7 +260,7 @@ function animate() {
         var intersects_super_balls_right = raycaster.intersectObjects(maze.super_balls.children);
 
         if (intersects_super_balls_left.length > 0 && intersects_super_balls_left[0].distance > 0) {
-            maze.balls.remove(intersects_super_balls_left[0].object);
+            maze.super_balls.remove(intersects_super_balls_left[0].object);
             super_pacman = true;
             setTimeout(finish_power_up, super_pacman_time[difficulty_level]);
             audio[5].play();
@@ -268,7 +268,7 @@ function animate() {
             player.score += fruit_points[difficulty_level];
         }
         else if (intersects_super_balls_center.length > 0 && intersects_super_balls_center[0].distance > 0) {
-            maze.balls.remove(intersects_super_balls_center[0].object);
+            maze.super_balls.remove(intersects_super_balls_center[0].object);
             super_pacman = true;
             setTimeout(finish_power_up, super_pacman_time[difficulty_level]);
             audio[5].play();
@@ -276,7 +276,7 @@ function animate() {
             player.score += fruit_points[difficulty_level];
         } 
         else if (intersects_super_balls_right.length > 0 && intersects_super_balls_right[0].distance > 0) {
-            maze.balls.remove(intersects_super_balls_right[0].object);
+            maze.super_balls.remove(intersects_super_balls_right[0].object);
             super_pacman = true;
             setTimeout(finish_power_up, super_pacman_time[difficulty_level]);
             audio[5].play();
