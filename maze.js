@@ -21,11 +21,11 @@ const unique_cube_material = new THREE.MeshPhongMaterial({map:textureWall});
 
 var ball;
 const unique_ball = new THREE.SphereBufferGeometry(1, 16, 16);
-const unique_ball_material = new THREE.MeshPhongMaterial({color:0xFFFF35});
+const unique_ball_material = new THREE.MeshPhongMaterial({color:0xFFFF00});
 
 var super_ball;
 const unique_super_ball = new THREE.SphereBufferGeometry(2, 16, 16);
-const unique_super_ball_material = new THREE.MeshPhongMaterial({color:0xFFFF00})
+const unique_super_ball_material = new THREE.MeshPhongMaterial({color:0xFFD700});
 
 export default class Maze {
 
