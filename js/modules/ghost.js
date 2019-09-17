@@ -8,10 +8,8 @@ export default class Ghost {
             '3DModels/pacman_ghost.obj', 
     
 			(object) => {
-				object.scale.set(0.15, 0.15, 0.15);
-				object.rotation.y -= Math.PI/2;
-                object.rotation.z -= Math.PI/2;
-                object.position.set(110, 1, -10);
+				object.scale.set(1.5, 1.5, 1.5);
+                object.position.set(110, 5, -10);
 			
 				/* object.traverse( (child) => {
 					if (child instanceof THREE.Mesh ) {
