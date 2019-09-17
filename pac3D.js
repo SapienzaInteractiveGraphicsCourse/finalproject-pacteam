@@ -16,7 +16,7 @@ var settingsBtn, settingsTable, backBtn;
 var stopped = false, paused = true, settinged = false;
 
 var keyboard = {};
-var player = {height: 6, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance: 0.5, score: 0.0};
+var player = {height: 6, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance: 1, score: 0.0};
 
 // Pacman.pacman variables
 var pacman;

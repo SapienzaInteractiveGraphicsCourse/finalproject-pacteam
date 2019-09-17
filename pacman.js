@@ -10,7 +10,7 @@ export default class Pacman {
         loader.load(
             '3DModels/pacman.obj',
             (object) => {
-                object.scale.set(0.06, 0.06, 0.06);
+                //object.scale.set(0.2, 0.2, 0.2);
                 object.rotation.y -= Math.PI*50/126;
                 object.rotation.z += 0.15;
                 object.traverse( (child) => {
