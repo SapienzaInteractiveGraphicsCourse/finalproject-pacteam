@@ -10,7 +10,7 @@ textureWall.wrapS = THREE.RepeatWrapping;
 textureWall.wrapT = THREE.RepeatWrapping;
 textureWall.generateMipmaps = true;
 textureWall.repeat.set(1, 10);
-var textureFloor = new THREE.TextureLoader().load("textures/ground.jpg");
+var textureFloor = new THREE.TextureLoader().load("textures/dark_sand.jpg");
 textureFloor.wrapS = THREE.RepeatWrapping;
 textureFloor.wrapT = THREE.RepeatWrapping;
 textureFloor.repeat.set(50, 50);
