@@ -30,17 +30,19 @@ const unique_super_ball_material = new THREE.MeshPhongMaterial({color:0xFFD700})
 export default class Maze {
 
     constructor() {
-        //Represents the maze's blocks
+        // Represents the maze's blocks
         this.maze = new Array(42);
         for (var i = 0; i < this.maze.length; i++) {
             this.maze[i] = new Array(41);
         }
 
-        //Represents the walls objects
+        // Represents the walls objects
         this.walls = new THREE.Group();
-        //Represents the balls objects
+        // Represents the balls objects
         this.balls = new THREE.Group();
-        //Represents the floor
+        // Represents the super balls objects
+        this.super_balls = new THREE.Group();
+        // Represents the floor
         this.floor = new THREE.Mesh();
     }
 
@@ -212,7 +214,7 @@ export default class Maze {
                     super_ball.castShadow = true;
                     super_ball.receiveShadow = true;
                     super_ball.position.set(5*j, 2, -5*i);
-                    this.balls.add(super_ball);
+                    this.super_balls.add(super_ball);
                 }
             }
         }
@@ -222,13 +224,13 @@ export default class Maze {
         super_ball.castShadow = true;
         super_ball.receiveShadow = true;
         super_ball.position.set(190, 2, -182.5);
-        this.balls.add(super_ball);
+        this.super_balls.add(super_ball);
 
         super_ball = new THREE.Mesh(unique_super_ball, unique_super_ball_material);
         super_ball.castShadow = true;
         super_ball.receiveShadow = true;
         super_ball.position.set(10, 2, -182.5);
-        this.balls.add(super_ball);
+        this.super_balls.add(super_ball);
 
         ball = new THREE.Mesh(unique_ball, unique_ball_material);
         ball.castShadow = true;
