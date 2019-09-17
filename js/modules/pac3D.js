@@ -10,11 +10,30 @@ var raycaster;
 
 var insetWidth, insetHeight;
 
+const fruit_points = [2, 5, 10] , ghost_points = [20, 50, 100];
+const super_pacman_time = [20000, 15000, 10000];
+const max_number_ghosts = [3, 4, 5];
+const max_number_pink_ghosts = [3, 2, 1],
+      max_number_blue_ghosts = [2, 2, 1]
+      max_number_orange_ghosts = [1, 2, 3],
+      max_number_red_ghosts = [1, 2, 3];
+const pink_ghost_rate = [0.6, 0.3, 0.1],
+      blue_ghost_rate = [0.5, 0.4, 0.2],
+      orange_ghost_rate = [0.2, 0.4, 0.5],
+      red_ghost_rate = [0.1, 0.3, 0.6];
+const ghost_spawn_time = [10000, 20000, 30000];
+const spawn_tile_location = [100, -130];
+
+var n_ghosts = 0;
+var difficulty_level = 1;
+
 var paused = true;
 var player = {height: 6, speed: 0.15, turn_speed: Math.PI*0.015, wall_distance: 4, score: 0.0};
 
 // Pacman.pacman variables
 var pacman;
+
+var super_pacman = false;
 
 // Maze
 var maze;
@@ -202,6 +221,28 @@ function animate() {
             maze.balls.remove(intersects_balls_right[0].object);
             audio[1].play();
         }
+
+        /* raycaster.set(new THREE.Vector3(pacman.pacman.position.x + 1.5*Math.cos(-camera.rotation.y), pacman.pacman.position.y+1, pacman.pacman.position.z - 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
+        var intersects_super_balls_left = raycaster.intersectObjects(maze.super_balls.children);
+
+        raycaster.set(new THREE.Vector3(pacman.pacman.position.x, pacman.pacman.position.y+1, pacman.pacman.position.z), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
+        var intersects_super_balls_center = raycaster.intersectObjects(maze.super_balls.children);
+
+        raycaster.set(new THREE.Vector3(pacman.pacman.position.x - 1.5*Math.cos(-camera.rotation.y), pacman.pacman.position.y+1, pacman.pacman.position.z + 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
+        var intersects_super_balls_right = raycaster.intersectObjects(maze.super_balls.children);
+
+        if (intersects_balls_left.length > 0 && intersects_balls_left[0].distance > 0) {
+            maze.balls.remove(intersects_balls_left[0].object);
+            audio[5].play();
+        }
+        else if (intersects_balls_center.length > 0 && intersects_balls_center[0].distance > 0) {
+            maze.balls.remove(intersects_balls_center[0].object);
+            audio[5].play();
+        } 
+        else if (intersects_balls_right.length > 0 && intersects_balls_right[0].distance > 0) {
+            maze.balls.remove(intersects_balls_right[0].object);
+            audio[5].play();
+        } */
     }
 
     if (keyboard[83]) { // S key
