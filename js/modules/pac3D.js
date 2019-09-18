@@ -77,15 +77,20 @@ window.onload = function init() {
     renderer = new THREE.WebGLRenderer({alpha:true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
+
+    // Add setting and audio
+    settingsInitializer();
+    audioInitializer();
     
     // Create a source of light
     var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
     dirLight.position.set(100, 80, -50);
-    scene.add(dirLight);
 
     // Create ambient light
     var ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-    scene.add(ambientLight);
+
+    // Create an instance for the maze
+    initMaze();
     
     // Create manager and loader
     manager = new THREE.LoadingManager();
@@ -101,10 +106,6 @@ window.onload = function init() {
     //Create a raycaster instance
     raycaster = new THREE.Raycaster();
     raycaster.far = 2.5;
-
-    // Add setting and audio
-    Settings();
-    AudioInitializer();
 
     //Used to add events listenders
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement);
@@ -157,27 +158,16 @@ window.onload = function init() {
     scene.add(target_object);
     spotLight.target = target_object;
     
-
-    // Create an instance for the maze
-    initMaze();
+    onWindowResize();
+    addKeyboardListeners();
 
     //Add all to scene when models has been loaded
     manager.onLoad = () => {
 
-        scene.add(
-            play, 
-            pacman.pacman,
-            floor,
-            walls,
-            balls,
-            super_balls,
-        );
+        scene.add(play, pacman.pacman, floor, walls, balls, super_balls, dirLight, ambientLight);
     };
 
     // Start rendering
-    onWindowResize();
-    addKeyboardListeners();
-    
     animate();
 };
 
