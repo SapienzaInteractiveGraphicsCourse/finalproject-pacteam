@@ -1,7 +1,7 @@
 import {maze} from './maze.js'
 export default class Ghost {
     constructor() {
-        this.ghost;
+        this.ghosts;
         this.actual_direction = 'down';
     }
 
@@ -13,8 +13,7 @@ export default class Ghost {
                 object.scale.set(4, 3, 4);
                 
                 // Standard spawn location
-                //object.position.set(100, 3, -130);
-                object.position.set(110, 5, -30);
+                object.position.set(100, 3, -130);
 			
 				object.traverse( (child) => {
 					if (child instanceof THREE.Mesh) {
@@ -44,12 +43,9 @@ export default class Ghost {
             directions.push('right');
         }
 
-        console.log(directions);
-
         if (directions.length == 2 && directions.includes(this.actual_direction)) return this.ghost.rotation.y;
         
-        var dir = Math.floor(Math.random() * directions.length);
-        switch (directions[dir]) {
+        switch (directions[Math.floor(Math.random() * directions.length)]) {
             case 'up':
                 this.actual_direction = 'up';
                 return Math.PI;
