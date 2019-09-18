@@ -1,7 +1,8 @@
+import {maze} from './maze.js'
 export default class Ghost {
-    constructor(type) {
+    constructor() {
         this.ghost;
-        this.type = type;
+        this.actual_direction = 'down';
     }
 
     loadGhost(loader, color) {
@@ -13,7 +14,7 @@ export default class Ghost {
                 
                 // Standard spawn location
                 //object.position.set(100, 3, -130);
-                object.position.set(110, 5, -10);
+                object.position.set(110, 5, -30);
 			
 				object.traverse( (child) => {
 					if (child instanceof THREE.Mesh) {
@@ -23,5 +24,54 @@ export default class Ghost {
                 this.ghost = object;
             }
         );
+    }
+
+    get_rotation(i, j) {
+        var directions = [];
+        if (maze[i+2][j] != 1) {
+            directions.push('up');
+        }
+
+        if (maze[i-2][j] != 1) {
+            directions.push('down');
+        }
+
+        if (maze[i][j-2] != 1) {
+            directions.push('left');
+        }
+
+        if (maze[i][j+2] != 1) {
+            directions.push('right');
+        }
+
+        console.log(directions);
+
+        if (directions.length == 2 && directions.includes(this.actual_direction)) return this.ghost.rotation.y;
+        
+        var dir = Math.floor(Math.random() * directions.length);
+        switch (directions[dir]) {
+            case 'up':
+                this.actual_direction = 'up';
+                return Math.PI;
+            case 'down':
+                this.actual_direction = 'down';
+                return 0;
+            case 'left': 
+                this.actual_direction = 'left';
+                return -Math.PI/2;
+            case 'right':
+                this.actual_direction = 'right';
+                return Math.PI/2;
+        }
+    }
+
+    moveGhost() {
+
+        this.ghost.position.x += 0.25*Math.sin(this.ghost.rotation.y);
+        this.ghost.position.z += 0.25*Math.cos(this.ghost.rotation.y);
+        
+        if (-this.ghost.position.z % 10 == 0 && this.ghost.position.x % 10 == 0) {
+            this.ghost.rotation.y = this.get_rotation(-this.ghost.position.z/5, this.ghost.position.x/5);
+        }
     }
 }
