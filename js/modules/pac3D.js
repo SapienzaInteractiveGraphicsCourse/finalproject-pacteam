@@ -1,4 +1,4 @@
-import Maze from './maze.js';
+import {initMaze, walls, balls, super_balls, floor} from './maze.js';
 import Ghost from './ghost.js';
 import Pacman from './pacman.js';
 import {AudioInitializer, audio} from './audio.js';
@@ -47,9 +47,6 @@ var pacman;
 var ghost;
 
 var super_pacman = false;
-
-// Maze
-var maze;
 
 var spotLight;
 var target_object;
@@ -167,18 +164,17 @@ window.onload = function init() {
     
 
     // Create an instance for the maze
-    maze = new Maze();
-    maze.initMaze(scene);
+    initMaze();
 
     //Add all to scene when models has been loaded
     manager.onLoad = () => {
         scene.add(
             play, 
             pacman.pacman,
-            maze.floor,
-            maze.walls,
-            maze.balls,
-            maze.super_balls,
+            floor,
+            walls,
+            balls,
+            super_balls,
             ghost.ghost
         );
     };
@@ -190,74 +186,6 @@ window.onload = function init() {
     animate();
 };
 
-var actual_direction = 'down';
-function rotate_ghost(i, j) {
-    var directions = [];
-    if (maze.maze[i+2][j] != 1) {
-        directions.push('up');
-    }
-
-    if (maze.maze[i-2][j] != 1) {
-        directions.push('down');
-    }
-
-    if (maze.maze[i][j-2] != 1) {
-        directions.push('left');
-    }
-
-    if (maze.maze[i][j+2] != 1) {
-        directions.push('right')
-    }
-
-    console.log('possible directions: ', directions);
-    var len = 0;
-    for (var i=0; i<directions.length; i++) {
-        if (!(directions[i] == actual_direction)) {
-            len += 1;
-        }
-    }
-
-    if (len >= 2) {
-        console.log('Incrocio!!')
-    } else return ghost.ghost.rotation.y;
-    
-    var dir = Math.floor(Math.random() * directions.length);
-    console.log('Choosen direction: ', directions[dir]);
-    switch (directions[dir]) {
-        case 'up':
-            actual_direction = 'up';
-            return Math.PI;
-        case 'down':
-            actual_direction = 'down';
-            return 0;
-        case 'left': 
-            actual_direction = 'left';
-            return -Math.PI/2;
-        case 'right':
-            actual_direction = 'right';
-            return Math.PI/2;
-    }
-}
-
-function moveGhost() {
-    var pos_x = ghost.ghost.position.x / 5,
-        pos_z = -ghost.ghost.position.z / 5;
-
-        console.log(-ghost.ghost.position.z, ghost.ghost.position.x);
-    
-    if (!(-ghost.ghost.position.z % 10 == 0 && ghost.ghost.position.x % 10 == 0)) {
-        console.log('Moving');
-        ghost.ghost.position.x += 0.25*Math.sin(ghost.ghost.rotation.y);
-        ghost.ghost.position.z += 0.25*Math.cos(ghost.ghost.rotation.y);
-    } else {
-        console.log('rotating');
-        var rotation = rotate_ghost(pos_z, pos_x);
-        ghost.ghost.rotation.y = rotation;
-        ghost.ghost.position.x += 0.25*Math.sin(ghost.ghost.rotation.y);
-        ghost.ghost.position.z += 0.25*Math.cos(ghost.ghost.rotation.y);
-    }
-}
-
 function animate() {
 
     if (paused || settinged) {
@@ -266,7 +194,7 @@ function animate() {
         return;
     }
 
-    moveGhost();
+    ghost.moveGhost();
 
     if (keyboard[87]) { // W key
         
@@ -275,21 +203,21 @@ function animate() {
             0, 
             -Math.sin(camera.rotation.y + Math.PI/4)
         ));
-        var intersects_right = raycaster.intersectObjects(maze.walls.children);
+        var intersects_right = raycaster.intersectObjects(walls.children);
 
         raycaster.set(pacman.pacman.position, new THREE.Vector3(
             Math.cos(camera.rotation.y + 3*Math.PI/4), 
             0, 
             -Math.sin(camera.rotation.y + 3*Math.PI/4)
         ));
-        var intersects_left = raycaster.intersectObjects(maze.walls.children);
+        var intersects_left = raycaster.intersectObjects(walls.children);
 
         raycaster.set(pacman.pacman.position, new THREE.Vector3(
             Math.sin(-camera.rotation.y), 
             0, 
             -Math.cos(-camera.rotation.y)
         ));
-        var intersects_center = raycaster.intersectObjects(maze.walls.children);
+        var intersects_center = raycaster.intersectObjects(walls.children);
         
         if (intersects_center.length > 0) {
             if (intersects_center[0].object.name == 'left') {
@@ -315,37 +243,37 @@ function animate() {
         }
 
         raycaster.set(new THREE.Vector3(pacman.pacman.position.x + 1.5*Math.cos(-camera.rotation.y), pacman.pacman.position.y+1, pacman.pacman.position.z - 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
-        var intersects_balls_left = raycaster.intersectObjects(maze.balls.children);
-        var intersects_super_balls_left = raycaster.intersectObjects(maze.super_balls.children);
+        var intersects_balls_left = raycaster.intersectObjects(balls.children);
+        var intersects_super_balls_left = raycaster.intersectObjects(super_balls.children);
 
         raycaster.set(new THREE.Vector3(pacman.pacman.position.x, pacman.pacman.position.y+1, pacman.pacman.position.z), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
-        var intersects_balls_center = raycaster.intersectObjects(maze.balls.children);
-        var intersects_super_balls_center = raycaster.intersectObjects(maze.super_balls.children);
+        var intersects_balls_center = raycaster.intersectObjects(balls.children);
+        var intersects_super_balls_center = raycaster.intersectObjects(super_balls.children);
 
         raycaster.set(new THREE.Vector3(pacman.pacman.position.x - 1.5*Math.cos(-camera.rotation.y), pacman.pacman.position.y+1, pacman.pacman.position.z + 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
-        var intersects_balls_right = raycaster.intersectObjects(maze.balls.children);
-        var intersects_super_balls_right = raycaster.intersectObjects(maze.super_balls.children);
+        var intersects_balls_right = raycaster.intersectObjects(balls.children);
+        var intersects_super_balls_right = raycaster.intersectObjects(super_balls.children);
 
         // ball interactions
         if (intersects_balls_left.length > 0 && intersects_balls_left[0].distance > 0) {
-            maze.balls.remove(intersects_balls_left[0].object);
+            balls.remove(intersects_balls_left[0].object);
             audio[1].play();
             player.score += FRUIT_POINTS[difficulty_level];
         }
         else if (intersects_balls_center.length > 0 && intersects_balls_center[0].distance > 0) {
-            maze.balls.remove(intersects_balls_center[0].object);
+            balls.remove(intersects_balls_center[0].object);
             audio[1].play();
             player.score += FRUIT_POINTS[difficulty_level];
         } 
         else if (intersects_balls_right.length > 0 && intersects_balls_right[0].distance > 0) {
-            maze.balls.remove(intersects_balls_right[0].object);
+            balls.remove(intersects_balls_right[0].object);
             audio[1].play();
             player.score += FRUIT_POINTS[difficulty_level];
         }
 
         // super balls interactions
         if (intersects_super_balls_left.length > 0 && intersects_super_balls_left[0].distance > 0) {
-            maze.super_balls.remove(intersects_super_balls_left[0].object);
+            super_balls.remove(intersects_super_balls_left[0].object);
             super_pacman = true;
             setTimeout(finish_power_up, super_pacman_time[difficulty_level]);
             audio[5].play();
@@ -353,7 +281,7 @@ function animate() {
             player.score += FRUIT_POINTS[difficulty_level];
         }
         else if (intersects_super_balls_center.length > 0 && intersects_super_balls_center[0].distance > 0) {
-            maze.super_balls.remove(intersects_super_balls_center[0].object);
+            super_balls.remove(intersects_super_balls_center[0].object);
             super_pacman = true;
             setTimeout(finish_power_up, super_pacman_time[difficulty_level]);
             audio[5].play();
@@ -361,7 +289,7 @@ function animate() {
             player.score += FRUIT_POINTS[difficulty_level];
         } 
         else if (intersects_super_balls_right.length > 0 && intersects_super_balls_right[0].distance > 0) {
-            maze.super_balls.remove(intersects_super_balls_right[0].object);
+            super_balls.remove(intersects_super_balls_right[0].object);
             super_pacman = true;
             setTimeout(finish_power_up, super_pacman_time[difficulty_level]);
             audio[5].play();
@@ -377,21 +305,21 @@ function animate() {
             0, 
             Math.cos(-camera.rotation.y)
         ));
-        var intersects_center = raycaster.intersectObjects(maze.walls.children);
+        var intersects_center = raycaster.intersectObjects(walls.children);
         
         raycaster.set(pacman.pacman.position, new THREE.Vector3(
             Math.cos(camera.rotation.y + 5*Math.PI/4), 
             0, 
             -Math.sin(camera.rotation.y + 5*Math.PI/4)
         ));
-        var intersects_right = raycaster.intersectObjects(maze.walls.children);
+        var intersects_right = raycaster.intersectObjects(walls.children);
 
         raycaster.set(pacman.pacman.position, new THREE.Vector3(
             Math.cos(camera.rotation.y + 7*Math.PI/4), 
             0, 
             -Math.sin(camera.rotation.y + 7*Math.PI/4)
         ));
-        var intersects_left = raycaster.intersectObjects(maze.walls.children);
+        var intersects_left = raycaster.intersectObjects(walls.children);
         
         if (intersects_center.length > 0) {
             if (intersects_center[0].object.name == 'left') {
@@ -424,21 +352,21 @@ function animate() {
             0, 
             -Math.sin(-camera.rotation.y)
         ));
-        var intersects_center = raycaster.intersectObjects(maze.walls.children);
+        var intersects_center = raycaster.intersectObjects(walls.children);
 
         raycaster.set(pacman.pacman.position, new THREE.Vector3(
             Math.cos(camera.rotation.y + 3*Math.PI/4), 
             0, 
             -Math.sin(camera.rotation.y + 3*Math.PI/4)
         ));
-        var intersects_right = raycaster.intersectObjects(maze.walls.children);
+        var intersects_right = raycaster.intersectObjects(walls.children);
 
         raycaster.set(pacman.pacman.position, new THREE.Vector3(
             Math.cos(camera.rotation.y + 5*Math.PI/4), 
             0, 
             -Math.sin(camera.rotation.y + 5*Math.PI/4)
         ));
-        var intersects_left = raycaster.intersectObjects(maze.walls.children);
+        var intersects_left = raycaster.intersectObjects(walls.children);
 
         if (intersects_center.length > 0) {
             if (intersects_center[0].object.name == 'left') {
@@ -471,21 +399,21 @@ function animate() {
             0, 
             Math.sin(-camera.rotation.y)
         ));
-        var intersects_center = raycaster.intersectObjects(maze.walls.children);
+        var intersects_center = raycaster.intersectObjects(walls.children);
 
         raycaster.set(pacman.pacman.position, new THREE.Vector3(
             Math.cos(camera.rotation.y + 7*Math.PI/4), 
             0, 
             -Math.sin(camera.rotation.y + 7*Math.PI/4)
         ));
-        var intersects_right = raycaster.intersectObjects(maze.walls.children);
+        var intersects_right = raycaster.intersectObjects(walls.children);
 
         raycaster.set(pacman.pacman.position, new THREE.Vector3(
             Math.cos(camera.rotation.y + Math.PI/4), 
             0, 
             -Math.sin(camera.rotation.y + Math.PI/4)
         ));
-        var intersects_left = raycaster.intersectObjects(maze.walls.children);
+        var intersects_left = raycaster.intersectObjects(walls.children);
 
         if (intersects_center.length > 0) {
             if (intersects_center[0].object.name == 'left') {
@@ -519,7 +447,7 @@ function animate() {
             -Math.sin(-camera.rotation.y)
         ));
 
-        var intersections = raycaster.intersectObjects(maze.walls.children);
+        var intersections = raycaster.intersectObjects(walls.children);
 
         if ((intersections.length > 0 && intersections[0].distance > player.wall_distance + 2) || intersections.length == 0) {
             camera.rotation.y += player.turn_speed;
@@ -534,7 +462,7 @@ function animate() {
             0, 
             Math.sin(-camera.rotation.y)
         ));
-        var intersections = raycaster.intersectObjects(maze.walls.children);
+        var intersections = raycaster.intersectObjects(walls.children);
 
         if ((intersections.length > 0 && intersections[0].distance > player.wall_distance + 2) || intersections.length == 0) {
             camera.rotation.y -= player.turn_speed;
