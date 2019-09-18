@@ -184,15 +184,6 @@ window.onload = function init() {
 function animate() {
 
     if (paused || settinged) {
-        renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
-        renderer.render( scene, camera );
-        renderer.clearDepth();
-        renderer.setScissorTest(true);
-        renderer.setScissor(window.innerWidth-insetWidth, window.innerHeight - insetHeight, insetWidth, insetHeight);
-        renderer.setViewport(window.innerWidth-insetWidth, window.innerHeight - insetHeight, insetWidth, insetHeight);
-        renderer.render(scene, cameraOrtho);
-        renderer.setScissorTest(false);
-        requestAnimationFrame(animate);
         return;
     }
 
