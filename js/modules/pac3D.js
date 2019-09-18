@@ -70,7 +70,7 @@ window.onload = function init() {
     camera.position.set(100, player.height+80, -5);
     
     // Create minimap camera
-    cameraOrtho = new THREE.OrthographicCamera(0, 201, 205, 0, -1000, 1000);
+    cameraOrtho = new THREE.OrthographicCamera(-2.5, 202.5, 207.5, -2.5, -1000, 1000);
     cameraOrtho.up = new THREE.Vector3(0, 0, -1);
 	cameraOrtho.lookAt(new THREE.Vector3(0, -1, 0));
     scene.add(cameraOrtho);
@@ -403,8 +403,8 @@ function animate() {
     renderer.render(scene, camera);
     renderer.clearDepth();
  	renderer.setScissorTest(true);
-    renderer.setScissor(window.innerWidth-insetWidth, window.innerHeight - insetHeight, insetWidth, insetHeight);
-    renderer.setViewport(window.innerWidth-insetWidth, window.innerHeight - insetHeight, insetWidth, insetHeight);
+    renderer.setScissor(window.innerWidth-insetWidth-2, window.innerHeight - insetHeight, insetWidth-2, insetHeight);
+    renderer.setViewport(window.innerWidth-insetWidth-2, window.innerHeight - insetHeight, insetWidth-2, insetHeight);
 	renderer.render(scene, cameraOrtho);
     renderer.setScissorTest(false);
     requestAnimationFrame(animate);
