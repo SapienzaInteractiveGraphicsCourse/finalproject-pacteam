@@ -13,7 +13,7 @@ export default class Ghost {
                 
                 // Standard spawn location
                 //object.position.set(100, 3, -130);
-                object.position.set(110, 5, -30);
+                object.position.set(110, 5, -10);
 			
 				object.traverse( (child) => {
 					if (child instanceof THREE.Mesh) {

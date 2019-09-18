@@ -54,7 +54,7 @@ var maze;
 var spotLight;
 var target_object;
 
-var ghost_loader;
+var object_loader;
 
 function finish_power_up() {
     super_pacman = false;
@@ -98,13 +98,13 @@ window.onload = function init() {
     scene.add(ambientLight);
     
     var manager = new THREE.LoadingManager();
-    ghost_loader = new THREE.OBJLoader(manager);
+    object_loader = new THREE.OBJLoader(manager);
 
     pacman = new Pacman();
-    pacman.loadPacman(loader);
+    pacman.loadPacman(object_loader);
 
     ghost = new Ghost();
-    ghost.loadGhost(loader);
+    ghost.loadGhost(object_loader, 0xffffff);
     
     //Create a raycaster instance
     raycaster = new THREE.Raycaster();
@@ -138,7 +138,7 @@ window.onload = function init() {
                 play.material.color.setHex(0xffffcc);
                 $('html,body').css('cursor', 'pointer');
             });
-
+        
             domEvents.addEventListener(play, "click", event => {
                 // Hides the buttons
                 scene.remove(play);
@@ -147,9 +147,9 @@ window.onload = function init() {
                 document.getElementById("playpausebtn").style.background = "url(images/pause.png) no-repeat";
                 audio[0].play();
                 scene.remove(dirLight);
-                //setInterval(moveGhost, 500);
+                //setInterval(moveGhost, 2000);
             });
-
+        
             domEvents.addEventListener(play, "mouseout", event => {
                 play.material.color.setHex(0xffff00);
                 $('html,body').css('cursor', 'default');
@@ -178,28 +178,83 @@ window.onload = function init() {
             maze.floor,
             maze.walls,
             maze.balls,
-            maze.super_balls);
+            maze.super_balls,
+            ghost.ghost
+        );
     };
 
     // Start rendering
     onWindowResize();
     addKeyboardListeners();
-    console.log(maze.maze[22][6]);
+    
     animate();
 };
+
+var actual_direction = 'down';
+function rotate_ghost(i, j) {
+    var directions = [];
+    if (maze.maze[i+2][j] != 1) {
+        directions.push('up');
+    }
+
+    if (maze.maze[i-2][j] != 1) {
+        directions.push('down');
+    }
+
+    if (maze.maze[i][j-2] != 1) {
+        directions.push('left');
+    }
+
+    if (maze.maze[i][j+2] != 1) {
+        directions.push('right')
+    }
+
+    console.log('possible directions: ', directions);
+    var len = 0;
+    for (var i=0; i<directions.length; i++) {
+        if (!(directions[i] == actual_direction)) {
+            len += 1;
+        }
+    }
+
+    if (len >= 2) {
+        console.log('Incrocio!!')
+    } else return ghost.ghost.rotation.y;
+    
+    var dir = Math.floor(Math.random() * directions.length);
+    console.log('Choosen direction: ', directions[dir]);
+    switch (directions[dir]) {
+        case 'up':
+            actual_direction = 'up';
+            return Math.PI;
+        case 'down':
+            actual_direction = 'down';
+            return 0;
+        case 'left': 
+            actual_direction = 'left';
+            return -Math.PI/2;
+        case 'right':
+            actual_direction = 'right';
+            return Math.PI/2;
+    }
+}
 
 function moveGhost() {
     var pos_x = ghost.ghost.position.x / 5,
         pos_z = -ghost.ghost.position.z / 5;
+
+        console.log(-ghost.ghost.position.z, ghost.ghost.position.x);
     
-    if (!(-ghost.ghost.position.z % 5 == 0 && ghost.ghost.position.x % 5 == 0)) {
-        ghost.ghost.position.z -= 0.5;
+    if (!(-ghost.ghost.position.z % 10 == 0 && ghost.ghost.position.x % 10 == 0)) {
+        console.log('Moving');
+        ghost.ghost.position.x += 0.25*Math.sin(ghost.ghost.rotation.y);
+        ghost.ghost.position.z += 0.25*Math.cos(ghost.ghost.rotation.y);
     } else {
-        console.log(pos_x, pos_z);
-        console.log("Up: " + maze.maze[pos_x][pos_z-1]);
-        console.log("Down: " + maze.maze[pos_x][pos_z+1]);
-        console.log("Left: " + maze.maze[pos_x-1][pos_z]);
-        console.log("Right: " + maze.maze[pos_x+1][pos_z]);
+        console.log('rotating');
+        var rotation = rotate_ghost(pos_z, pos_x);
+        ghost.ghost.rotation.y = rotation;
+        ghost.ghost.position.x += 0.25*Math.sin(ghost.ghost.rotation.y);
+        ghost.ghost.position.z += 0.25*Math.cos(ghost.ghost.rotation.y);
     }
 }
 
@@ -505,32 +560,32 @@ function animate() {
         }
     } */
 
-    setTimeout(() => {
+    /* setTimeout(() => {
         var val = Math.random();
 
         var ghost;
         if (val < GHOST_RATE_PINK[difficulty_level]) {
             ghost = new Ghost(GHOST_TYPE_PINK);
-            ghost.loadGhost(ghost_loader, GHOST_COLOR_PINK);
+            ghost.loadGhost(object_loader, GHOST_COLOR_PINK);
         }
         else if (val < GHOST_RATE_PINK[difficulty_level] + GHOST_RATE_BLUE[difficulty_level]) {
             ghost = new Ghost(GHOST_TYPE_BLUE);
-            ghost.loadGhost(ghost_loader, GHOST_COLOR_BLUE);
+            ghost.loadGhost(object_loader, GHOST_COLOR_BLUE);
         }
         else if (val < GHOST_RATE_PINK[difficulty_level] + GHOST_RATE_BLUE[difficulty_level] + GHOST_RATE_ORANGE[difficulty_level]) {
             ghost = new Ghost(GHOST_TYPE_ORANGE);
-            ghost.loadGhost(ghost_loader, GHOST_COLOR_ORANGE);
+            ghost.loadGhost(object_loader, GHOST_COLOR_ORANGE);
         }
         else {
             ghost = new Ghost(GHOST_TYPE_RED);
-            ghost.loadGhost(ghost_loader, GHOST_COLOR_RED);
+            ghost.loadGhost(object_loader, GHOST_COLOR_RED);
         }
 
         scene.add(ghost.ghost);
         n_ghosts++;
         ghosts.push(ghost);
 
-    }, GHOST_SPAWN_TIME)
+    }, GHOST_SPAWN_TIME) */
 
     // Update pacman position
     pacman.pacman.position.set(camera.position.x + Math.sin(-camera.rotation.y)*3.5, 1, camera.position.z - Math.cos(-camera.rotation.y)*3.5);
