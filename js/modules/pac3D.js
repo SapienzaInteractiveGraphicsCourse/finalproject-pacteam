@@ -4,7 +4,7 @@ import {keyboard, addKeyboardListeners} from './keyboard_controls.js';
 
 import Pacman from './pacman.js';
 import {Ghost, loadGhost} from './ghost.js';
-import {initMaze, walls, balls, super_balls, floor} from './maze.js';
+import {initMaze, walls, balls, floor} from './maze.js';
 import {spotLight, target_object, dirLight, ambientLight} from './lights.js';
 
 let scene, camera, cameraOrtho, renderer, raycaster;
@@ -216,34 +216,64 @@ function animate() {
 
         raycaster.set(new THREE.Vector3(pacman.pacman.position.x + 1.5*Math.cos(-camera.rotation.y), pacman.pacman.position.y+1, pacman.pacman.position.z - 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
         var intersects_balls_left = raycaster.intersectObjects(balls.children);
-        var intersects_super_balls_left = raycaster.intersectObjects(super_balls.children);
+        //var intersects_super_balls_left = raycaster.intersectObjects(super_balls.children);
 
         raycaster.set(new THREE.Vector3(pacman.pacman.position.x, pacman.pacman.position.y+1, pacman.pacman.position.z), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
         var intersects_balls_center = raycaster.intersectObjects(balls.children);
-        var intersects_super_balls_center = raycaster.intersectObjects(super_balls.children);
+        //var intersects_super_balls_center = raycaster.intersectObjects(super_balls.children);
 
         raycaster.set(new THREE.Vector3(pacman.pacman.position.x - 1.5*Math.cos(-camera.rotation.y), pacman.pacman.position.y+1, pacman.pacman.position.z + 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
         var intersects_balls_right = raycaster.intersectObjects(balls.children);
-        var intersects_super_balls_right = raycaster.intersectObjects(super_balls.children);
+        //var intersects_super_balls_right = raycaster.intersectObjects(super_balls.children);
 
         // ball interactions
-        if (intersects_balls_left.length > 0 && intersects_balls_left[0].distance > 0) {
-            balls.remove(intersects_balls_left[0].object);
-            audio[1].play();
-            player.score += FRUIT_POINTS[difficulty_level];
+        if (intersects_balls_left.length > 0) {
+            if (intersects_balls_left[0].object.name == 'sp') {
+                balls.remove(intersects_balls_left[0].object);
+                super_pacman = true;
+                setTimeout(finish_power_up, SUPER_PACMAN_TIME[difficulty_level]);
+                audio[5].play();
+                audio[0].pause();
+                player.score += FRUIT_POINTS[difficulty_level];
+            } 
+            else {
+                balls.remove(intersects_balls_left[0].object);
+                audio[1].play();
+                player.score += FRUIT_POINTS[difficulty_level];
+            }
         }
-        else if (intersects_balls_center.length > 0 && intersects_balls_center[0].distance > 0) {
-            balls.remove(intersects_balls_center[0].object);
-            audio[1].play();
-            player.score += FRUIT_POINTS[difficulty_level];
+        else if (intersects_balls_center.length > 0) {
+            if (intersects_balls_center[0].object.name == 'sp') {
+                balls.remove(intersects_balls_center[0].object);
+                super_pacman = true;
+                setTimeout(finish_power_up, SUPER_PACMAN_TIME[difficulty_level]);
+                audio[5].play();
+                audio[0].pause();
+                player.score += FRUIT_POINTS[difficulty_level];
+            } 
+            else {
+                balls.remove(intersects_balls_center[0].object);
+                audio[1].play();
+                player.score += FRUIT_POINTS[difficulty_level];
+            }
         } 
-        else if (intersects_balls_right.length > 0 && intersects_balls_right[0].distance > 0) {
-            balls.remove(intersects_balls_right[0].object);
-            audio[1].play();
-            player.score += FRUIT_POINTS[difficulty_level];
+        else if (intersects_balls_right.length > 0) {
+            if (intersects_balls_right[0].object.name == 'sp') {
+                balls.remove(intersects_balls_right[0].object);
+                super_pacman = true;
+                setTimeout(finish_power_up, SUPER_PACMAN_TIME[difficulty_level]);
+                audio[5].play();
+                audio[0].pause();
+                player.score += FRUIT_POINTS[difficulty_level];
+            } 
+            else {
+                balls.remove(intersects_balls_right[0].object);
+                audio[1].play();
+                player.score += FRUIT_POINTS[difficulty_level];
+            }
         }
 
-        // super balls interactions
+        /* // super balls interactions
         if (intersects_super_balls_left.length > 0 && intersects_super_balls_left[0].distance > 0) {
             super_balls.remove(intersects_super_balls_left[0].object);
             super_pacman = true;
@@ -267,7 +297,7 @@ function animate() {
             audio[5].play();
             audio[0].pause();
             player.score += FRUIT_POINTS[difficulty_level];
-        }
+        } */
     }
 
     if (keyboard[83]) { // S key

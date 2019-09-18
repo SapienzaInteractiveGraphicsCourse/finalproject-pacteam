@@ -23,7 +23,6 @@ var ball;
 const unique_ball = new THREE.SphereBufferGeometry(0.75, 16, 16);
 const unique_ball_material = new THREE.MeshPhongMaterial({color:0xFFFF00});
 
-var super_ball;
 const unique_super_ball = new THREE.SphereBufferGeometry(1.5, 16, 16);
 const unique_super_ball_material = new THREE.MeshPhongMaterial({color:0xFFD700});
 
@@ -42,8 +41,6 @@ for (var i = 0; i < maze.length; i++) {
 var walls = new THREE.Group();
 // Represents the balls objects
 var balls = new THREE.Group();
-// Represents the super balls objects
-var super_balls = new THREE.Group();
 // Represents the floor
 var floor = new THREE.Mesh();
 
@@ -211,27 +208,30 @@ var initMaze = () => {
                 balls.add(ball);
             }
             else if (maze[i][j] == 3) {
-                super_ball = new THREE.Mesh(unique_super_ball, unique_super_ball_material);
-                super_ball.castShadow = true;
-                super_ball.receiveShadow = true;
-                super_ball.position.set(5*j, 2, -5*i);
-                super_balls.add(super_ball);
+                ball = new THREE.Mesh(unique_super_ball, unique_super_ball_material);
+                ball.castShadow = true;
+                ball.receiveShadow = true;
+                ball.position.set(5*j, 2, -5*i);
+                ball.name = 'sp';
+                balls.add(ball);
             }
         }
     };
 
-    // Adding some, otherwise, non-aligned balls
-    super_ball = new THREE.Mesh(unique_super_ball, unique_super_ball_material);
-    super_ball.castShadow = true;
-    super_ball.receiveShadow = true;
-    super_ball.position.set(190, 2, -182.5);
-    super_balls.add(super_ball);
+    // Adding some, otherwise non-aligned, balls
+    ball = new THREE.Mesh(unique_super_ball, unique_super_ball_material);
+    ball.castShadow = true;
+    ball.receiveShadow = true;
+    ball.position.set(190, 2, -182.5);
+    ball.name = 'sp';
+    balls.add(ball);
 
-    super_ball = new THREE.Mesh(unique_super_ball, unique_super_ball_material);
-    super_ball.castShadow = true;
-    super_ball.receiveShadow = true;
-    super_ball.position.set(10, 2, -182.5);
-    super_balls.add(super_ball);
+    ball = new THREE.Mesh(unique_super_ball, unique_super_ball_material);
+    ball.castShadow = true;
+    ball.receiveShadow = true;
+    ball.position.set(10, 2, -182.5);
+    ball.name = 'sp';
+    balls.add(ball);
 
     ball = new THREE.Mesh(unique_ball, unique_ball_material);
     ball.castShadow = true;
@@ -281,5 +281,5 @@ var initMaze = () => {
 export {
     initMaze,
     maze,
-    walls, balls, super_balls, floor
+    walls, balls, floor
 };
