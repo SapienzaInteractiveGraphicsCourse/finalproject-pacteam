@@ -1,12 +1,13 @@
-import {initMaze, walls, balls, super_balls, floor} from './maze.js';
-import {Ghost, ghost_model, possible_ghosts_positions, loadGhost} from './ghost.js';
-import Pacman from './pacman.js';
-import {AudioInitializer, audio} from './audio.js';
-import {Settings, settinged} from './settings.js';
+import {audioInitializer, audio} from './audio.js';
+import {settingsInitializer, settinged} from './settings.js';
 import {keyboard, addKeyboardListeners} from './keyboard_controls.js';
 
-let scene, camera, cameraOrtho, renderer;
-var raycaster;
+import Pacman from './pacman.js';
+import {Ghost, loadGhost} from './ghost.js';
+import {initMaze, walls, balls, super_balls, floor} from './maze.js';
+import {spotLight, target_object, dirLight, ambientLight} from './lights.js';
+
+let scene, camera, cameraOrtho, renderer, raycaster;
 
 var insetWidth, insetHeight;
 
@@ -46,9 +47,6 @@ var ghosts = [];
 
 var super_pacman = false;
 
-var spotLight;
-var target_object;
-
 var manager;
 var object_loader;
 
@@ -77,15 +75,17 @@ window.onload = function init() {
     renderer = new THREE.WebGLRenderer({alpha:true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
-    
-    // Create a source of light
-    var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    dirLight.position.set(100, 80, -50);
-    scene.add(dirLight);
 
-    // Create ambient light
-    var ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-    scene.add(ambientLight);
+    // Add setting and audio
+    settingsInitializer();
+    audioInitializer();
+
+    // Useful stuffs
+    onWindowResize();
+    addKeyboardListeners();
+
+    // Create an instance for the maze
+    initMaze();
     
     // Create manager and loader
     manager = new THREE.LoadingManager();
@@ -101,10 +101,6 @@ window.onload = function init() {
     //Create a raycaster instance
     raycaster = new THREE.Raycaster();
     raycaster.far = 2.5;
-
-    // Add setting and audio
-    Settings();
-    AudioInitializer();
 
     //Used to add events listenders
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement);
@@ -149,41 +145,20 @@ window.onload = function init() {
         }
     );
 
-    spotLight = new THREE.SpotLight(0xffffff, 0.9, 200, Math.PI/4, 1, 2);
-    spotLight.castShadow = true;
-    scene.add(spotLight);
-    target_object = new THREE.Object3D();
-    target_object.position.set(100, player.height, -10);
-    scene.add(target_object);
-    spotLight.target = target_object;
-    
-
-    // Create an instance for the maze
-    initMaze();
-
-    //Add all to scene when models has been loaded
+    //Add all to scene when models have been loaded
     manager.onLoad = () => {
-
-        scene.add(
-            play, 
-            pacman.pacman,
-            floor,
-            walls,
-            balls,
-            super_balls,
-        );
+        scene.add(dirLight, ambientLight, spotLight, target_object, play, floor, walls, balls, super_balls, pacman.pacman);
     };
 
     // Start rendering
-    onWindowResize();
-    addKeyboardListeners();
-    
     animate();
 };
 
 function animate() {
 
     if (paused || settinged) {
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
         return;
     }
 
@@ -270,7 +245,7 @@ function animate() {
         if (intersects_super_balls_left.length > 0 && intersects_super_balls_left[0].distance > 0) {
             super_balls.remove(intersects_super_balls_left[0].object);
             super_pacman = true;
-            setTimeout(finish_power_up, super_pacman_time[difficulty_level]);
+            setTimeout(finish_power_up, SUPER_PACMAN_TIME[difficulty_level]);
             audio[5].play();
             audio[0].pause();
             player.score += FRUIT_POINTS[difficulty_level];
@@ -278,7 +253,7 @@ function animate() {
         else if (intersects_super_balls_center.length > 0 && intersects_super_balls_center[0].distance > 0) {
             super_balls.remove(intersects_super_balls_center[0].object);
             super_pacman = true;
-            setTimeout(finish_power_up, super_pacman_time[difficulty_level]);
+            setTimeout(finish_power_up, SUPER_PACMAN_TIME[difficulty_level]);
             audio[5].play();
             audio[0].pause();
             player.score += FRUIT_POINTS[difficulty_level];
@@ -286,7 +261,7 @@ function animate() {
         else if (intersects_super_balls_right.length > 0 && intersects_super_balls_right[0].distance > 0) {
             super_balls.remove(intersects_super_balls_right[0].object);
             super_pacman = true;
-            setTimeout(finish_power_up, super_pacman_time[difficulty_level]);
+            setTimeout(finish_power_up, SUPER_PACMAN_TIME[difficulty_level]);
             audio[5].play();
             audio[0].pause();
             player.score += FRUIT_POINTS[difficulty_level];
@@ -469,9 +444,9 @@ function animate() {
     pacman.pacman.rotation.set(camera.rotation.x, camera.rotation.y - 1.28, camera.rotation.z + 0.21);
     target_object.position.set(camera.position.x + Math.sin(-camera.rotation.y)*10, 1, camera.position.z - Math.cos(-camera.rotation.y)*10);
     spotLight.position.set(camera.position.x, camera.position.y, camera.position.z);
-    
-    renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
-    renderer.render( scene, camera );
+
+    renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
+    renderer.render(scene, camera);
     renderer.clearDepth();
  	renderer.setScissorTest(true);
     renderer.setScissor(window.innerWidth-insetWidth, window.innerHeight - insetHeight, insetWidth, insetHeight);
