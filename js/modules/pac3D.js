@@ -169,27 +169,32 @@ function animate() {
     }
 
     if (keyboard[87]) { // W key
+
+        var new_pacman_position = new THREE.Vector3(pacman.pacman.position.x, pacman.pacman.position.y + 1, pacman.pacman.position.z);
         
-        raycaster.set(pacman.pacman.position, new THREE.Vector3(
+        raycaster.set(new_pacman_position, new THREE.Vector3(
             Math.cos(camera.rotation.y + Math.PI/4), 
-            5, 
+            0, 
             -Math.sin(camera.rotation.y + Math.PI/4)
         ));
         var intersects_right = raycaster.intersectObjects(walls.children);
+        var intersects_balls_right = raycaster.intersectObjects(balls.children);
 
-        raycaster.set(pacman.pacman.position, new THREE.Vector3(
+        raycaster.set(new_pacman_position, new THREE.Vector3(
             Math.cos(camera.rotation.y + 3*Math.PI/4), 
-            5, 
+            0, 
             -Math.sin(camera.rotation.y + 3*Math.PI/4)
         ));
         var intersects_left = raycaster.intersectObjects(walls.children);
+        var intersects_balls_left = raycaster.intersectObjects(balls.children);
 
-        raycaster.set(pacman.pacman.position, new THREE.Vector3(
+        raycaster.set(new_pacman_position, new THREE.Vector3(
             Math.sin(-camera.rotation.y), 
-            5, 
+            0, 
             -Math.cos(-camera.rotation.y)
         ));
         var intersects_center = raycaster.intersectObjects(walls.children);
+        var intersects_balls_center = raycaster.intersectObjects(balls.children);
         
         if (intersects_center.length > 0) {
             if (intersects_center[0].object.name == 'left') {
@@ -213,15 +218,6 @@ function animate() {
             camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
             camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
         }
-
-        raycaster.set(new THREE.Vector3(pacman.pacman.position.x + 1.5*Math.cos(-camera.rotation.y), pacman.pacman.position.y+1, pacman.pacman.position.z - 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
-        var intersects_balls_left = raycaster.intersectObjects(balls.children);
-
-        raycaster.set(new THREE.Vector3(pacman.pacman.position.x, pacman.pacman.position.y+1, pacman.pacman.position.z), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
-        var intersects_balls_center = raycaster.intersectObjects(balls.children);
-
-        raycaster.set(new THREE.Vector3(pacman.pacman.position.x - 1.5*Math.cos(-camera.rotation.y), pacman.pacman.position.y+1, pacman.pacman.position.z + 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
-        var intersects_balls_right = raycaster.intersectObjects(balls.children);
 
         // ball interactions
         if (intersects_balls_left.length > 0) {
