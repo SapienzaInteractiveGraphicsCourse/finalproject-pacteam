@@ -58,6 +58,7 @@ function finish_power_up() {
 }
 
 var id_interval;
+var play;
 
 window.onload = function init() {
 
@@ -79,6 +80,9 @@ window.onload = function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
+    // Initialize the manager
+    loadManager();
+
     // Add setting and audio
     settingsInitializer();
     audioInitializer();
@@ -91,71 +95,20 @@ window.onload = function init() {
     initMaze();
     
     // Create manager and loader
-    manager = new THREE.LoadingManager();
     object_loader = new THREE.OBJLoader(manager);
 
     // Create pacman
     loadPacman(object_loader);
     
-    
     // Load ghost model
     loadGhost(object_loader);
+
+    // Load Play
+    loadPlay();
     
     //Create a raycaster instance
     raycaster = new THREE.Raycaster();
     raycaster.far = 2.5;
-
-    //Used to add events listenders
-    const domEvents = new THREEx.DomEvents(camera, renderer.domElement);
-
-    var loader = new THREE.FontLoader();
-    var play;
-    loader.load("fonts/Super_Mario_256.json", 
-    
-        function(font) {
-            var text = new THREE.TextGeometry('PLAY', 
-            {
-                font: font,
-                size: 7,
-                height: 3,
-                curveSegments: 0,
-            });
-
-            var textMaterial = new THREE.MeshPhongMaterial({color: 0xffff00});
-            play = new THREE.Mesh(text, textMaterial);
-            play.position.set(camera.position.x-12, camera.position.y+4, camera.position.z-40);
-
-            domEvents.addEventListener(play, "mouseover", event => {
-                play.material.color.setHex(0xffffcc);
-                $('html,body').css('cursor', 'pointer');
-            });
-        
-            domEvents.addEventListener(play, "click", event => {
-                // Hides the buttons
-                scene.remove(play);
-                camera.position.y = player.height;
-                paused = false;
-                document.getElementById("playpausebtn").style.background = "url(images/pause.png) no-repeat";
-                audio[0].play();
-                scene.remove(dirLight);
-                id_interval = setInterval(spawn, 3000);
-            });
-        
-            domEvents.addEventListener(play, "mouseout", event => {
-                play.material.color.setHex(0xffff00);
-                $('html,body').css('cursor', 'default');
-            });
-        }
-    );
-
-    //Add all to scene when models have been loaded
-    manager.onLoad = () => {
-        pacman = new Pacman();
-        scene.add(dirLight, ambientLight, spotLight, target_object, play, floor, walls, balls, pacman.pacman);
-    };
-
-    // Start rendering
-    animate();
 };
 
 function animate() {
@@ -482,6 +435,73 @@ function spawn() {
     }
 }
 
+const loadPlay = () => {
+    //Used to add events listenders
+    const domEvents = new THREEx.DomEvents(camera, renderer.domElement);
+
+    var loader = new THREE.FontLoader(manager);
+    loader.load("fonts/Super_Mario_256.json", 
+    
+        function(font) {
+            var text = new THREE.TextGeometry('PLAY', 
+            {
+                font: font,
+                size: 7,
+                height: 3,
+                curveSegments: 0,
+            });
+
+            var textMaterial = new THREE.MeshPhongMaterial({color: 0xffff00});
+            play = new THREE.Mesh(text, textMaterial);
+            play.position.set(camera.position.x-12, camera.position.y+4, camera.position.z-40);
+
+            domEvents.addEventListener(play, "mouseover", event => {
+                play.material.color.setHex(0xffffcc);
+                $('html,body').css('cursor', 'pointer');
+            });
+        
+            domEvents.addEventListener(play, "click", event => {
+                // Hides the buttons
+                scene.remove(play);
+                camera.position.y = player.height;
+                paused = false;
+                document.getElementById("playpausebtn").style.background = "url(images/pause.png) no-repeat";
+                audio[0].play();
+                scene.remove(dirLight);
+                id_interval = setInterval(spawn, 3000);
+            });
+        
+            domEvents.addEventListener(play, "mouseout", event => {
+                play.material.color.setHex(0xffff00);
+                $('html,body').css('cursor', 'default');
+            });
+        }
+    );
+}
+
+const loadManager = () => {
+    manager = new THREE.LoadingManager();
+    const loadingBar = document.querySelector('#loading-bar');
+    const progressBar = document.querySelector('#progress');
+    const loadingOverlay = document.querySelector('#loading-overlay');
+
+    manager.onStart = () => {
+        loadingBar.style.display = 'inline-flex';
+        progressBar.style.display = 'initial';
+    };
+
+    manager.onProgress = (item, loaded, total) => {
+        progressBar.style.width = (loaded / total * 100) + '%';
+    }
+
+    manager.onLoad = () => {
+        pacman = new Pacman();
+        loadingOverlay.classList.add( 'loading-overlay-hidden' );
+
+        scene.add(dirLight, ambientLight, spotLight, target_object, play, floor, walls, balls, pacman.pacman);
+        animate();
+    };
+}
 
 // Resize listeners
 window.addEventListener('resize', onWindowResize, false);

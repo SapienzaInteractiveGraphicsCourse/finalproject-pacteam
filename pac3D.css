@@ -93,3 +93,36 @@ table#settingsTable {
 td {
     text-align: center;
 }
+
+#loading-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+.loading-overlay-hidden {
+    display: none !important;
+}
+
+#loading-bar {
+    width: 25em;
+    height: 1em;
+    border-radius: 0.25em;
+    background-color: black;
+
+    border: 1px solid grey;
+    display: none;
+
+}
+
+#progress {
+    background-color: #75b800;
+    height: inherit;
+    border-radius: inherit;
+    display: none;
+    width: 5%;
+}
