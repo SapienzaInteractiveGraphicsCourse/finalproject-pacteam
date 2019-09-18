@@ -2,8 +2,9 @@ import {audioInitializer, audio} from './audio.js';
 import {settingsInitializer, settinged} from './settings.js';
 import {keyboard, addKeyboardListeners} from './keyboard_controls.js';
 
-import Pacman from './pacman.js';
+
 import {Ghost, loadGhost} from './ghost.js';
+import {Pacman, loadPacman} from './pacman.js';
 import {initMaze, walls, balls, floor} from './maze.js';
 import {spotLight, target_object, dirLight, ambientLight} from './lights.js';
 
@@ -94,9 +95,9 @@ window.onload = function init() {
     object_loader = new THREE.OBJLoader(manager);
 
     // Create pacman
-    pacman = new Pacman();
-    pacman.loadPacman(object_loader);
-
+    loadPacman(object_loader);
+    
+    
     // Load ghost model
     loadGhost(object_loader);
     
@@ -149,6 +150,7 @@ window.onload = function init() {
 
     //Add all to scene when models have been loaded
     manager.onLoad = () => {
+        pacman = new Pacman();
         scene.add(dirLight, ambientLight, spotLight, target_object, play, floor, walls, balls, pacman.pacman);
     };
 
