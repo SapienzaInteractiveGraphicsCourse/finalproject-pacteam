@@ -149,7 +149,7 @@ window.onload = function init() {
 
     //Add all to scene when models have been loaded
     manager.onLoad = () => {
-        scene.add(dirLight, ambientLight, spotLight, target_object, play, floor, walls, balls, super_balls, pacman.pacman);
+        scene.add(dirLight, ambientLight, spotLight, target_object, play, floor, walls, balls, pacman.pacman);
     };
 
     // Start rendering
@@ -172,21 +172,21 @@ function animate() {
         
         raycaster.set(pacman.pacman.position, new THREE.Vector3(
             Math.cos(camera.rotation.y + Math.PI/4), 
-            0, 
+            5, 
             -Math.sin(camera.rotation.y + Math.PI/4)
         ));
         var intersects_right = raycaster.intersectObjects(walls.children);
 
         raycaster.set(pacman.pacman.position, new THREE.Vector3(
             Math.cos(camera.rotation.y + 3*Math.PI/4), 
-            0, 
+            5, 
             -Math.sin(camera.rotation.y + 3*Math.PI/4)
         ));
         var intersects_left = raycaster.intersectObjects(walls.children);
 
         raycaster.set(pacman.pacman.position, new THREE.Vector3(
             Math.sin(-camera.rotation.y), 
-            0, 
+            5, 
             -Math.cos(-camera.rotation.y)
         ));
         var intersects_center = raycaster.intersectObjects(walls.children);
@@ -216,15 +216,12 @@ function animate() {
 
         raycaster.set(new THREE.Vector3(pacman.pacman.position.x + 1.5*Math.cos(-camera.rotation.y), pacman.pacman.position.y+1, pacman.pacman.position.z - 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
         var intersects_balls_left = raycaster.intersectObjects(balls.children);
-        //var intersects_super_balls_left = raycaster.intersectObjects(super_balls.children);
 
         raycaster.set(new THREE.Vector3(pacman.pacman.position.x, pacman.pacman.position.y+1, pacman.pacman.position.z), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
         var intersects_balls_center = raycaster.intersectObjects(balls.children);
-        //var intersects_super_balls_center = raycaster.intersectObjects(super_balls.children);
 
         raycaster.set(new THREE.Vector3(pacman.pacman.position.x - 1.5*Math.cos(-camera.rotation.y), pacman.pacman.position.y+1, pacman.pacman.position.z + 1.5*Math.sin(-camera.rotation.y)), new THREE.Vector3(Math.sin(-camera.rotation.y), 0, -Math.cos(-camera.rotation.y)));
         var intersects_balls_right = raycaster.intersectObjects(balls.children);
-        //var intersects_super_balls_right = raycaster.intersectObjects(super_balls.children);
 
         // ball interactions
         if (intersects_balls_left.length > 0) {
@@ -272,32 +269,6 @@ function animate() {
                 player.score += FRUIT_POINTS[difficulty_level];
             }
         }
-
-        /* // super balls interactions
-        if (intersects_super_balls_left.length > 0 && intersects_super_balls_left[0].distance > 0) {
-            super_balls.remove(intersects_super_balls_left[0].object);
-            super_pacman = true;
-            setTimeout(finish_power_up, SUPER_PACMAN_TIME[difficulty_level]);
-            audio[5].play();
-            audio[0].pause();
-            player.score += FRUIT_POINTS[difficulty_level];
-        }
-        else if (intersects_super_balls_center.length > 0 && intersects_super_balls_center[0].distance > 0) {
-            super_balls.remove(intersects_super_balls_center[0].object);
-            super_pacman = true;
-            setTimeout(finish_power_up, SUPER_PACMAN_TIME[difficulty_level]);
-            audio[5].play();
-            audio[0].pause();
-            player.score += FRUIT_POINTS[difficulty_level];
-        } 
-        else if (intersects_super_balls_right.length > 0 && intersects_super_balls_right[0].distance > 0) {
-            super_balls.remove(intersects_super_balls_right[0].object);
-            super_pacman = true;
-            setTimeout(finish_power_up, SUPER_PACMAN_TIME[difficulty_level]);
-            audio[5].play();
-            audio[0].pause();
-            player.score += FRUIT_POINTS[difficulty_level];
-        } */
     }
 
     if (keyboard[83]) { // S key
