@@ -1,33 +1,28 @@
 import {maze} from './maze.js'
-export default class Ghost {
-    constructor() {
-        this.ghosts;
-        this.actual_direction = 'down';
-    }
 
-    loadGhost(loader, color) {
-        loader.load(
-            '3DModels/pacman_ghost.obj', 
-    
-			(object) => {
-                object.scale.set(4, 3, 4);
-                
-                // Standard spawn location
-                object.position.set(100, 3, -130);
-			
-				object.traverse( (child) => {
-					if (child instanceof THREE.Mesh) {
-						child.material.color.setHex(color);
-					}
-                });
-                this.ghost = object;
+var possible_ghosts_positions = [new THREE.Vector3(70, 3, -130), new THREE.Vector3(130, 3, -130), new THREE.Vector3(70, 3, -90), new THREE.Vector3(130, 3, -90)];
+var ghost_model;
+var ghosts = [];
+var n_ghosts = 0;
+
+class Ghost {
+    constructor(color) {
+        this.ghost = ghost_model.clone();
+        this.actual_direction = 'down';
+
+        var position = possible_ghosts_positions[Math.floor(Math.random() * possible_ghosts_positions.length)];
+        this.ghost.position.set(position.x, position.y, position.z);
+
+        this.ghost.traverse( (child) => {
+            if (child instanceof THREE.Mesh) {
+                child.material.color.setHex(color);
             }
-        );
+        });
     }
 
     get_rotation(i, j) {
         var directions = [];
-        if (maze[i+2][j] != 1) {
+        if (maze[i+2][j] != 1 && i != 34) {
             directions.push('up');
         }
 
@@ -35,11 +30,11 @@ export default class Ghost {
             directions.push('down');
         }
 
-        if (maze[i][j-2] != 1) {
+        if (maze[i][j-2] != 1 && j != 10) {
             directions.push('left');
         }
 
-        if (maze[i][j+2] != 1) {
+        if (maze[i][j+2] != 1 && j != 30) {
             directions.push('right');
         }
 
@@ -63,11 +58,30 @@ export default class Ghost {
 
     moveGhost() {
 
-        this.ghost.position.x += 0.25*Math.sin(this.ghost.rotation.y);
-        this.ghost.position.z += 0.25*Math.cos(this.ghost.rotation.y);
-        
         if (-this.ghost.position.z % 10 == 0 && this.ghost.position.x % 10 == 0) {
             this.ghost.rotation.y = this.get_rotation(-this.ghost.position.z/5, this.ghost.position.x/5);
         }
+
+        this.ghost.position.x += 0.25*Math.sin(this.ghost.rotation.y);
+        this.ghost.position.z += 0.25*Math.cos(this.ghost.rotation.y);
     }
+}
+
+function loadGhost(loader, color) {
+    loader.load(
+        '3DModels/pacman_ghost.obj', 
+
+        (object) => {
+            object.scale.set(4, 3, 4);
+            ghost_model = object;
+        }
+    );
+}
+
+
+export {
+    Ghost,
+    loadGhost,
+    possible_ghosts_positions,
+    ghost_model
 }

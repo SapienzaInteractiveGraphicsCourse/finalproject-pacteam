@@ -1,5 +1,5 @@
 import {initMaze, walls, balls, super_balls, floor} from './maze.js';
-import Ghost from './ghost.js';
+import {Ghost, ghost_model, possible_ghosts_positions, loadGhost} from './ghost.js';
 import Pacman from './pacman.js';
 import {AudioInitializer, audio} from './audio.js';
 import {Settings, settinged} from './settings.js';
@@ -34,23 +34,22 @@ const GHOST_COLOR_RED = 0xffff00,
       GHOST_COLOR_BLUE = 0x00ffff,
       GHOST_COLOR_PINK = 0xffb8ff;
 
-var n_ghosts = 0;
-var difficulty_level = 1;
 
-var ghosts = [];
+var difficulty_level = 1;
 
 var paused = true;
 var player = {height: 6, speed: 0.25, turn_speed: Math.PI*0.015, score: 0.0};
 
 // Pacman.pacman variables
 var pacman;
-var ghost;
+var ghosts = [];
 
 var super_pacman = false;
 
 var spotLight;
 var target_object;
 
+var manager;
 var object_loader;
 
 function finish_power_up() {
@@ -58,12 +57,6 @@ function finish_power_up() {
     audio[5].pause();
     audio[0].play();
 }
-
-/* function ghost_spawn() {
-    if (n_ghosts < max_number_ghosts[difficulty_level]) {
-
-    }
-} */
 
 window.onload = function init() {
 
@@ -94,21 +87,23 @@ window.onload = function init() {
     var ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
     scene.add(ambientLight);
     
-    var manager = new THREE.LoadingManager();
+    // Create manager and loader
+    manager = new THREE.LoadingManager();
     object_loader = new THREE.OBJLoader(manager);
 
+    // Create pacman
     pacman = new Pacman();
     pacman.loadPacman(object_loader);
 
-    ghost = new Ghost();
-    ghost.loadGhost(object_loader, 0xffffff);
+    // Load ghost model
+    loadGhost(object_loader);
     
     //Create a raycaster instance
     raycaster = new THREE.Raycaster();
     raycaster.far = 2.5;
-    // Set the settings
+
+    // Add setting and audio
     Settings();
-    // Set the audio
     AudioInitializer();
 
     //Used to add events listenders
@@ -144,7 +139,7 @@ window.onload = function init() {
                 document.getElementById("playpausebtn").style.background = "url(images/pause.png) no-repeat";
                 audio[0].play();
                 scene.remove(dirLight);
-                //setInterval(moveGhost, 2000);
+                setInterval(spawn, 3000);
             });
         
             domEvents.addEventListener(play, "mouseout", event => {
@@ -168,6 +163,7 @@ window.onload = function init() {
 
     //Add all to scene when models has been loaded
     manager.onLoad = () => {
+
         scene.add(
             play, 
             pacman.pacman,
@@ -175,7 +171,6 @@ window.onload = function init() {
             walls,
             balls,
             super_balls,
-            ghost.ghost
         );
     };
 
@@ -189,12 +184,21 @@ window.onload = function init() {
 function animate() {
 
     if (paused || settinged) {
-        renderer.render(scene, camera);
+        renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
+        renderer.render( scene, camera );
+        renderer.clearDepth();
+        renderer.setScissorTest(true);
+        renderer.setScissor(window.innerWidth-insetWidth, window.innerHeight - insetHeight, insetWidth, insetHeight);
+        renderer.setViewport(window.innerWidth-insetWidth, window.innerHeight - insetHeight, insetWidth, insetHeight);
+        renderer.render(scene, cameraOrtho);
+        renderer.setScissorTest(false);
         requestAnimationFrame(animate);
         return;
     }
 
-    ghost.moveGhost();
+    for (var i=0; i < ghosts.length; i++) {
+        ghosts[i].moveGhost();
+    }
 
     if (keyboard[87]) { // W key
         
@@ -469,52 +473,6 @@ function animate() {
         }
     }
 
-    /* for (var i = 0; i < ghosts.length; i++) {
-        if (super_pacman) {
-            // Run away from pacman
-            // Turn blue and white alternatively
-        }
-        else {
-            switch(ghosts[i].type) {
-                case GHOST_TYPE_RED:
-
-                case GHOST_TYPE_ORANGE:
-
-                case GHOST_TYPE_BLUE:
-                
-                case GHOST_TYPE_PINK:
-
-            }
-        }
-    } */
-
-    /* setTimeout(() => {
-        var val = Math.random();
-
-        var ghost;
-        if (val < GHOST_RATE_PINK[difficulty_level]) {
-            ghost = new Ghost(GHOST_TYPE_PINK);
-            ghost.loadGhost(object_loader, GHOST_COLOR_PINK);
-        }
-        else if (val < GHOST_RATE_PINK[difficulty_level] + GHOST_RATE_BLUE[difficulty_level]) {
-            ghost = new Ghost(GHOST_TYPE_BLUE);
-            ghost.loadGhost(object_loader, GHOST_COLOR_BLUE);
-        }
-        else if (val < GHOST_RATE_PINK[difficulty_level] + GHOST_RATE_BLUE[difficulty_level] + GHOST_RATE_ORANGE[difficulty_level]) {
-            ghost = new Ghost(GHOST_TYPE_ORANGE);
-            ghost.loadGhost(object_loader, GHOST_COLOR_ORANGE);
-        }
-        else {
-            ghost = new Ghost(GHOST_TYPE_RED);
-            ghost.loadGhost(object_loader, GHOST_COLOR_RED);
-        }
-
-        scene.add(ghost.ghost);
-        n_ghosts++;
-        ghosts.push(ghost);
-
-    }, GHOST_SPAWN_TIME) */
-
     // Update pacman position
     pacman.pacman.position.set(camera.position.x + Math.sin(-camera.rotation.y)*3.5, 1, camera.position.z - Math.cos(-camera.rotation.y)*3.5);
     pacman.pacman.rotation.set(camera.rotation.x, camera.rotation.y - 1.28, camera.rotation.z + 0.21);
@@ -544,6 +502,12 @@ function onWindowResize() {
 
     cameraOrtho.aspect = insetWidth / insetHeight;
     cameraOrtho.updateProjectionMatrix(); 
+}
+
+function spawn() {
+    var ghost = new Ghost(0xffffff);
+    scene.add(ghost.ghost);
+    ghosts.push(ghost);
 }
 
 
