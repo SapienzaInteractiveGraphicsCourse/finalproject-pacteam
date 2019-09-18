@@ -1,7 +1,7 @@
 import {audio} from './audio.js';
 var settinged = false, stopped = false;
 
-var Settings = () => {
+var settingsInitializer = () => {
 
     var settingsBtn = document.getElementById("settings");
     var settingsTable = document.getElementById("container");
@@ -27,7 +27,7 @@ var Settings = () => {
 }
 
 export {
-    Settings,
+    settingsInitializer,
     settinged,
     stopped,
 }

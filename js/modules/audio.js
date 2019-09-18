@@ -1,6 +1,6 @@
 var audio = [];
 
-var AudioInitializer = () => {
+var audioInitializer = () => {
     'use strict';
 
     audio[0] = new Audio();
@@ -100,6 +100,6 @@ var AudioInitializer = () => {
 };
 
 export {
-    AudioInitializer,
+    audioInitializer,
     audio
 };
