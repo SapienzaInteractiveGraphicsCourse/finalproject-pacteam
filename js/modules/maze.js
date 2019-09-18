@@ -186,8 +186,6 @@ var initMaze = () => {
     createMaze()
     createBalls()
 
-    console.log(maze);
-
     floor.geometry = new THREE.PlaneGeometry(205, 211, 10, 10);
     floor.material = new THREE.MeshPhongMaterial({map:textureFloor});
     floor.castShadow = true;
