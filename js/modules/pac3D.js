@@ -56,6 +56,8 @@ function finish_power_up() {
     audio[0].play();
 }
 
+var id_interval;
+
 window.onload = function init() {
 
     // Create the scene
@@ -135,7 +137,7 @@ window.onload = function init() {
                 document.getElementById("playpausebtn").style.background = "url(images/pause.png) no-repeat";
                 audio[0].play();
                 scene.remove(dirLight);
-                setInterval(spawn, 3000);
+                id_interval = setInterval(spawn, 3000);
             });
         
             domEvents.addEventListener(play, "mouseout", event => {
@@ -474,6 +476,11 @@ function spawn() {
     var ghost = new Ghost(0xffffff);
     scene.add(ghost.ghost);
     ghosts.push(ghost);
+
+    if (ghosts.length == GHOSTS_MAX_NUMBER[difficulty_level]) {
+        console.log(GHOSTS_MAX_NUMBER[difficulty_level]);
+        clearInterval(id_interval);
+    }
 }
 
 
