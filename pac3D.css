@@ -82,6 +82,13 @@ div#container{
     position: absolute;
 }
 
+div#container_death {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: none;
+}
+
 div#Info {
     position: absolute;
     bottom: 0%;
@@ -109,6 +116,15 @@ table#settingsTable {
     border-spacing: 50px;
     border-collapse: separate;
     font-size: 50px;
+    background: rgba(20, 50, 60, 0.6);
+}
+
+table#death {
+    font-size: 500%;
+    color: red;
+    margin: 10% auto;
+    border-spacing: 50px;
+    border-collapse: separate;
     background: rgba(20, 50, 60, 0.6);
 }
 

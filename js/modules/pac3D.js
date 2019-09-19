@@ -43,7 +43,7 @@ function finish_power_up() {
 var play;
 var score;
 
-window.onload = function init() {
+function init() {
 
     // Create the scene
     scene = new THREE.Scene();
@@ -62,6 +62,8 @@ window.onload = function init() {
     renderer = new THREE.WebGLRenderer({alpha:true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
+
+    document.getElementById('home_page').onclick = reset_game(scene);
 
     score = document.getElementById('score');
 
@@ -102,6 +104,7 @@ window.onload = function init() {
 function animate() {
 
     if (paused || settinged) {
+        renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
         renderer.render(scene, camera);
         requestAnimationFrame(animate);
         return;
@@ -138,7 +141,10 @@ function animate() {
                 n_ghosts--;
             }
             else {
-                console.log('Morto')
+                paused = true;
+                audio[0].pause();
+                audio[3].play();
+                document.getElementById('container_death').style.display = 'initial';
             }
         }
     }
@@ -169,7 +175,10 @@ function animate() {
                 n_ghosts--;
             }
             else {
-                console.log('Morto')
+                paused = true;
+                audio[0].pause();
+                audio[3].play();
+                document.getElementById('container_death').style.display = 'initial';
             }
         }
     }
@@ -200,7 +209,10 @@ function animate() {
                 n_ghosts--;
             }
             else {
-                console.log('Morto')
+                paused = true;
+                audio[0].pause();
+                audio[3].play();
+                document.getElementById('container_death').style.display = 'initial';
             }
         }
     }
@@ -230,7 +242,10 @@ function animate() {
                 n_ghosts--;
             }
             else {
-                console.log('Morto')
+                paused = true;
+                audio[0].pause();
+                audio[3].play();
+                document.getElementById('container_death').style.display = 'initial';
             }
         }
     }
@@ -260,7 +275,10 @@ function animate() {
                 n_ghosts--;
             }
             else {
-                console.log('Morto')
+                paused = true;
+                audio[0].pause();
+                audio[3].play();
+                document.getElementById('container_death').style.display = 'initial';
             }
         }
     }
@@ -290,7 +308,10 @@ function animate() {
                 n_ghosts--;
             }
             else {
-                console.log('Morto')
+                paused = true;
+                audio[0].pause();
+                audio[3].play();
+                document.getElementById('container_death').style.display = 'initial';
             }
         }
     }
@@ -320,7 +341,10 @@ function animate() {
                 n_ghosts--;
             }
             else {
-                console.log('Morto')
+                paused = true;
+                audio[0].pause();
+                audio[3].play();
+                document.getElementById('container_death').style.display = 'initial';
             }
         }
     }
@@ -350,7 +374,10 @@ function animate() {
                 n_ghosts--;
             }
             else {
-                console.log('Morto')
+                paused = true;
+                audio[0].pause();
+                audio[3].play();
+                document.getElementById('container_death').style.display = 'initial';
             }
         }
     }
@@ -604,7 +631,6 @@ const loadPlay = () => {
                 document.getElementById('easy_diff').disabled = true;
                 document.getElementById('medium_diff').disabled = true;
                 document.getElementById('hard_diff').disabled = true;
-                console.log(difficulty_level);
                 camera.position.y = player.height;
                 paused = false;
                 document.getElementById("playpausebtn").style.background = "url(images/pause.png) no-repeat";
@@ -646,5 +672,25 @@ const loadManager = () => {
     };
 }
 
+function reset_game(obj) {
+    console.log('ciao');
+    while(obj.children.length > 0){ 
+        reset_game(obj.children[0])
+        obj.remove(obj.children[0]);
+      }
+      if(obj.geometry) obj.geometry.dispose()
+    
+      if(obj.material){ 
+        //in case of map, bumpMap, normalMap, envMap ...
+        Object.keys(obj.material).forEach(prop => {                                             
+          if(typeof obj.material[prop].dispose === 'function')                                  
+          obj.material[prop].dispose()                                                        
+        })
+        obj.material.dispose()
+      }
+}
+
 // Resize listeners
 window.addEventListener('resize', onWindowResize, false);
+
+window.onload = init();
