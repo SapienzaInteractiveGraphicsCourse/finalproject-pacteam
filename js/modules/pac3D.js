@@ -560,7 +560,7 @@ function onWindowResize() {
 function spawn() {
     if (n_ghosts < GHOSTS_MAX_NUMBER[difficulty_level]) {
         var ghost = new Ghost(0xffffff);
-        ghost.cube.userData = {id: n_ghosts};
+        //ghost.cube.userData = {id: n_ghosts};
         scene.add(ghost.ghost);
         scene.add(ghost.cube);
         ghosts.push(ghost);
