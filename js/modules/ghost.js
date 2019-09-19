@@ -8,9 +8,16 @@ class Ghost {
     constructor(color) {
         this.ghost = ghost_model.clone();
         this.actual_direction = 'down';
+        this.cube = new THREE.Mesh(
+            new THREE.BoxBufferGeometry(6, 6, 6),
+            new THREE.MeshPhongMaterial(color)
+        );
+        this.cube.material.opacity = 0;
+        this.cube.material.transparent = true;
 
         var position = possible_ghosts_positions[Math.floor(Math.random() * possible_ghosts_positions.length)];
         this.ghost.position.set(position.x, position.y, position.z);
+        this.cube.position.set(position.x, position.y, position.z);
 
         this.ghost.traverse( (child) => {
             if (child instanceof THREE.Mesh) {
@@ -63,6 +70,8 @@ class Ghost {
 
         this.ghost.position.x += 0.25*Math.sin(this.ghost.rotation.y);
         this.ghost.position.z += 0.25*Math.cos(this.ghost.rotation.y);
+
+        this.cube.position.set(this.ghost.position.x, this.ghost.position.y, this.ghost.position.z);
     }
 }
 

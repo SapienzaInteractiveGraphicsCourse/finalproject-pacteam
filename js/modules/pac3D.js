@@ -44,10 +44,12 @@ var player = {height: 6, speed: 0.25, turn_speed: Math.PI*0.015, score: 0.0};
 
 // Pacman.pacman variables
 var pacman;
+var n_ghosts = 0;
 var ghosts = [];
 var ghosts_objects = [];
 
 var super_pacman = false;
+var i;
 
 var manager;
 var object_loader;
@@ -58,7 +60,6 @@ function finish_power_up() {
     audio[0].play();
 }
 
-var id_interval;
 var play;
 
 window.onload = function init() {
@@ -131,12 +132,30 @@ function animate() {
         0, 
         -Math.cos(-camera.rotation.y)
     ));
-    //scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000) );
+    
     var intersects_up = raycaster.intersectObjects(walls.children);
     var intersects_balls_center = raycaster.intersectObjects(balls.children);
     if (ghosts.length != 0) {
         var intersects_up_ghost = raycaster.intersectObjects(ghosts_objects);
         if (intersects_up_ghost.length != 0) {
+            if (super_pacman) {
+                for (i = 0; i < ghosts.length; i++) {
+                    if (ghosts_objects[i] == intersects_up_ghost[0].object) {
+                        break;
+                    }
+                }
+                scene.remove(ghosts[i].ghost);
+                scene.remove(intersects_up_ghost[0].object);
+                ghosts[i].ghost.material.dispose();
+                ghosts[i].ghost.geometry.dispose();
+                intersects_up_ghost[0].object.material.dispose();
+                intersects_up_ghost[0].object.geometry.dispose();
+                player.score += GHOST_POINTS[difficulty_level];
+                audio[4].play();
+            }
+            else {
+                console.log('Morto')
+            }
         }
     }
 
@@ -149,9 +168,27 @@ function animate() {
     var intersects_balls_right = raycaster.intersectObjects(balls.children);
     
     if (ghosts.length != 0) {
-        var intersects_up_right_ghost = raycaster.intersectObjects(ghosts_objects, true);
+        var intersects_up_right_ghost = raycaster.intersectObjects(ghosts_objects);
         
         if (intersects_up_right_ghost.length != 0) {
+            if (super_pacman) {
+                for (i = 0; i < ghosts.length; i++) {
+                    if (ghosts_objects[i] == intersects_up_right_ghost[0].object) {
+                        break;
+                    }
+                }
+                scene.remove(ghosts[i].ghost);
+                scene.remove(intersects_up_right_ghost[0].object);
+                ghosts[i].ghost.material.dispose();
+                ghosts[i].ghost.geometry.dispose();
+                intersects_up_ghost[0].object.material.dispose();
+                intersects_up_ghost[0].object.geometry.dispose();
+                player.score += GHOST_POINTS[difficulty_level];
+                audio[4].play();
+            }
+            else {
+                console.log('Morto')
+            }
         }
     }
 
@@ -164,9 +201,27 @@ function animate() {
     var intersects_balls_left = raycaster.intersectObjects(balls.children);
 
     if (ghosts.length != 0) {
-        var intersects_up_left_ghost = raycaster.intersectObjects(ghosts_objects, true);
+        var intersects_up_left_ghost = raycaster.intersectObjects(ghosts_objects);
 
         if (intersects_up_left_ghost.length != 0) {
+            if (super_pacman) {
+                for (i = 0; i < ghosts.length; i++) {
+                    if (ghosts_objects[i] == intersects_up_left_ghost[0].object) {
+                        break;
+                    }
+                }
+                scene.remove(ghosts[i].ghost);
+                scene.remove(intersects_up_left_ghost[0].object);
+                ghosts[i].ghost.material.dispose();
+                ghosts[i].ghost.geometry.dispose();
+                intersects_up_ghost[0].object.material.dispose();
+                intersects_up_ghost[0].object.geometry.dispose();
+                player.score += GHOST_POINTS[difficulty_level];
+                audio[4].play();
+            }
+            else {
+                console.log('Morto')
+            }
         }
     }
 
@@ -178,9 +233,27 @@ function animate() {
     var intersects_down = raycaster.intersectObjects(walls.children);
 
     if (ghosts.length != 0) {
-        var intersects_down_ghost = raycaster.intersectObjects(ghosts_objects, true);
+        var intersects_down_ghost = raycaster.intersectObjects(ghosts_objects);
 
         if (intersects_down_ghost.length != 0) {
+            if (super_pacman) {
+                for (i = 0; i < ghosts.length; i++) {
+                    if (ghosts_objects[i] == intersects_down_ghost[0].object) {
+                        break;
+                    }
+                }
+                scene.remove(ghosts[i].ghost);
+                scene.remove(intersects_down_ghost[0].object);
+                ghosts[i].ghost.material.dispose();
+                ghosts[i].ghost.geometry.dispose();
+                intersects_up_ghost[0].object.material.dispose();
+                intersects_up_ghost[0].object.geometry.dispose();
+                player.score += GHOST_POINTS[difficulty_level];
+                audio[4].play();
+            }
+            else {
+                console.log('Morto')
+            }
         }
     }
 
@@ -192,9 +265,27 @@ function animate() {
     var intersects_down_left = raycaster.intersectObjects(walls.children);
     
     if (ghosts.length != 0) {
-        var intersects_down_left_ghost = raycaster.intersectObjects(ghosts_objects, true);
+        var intersects_down_left_ghost = raycaster.intersectObjects(ghosts_objects);
 
         if (intersects_down_left_ghost.length != 0) {
+            if (super_pacman) {
+                for (i = 0; i < ghosts.length; i++) {
+                    if (ghosts_objects[i] == intersects_down_left_ghost[0].object) {
+                        break;
+                    }
+                }
+                scene.remove(ghosts[i].ghost);
+                scene.remove(intersects_down_left_ghost[0].object);
+                ghosts[i].ghost.material.dispose();
+                ghosts[i].ghost.geometry.dispose();
+                intersects_up_ghost[0].object.material.dispose();
+                intersects_up_ghost[0].object.geometry.dispose();
+                player.score += GHOST_POINTS[difficulty_level];
+                audio[4].play();
+            }
+            else {
+                console.log('Morto')
+            }
         }
     }
 
@@ -206,9 +297,27 @@ function animate() {
     var intersects_down_right = raycaster.intersectObjects(walls.children);
     
     if (ghosts.length != 0) {
-        var intersects_down_right_ghost = raycaster.intersectObjects(ghosts_objects, true);
+        var intersects_down_right_ghost = raycaster.intersectObjects(ghosts_objects);
 
         if (intersects_down_right_ghost.length != 0) {
+            if (super_pacman) {
+                for (i = 0; i < ghosts.length; i++) {
+                    if (ghosts_objects[i] == intersects_down_right_ghost[0].object) {
+                        break;
+                    }
+                }
+                scene.remove(ghosts[i].ghost);
+                scene.remove(intersects_down_right_ghost[0].object);
+                ghosts[i].ghost.material.dispose();
+                ghosts[i].ghost.geometry.dispose();
+                intersects_up_ghost[0].object.material.dispose();
+                intersects_up_ghost[0].object.geometry.dispose();
+                player.score += GHOST_POINTS[difficulty_level];
+                audio[4].play();
+            }
+            else {
+                console.log('Morto')
+            }
         }
     }
 
@@ -220,9 +329,27 @@ function animate() {
     var intersects_left = raycaster.intersectObjects(walls.children);
 
     if (ghosts.length != 0) {
-        var intersects_left_ghost = raycaster.intersectObjects(ghosts_objects, true);
+        var intersects_left_ghost = raycaster.intersectObjects(ghosts_objects);
 
         if (intersects_left_ghost.length != 0) {
+            if (super_pacman) {
+                for (i = 0; i < ghosts.length; i++) {
+                    if (ghosts_objects[i] == intersects_left_ghost[0].object) {
+                        break;
+                    }
+                }
+                scene.remove(ghosts[i].ghost);
+                scene.remove(intersects_left_ghost[0].object);
+                ghosts[i].ghost.material.dispose();
+                ghosts[i].ghost.geometry.dispose();
+                intersects_up_ghost[0].object.material.dispose();
+                intersects_up_ghost[0].object.geometry.dispose();
+                player.score += GHOST_POINTS[difficulty_level];
+                audio[4].play();
+            }
+            else {
+                console.log('Morto')
+            }
         }
     }
 
@@ -234,9 +361,27 @@ function animate() {
     var intersects_right = raycaster.intersectObjects(walls.children);
 
     if (ghosts.length != 0) {
-        var intersects_right_ghost = raycaster.intersectObjects(ghosts_objects, true);
+        var intersects_right_ghost = raycaster.intersectObjects(ghosts_objects);
 
         if (intersects_right_ghost.length != 0) {
+            if (super_pacman) {
+                for (i = 0; i < ghosts.length; i++) {
+                    if (ghosts_objects[i] == intersects_right_ghost[0].object) {
+                        break;
+                    }
+                }
+                scene.remove(ghosts[i].ghost);
+                scene.remove(intersects_right_ghost[0].object);
+                ghosts[i].ghost.material.dispose();
+                ghosts[i].ghost.geometry.dispose();
+                intersects_up_ghost[0].object.material.dispose();
+                intersects_up_ghost[0].object.geometry.dispose();
+                player.score += GHOST_POINTS[difficulty_level];
+                audio[4].play();
+            }
+            else {
+                console.log('Morto')
+            }
         }
     }
 
@@ -437,11 +582,13 @@ function onWindowResize() {
 }
 
 function spawn() {
-    if (ghosts.length < GHOSTS_MAX_NUMBER[difficulty_level]) {
+    if (n_ghosts < GHOSTS_MAX_NUMBER[difficulty_level]) {
         var ghost = new Ghost(0xffffff);
         scene.add(ghost.ghost);
+        scene.add(ghost.cube);
         ghosts.push(ghost);
-        ghosts_objects.push(ghost.ghost);
+        ghosts_objects.push(ghost.cube);
+        n_ghosts++;
     }
 }
 
@@ -478,7 +625,7 @@ const loadPlay = () => {
                 document.getElementById("playpausebtn").style.background = "url(images/pause.png) no-repeat";
                 audio[0].play();
                 scene.remove(dirLight);
-                id_interval = setInterval(spawn, 3000);
+                setInterval(spawn, GHOST_SPAWN_TIME[difficulty_level]);
             });
         
             domEvents.addEventListener(play, "mouseout", event => {
