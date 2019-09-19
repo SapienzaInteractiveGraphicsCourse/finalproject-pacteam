@@ -1,9 +1,3 @@
-/*
-
-A class to represents a Maze
-
-*/
-
 // Textures
 var textureWall = new THREE.TextureLoader().load("textures/grass.png");
 textureWall.wrapS = THREE.RepeatWrapping;
