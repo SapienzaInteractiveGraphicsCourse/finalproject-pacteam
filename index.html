@@ -52,6 +52,14 @@
                         <td class="badge bg-danger">Mute audio:</td>
                         <td><button id="mutebtn"></button></td>
                     </tr>
+                    <tr>
+                        <td></td>
+                        <td class="badge bg-danger">Difficulty:</td>
+                        <td id='diff'><input id='easy_diff' type='radio' name='diff' value=0>&nbsp;&nbsp;Easy</br>
+                            <input id='medium_diff' type='radio' name='diff' value=1 checked>&nbsp;&nbsp;Medium </br>
+                            <input id='hard_diff' type='radio' name='diff' value=2>&nbsp;&nbsp;Hard
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -59,23 +67,23 @@
         <div id='container_death' style="display:none">
             <table id='death'>
                 <tbody>
-                    <tr>
-                        <td><button id='back'></button></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td class="badge text-wrap bg-danger">BackgroundVolume:</td>
-                        <td><input type="range" id="volumeslider"></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td class="badge bg-danger">Mute audio:</td>
-                        <td><button id="mutebtn"></button></td>
-                    </tr>
                 </tbody>
             </table>
         </div>
 
+        <div id='Info'>
+            Command List: </br>
+            W = MOVE FORWARD </br>
+            S = MOVE BACKWARD </br>
+            A = MOVE LEFT </br>
+            D = MOVE RIGHT </br>
+            LEFT_ARROW = ROTATE LEFT </br>
+            RIGHT_ARROW = ROTATE RIGHT
+        </div>
+
+        <div id='score'>
+            Score: 0
+        </div>
         <div id="loading-overlay">
             <div id="loading-bar">
                 <span id="progress"></span>

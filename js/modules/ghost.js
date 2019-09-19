@@ -1,29 +1,24 @@
 import {maze} from './maze.js'
 
-var possible_ghosts_positions = [new THREE.Vector3(70, 3, -130), new THREE.Vector3(130, 3, -130), new THREE.Vector3(70, 3, -90), new THREE.Vector3(130, 3, -90)];
-var ghost_model;
+const POSSIBLE_GHOST_POSITIONS = [new THREE.Vector3(70, 3, -130), new THREE.Vector3(130, 3, -130), new THREE.Vector3(70, 3, -90), new THREE.Vector3(130, 3, -90)];
+
+const GHOST_MODELS = [];
 
 
 class Ghost {
-    constructor(color) {
-        this.ghost = ghost_model.clone();
+    constructor() {
+        this.ghost = GHOST_MODELS[Math.floor(Math.random() * GHOST_MODELS.length)].clone();
         this.actual_direction = 'down';
         this.cube = new THREE.Mesh(
             new THREE.BoxBufferGeometry(6, 6, 6),
-            new THREE.MeshPhongMaterial(color)
+            new THREE.MeshPhongMaterial()
         );
         this.cube.material.opacity = 0;
         this.cube.material.transparent = true;
 
-        var position = possible_ghosts_positions[Math.floor(Math.random() * possible_ghosts_positions.length)];
+        var position = POSSIBLE_GHOST_POSITIONS[Math.floor(Math.random() * POSSIBLE_GHOST_POSITIONS.length)];
         this.ghost.position.set(position.x, position.y, position.z);
         this.cube.position.set(position.x, position.y, position.z);
-
-        this.ghost.traverse( (child) => {
-            if (child instanceof THREE.Mesh) {
-                child.material.color.setHex(color);
-            }
-        });
     }
 
     get_rotation(i, j) {
@@ -81,7 +76,13 @@ function loadGhost(loader, color) {
 
         (object) => {
             object.scale.set(4, 3, 4);
-            ghost_model = object;
+
+            object.traverse((child) => {
+                if (child instanceof THREE.Mesh) {
+                    child.material.color.setHex(color);
+                }
+            });
+            GHOST_MODELS.push(object);
         }
     );
 }
@@ -90,5 +91,4 @@ function loadGhost(loader, color) {
 export {
     Ghost,
     loadGhost,
-    ghost_model
 }

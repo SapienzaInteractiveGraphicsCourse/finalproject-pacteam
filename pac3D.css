@@ -82,6 +82,28 @@ div#container{
     position: absolute;
 }
 
+div#Info {
+    position: absolute;
+    bottom: 0%;
+    left: 5px;
+    color: chartreuse;
+    display: none;
+}
+
+div#score {
+    position: absolute;
+    right: 20px;
+    top: 33%;
+    color: chartreuse;
+    font-size: 200%;
+    display: none;
+}
+
+td#diff {
+    font-size: 50%;
+    color: white;
+}
+
 table#settingsTable {
     margin: 10% auto;
     border-spacing: 50px;

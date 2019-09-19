@@ -14,28 +14,8 @@ var insetWidth, insetHeight;
 
 const FRUIT_POINTS = [2, 5, 10] , GHOST_POINTS = [20, 50, 100];
 const SUPER_PACMAN_TIME = [20000, 15000, 10000];
-const GHOSTS_MAX_NUMBER = [3, 4, 5];
-const GHOSTS_MAX_NUMBER_PINK = [3, 2, 1],
-      GHOSTS_MAX_NUMBER_BLUE = [2, 2, 1],
-      GHOSTS_MAX_NUMBER_ORANGE = [1, 2, 3],
-      GHOSTS_MAX_NUMBER_RED = [1, 2, 3];
-const GHOST_RATE_PINK = [0.6, 0.3, 0.1],
-      GHOST_RATE_BLUE = [0.5, 0.4, 0.2],
-      GHOST_RATE_ORANGE = [0.2, 0.4, 0.5],
-      GHOST_RATE_RED = [0.1, 0.3, 0.6];
-const GHOST_SPAWN_TIME = [10000, 20000, 30000],
-      FIRST_GHOST_SPAWN_TIME = [12000, 8000, 4000];
-
-const GHOST_TYPE_RED = "red",
-      GHOST_TYPE_ORANGE = "orange",
-      GHOST_TYPE_BLUE = "blue",
-      GHOST_TYPE_PINK = "pink";
-
-const GHOST_COLOR_RED = 0xffff00,
-      GHOST_COLOR_ORANGE = 0xffb852,
-      GHOST_COLOR_BLUE = 0x00ffff,
-      GHOST_COLOR_PINK = 0xffb8ff;
-
+const GHOSTS_MAX_NUMBER = [4, 6, 8];
+const GHOST_SPAWN_TIME = [15000, 10000, 8000];
 
 var difficulty_level = 1;
 
@@ -61,6 +41,7 @@ function finish_power_up() {
 }
 
 var play;
+var score;
 
 window.onload = function init() {
 
@@ -81,6 +62,8 @@ window.onload = function init() {
     renderer = new THREE.WebGLRenderer({alpha:true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
+
+    score = document.getElementById('score');
 
     // Initialize the manager
     loadManager();
@@ -103,7 +86,10 @@ window.onload = function init() {
     loadPacman(object_loader);
     
     // Load ghost model
-    loadGhost(object_loader);
+    loadGhost(object_loader, 0xffff00);
+    loadGhost(object_loader, 0xffb852);
+    loadGhost(object_loader, 0x00ffff);
+    loadGhost(object_loader, 0xffb8ff);
 
     // Load Play
     loadPlay();
@@ -147,6 +133,7 @@ function animate() {
                 scene.remove(ghosts[i].ghost);
                 scene.remove(intersects_up_ghost[0].object);
                 player.score += GHOST_POINTS[difficulty_level];
+                score.innerHTML = 'Score: ' + player.score;
                 audio[4].play();
                 n_ghosts--;
             }
@@ -177,6 +164,7 @@ function animate() {
                 scene.remove(ghosts[i].ghost);
                 scene.remove(intersects_up_right_ghost[0].object);
                 player.score += GHOST_POINTS[difficulty_level];
+                score.innerHTML = 'Score: ' + player.score;
                 audio[4].play();
                 n_ghosts--;
             }
@@ -207,6 +195,7 @@ function animate() {
                 scene.remove(ghosts[i].ghost);
                 scene.remove(intersects_up_left_ghost[0].object);
                 player.score += GHOST_POINTS[difficulty_level];
+                score.innerHTML = 'Score: ' + player.score;
                 audio[4].play();
                 n_ghosts--;
             }
@@ -236,6 +225,7 @@ function animate() {
                 scene.remove(ghosts[i].ghost);
                 scene.remove(intersects_down_ghost[0].object);
                 player.score += GHOST_POINTS[difficulty_level];
+                score.innerHTML = 'Score: ' + player.score;
                 audio[4].play();
                 n_ghosts--;
             }
@@ -265,6 +255,7 @@ function animate() {
                 scene.remove(ghosts[i].ghost);
                 scene.remove(intersects_down_left_ghost[0].object);
                 player.score += GHOST_POINTS[difficulty_level];
+                score.innerHTML = 'Score: ' + player.score;
                 audio[4].play();
                 n_ghosts--;
             }
@@ -294,6 +285,7 @@ function animate() {
                 scene.remove(ghosts[i].ghost);
                 scene.remove(intersects_down_right_ghost[0].object);
                 player.score += GHOST_POINTS[difficulty_level];
+                score.innerHTML = 'Score: ' + player.score;
                 audio[4].play();
                 n_ghosts--;
             }
@@ -323,6 +315,7 @@ function animate() {
                 scene.remove(ghosts[i].ghost);
                 scene.remove(intersects_left_ghost[0].object);
                 player.score += GHOST_POINTS[difficulty_level];
+                score.innerHTML = 'Score: ' + player.score;
                 audio[4].play();
                 n_ghosts--;
             }
@@ -352,6 +345,7 @@ function animate() {
                 scene.remove(ghosts[i].ghost);
                 scene.remove(intersects_right_ghost[0].object);
                 player.score += GHOST_POINTS[difficulty_level];
+                score.innerHTML = 'Score: ' + player.score;
                 audio[4].play();
                 n_ghosts--;
             }
@@ -395,11 +389,13 @@ function animate() {
                 audio[5].play();
                 audio[0].pause();
                 player.score += FRUIT_POINTS[difficulty_level];
+                score.innerHTML = 'Score: ' + player.score;
             } 
             else {
                 balls.remove(intersects_balls_left[0].object);
                 audio[1].play();
                 player.score += FRUIT_POINTS[difficulty_level];
+                score.innerHTML = 'Score: ' + player.score;
             }
         }
         else if (intersects_balls_center.length > 0) {
@@ -410,11 +406,13 @@ function animate() {
                 audio[5].play();
                 audio[0].pause();
                 player.score += FRUIT_POINTS[difficulty_level];
+                score.innerHTML = 'Score: ' + player.score;
             } 
             else {
                 balls.remove(intersects_balls_center[0].object);
                 audio[1].play();
                 player.score += FRUIT_POINTS[difficulty_level];
+                score.innerHTML = 'Score: ' + player.score;
             }
         } 
         else if (intersects_balls_right.length > 0) {
@@ -425,11 +423,13 @@ function animate() {
                 audio[5].play();
                 audio[0].pause();
                 player.score += FRUIT_POINTS[difficulty_level];
+                score.innerHTML = 'Score: ' + player.score;
             } 
             else {
                 balls.remove(intersects_balls_right[0].object);
                 audio[1].play();
                 player.score += FRUIT_POINTS[difficulty_level];
+                score.innerHTML = 'Score: ' + player.score;
             }
         }
     }
@@ -559,8 +559,7 @@ function onWindowResize() {
 
 function spawn() {
     if (n_ghosts < GHOSTS_MAX_NUMBER[difficulty_level]) {
-        var ghost = new Ghost(0xffffff);
-        //ghost.cube.userData = {id: n_ghosts};
+        var ghost = new Ghost();
         scene.add(ghost.ghost);
         scene.add(ghost.cube);
         ghosts.push(ghost);
@@ -597,6 +596,15 @@ const loadPlay = () => {
             domEvents.addEventListener(play, "click", event => {
                 // Hides the buttons
                 scene.remove(play);
+                score.style.display = 'initial';
+                if (document.getElementById('easy_diff').checked) difficulty_level=0;
+                else if (document.getElementById('medium_diff').checked) difficulty_level=1;
+                else difficulty_level = 2;
+
+                document.getElementById('easy_diff').disabled = true;
+                document.getElementById('medium_diff').disabled = true;
+                document.getElementById('hard_diff').disabled = true;
+                console.log(difficulty_level);
                 camera.position.y = player.height;
                 paused = false;
                 document.getElementById("playpausebtn").style.background = "url(images/pause.png) no-repeat";
@@ -633,6 +641,7 @@ const loadManager = () => {
         loadingOverlay.classList.add( 'loading-overlay-hidden' );
 
         scene.add(dirLight, ambientLight, spotLight, target_object, play, floor, walls, balls, pacman.pacman);
+        document.getElementById('Info').style.display = 'initial';
         animate();
     };
 }
