@@ -146,12 +146,9 @@ function animate() {
                 }
                 scene.remove(ghosts[i].ghost);
                 scene.remove(intersects_up_ghost[0].object);
-                ghosts[i].ghost.material.dispose();
-                ghosts[i].ghost.geometry.dispose();
-                intersects_up_ghost[0].object.material.dispose();
-                intersects_up_ghost[0].object.geometry.dispose();
                 player.score += GHOST_POINTS[difficulty_level];
                 audio[4].play();
+                n_ghosts--;
             }
             else {
                 console.log('Morto')
@@ -179,12 +176,9 @@ function animate() {
                 }
                 scene.remove(ghosts[i].ghost);
                 scene.remove(intersects_up_right_ghost[0].object);
-                ghosts[i].ghost.material.dispose();
-                ghosts[i].ghost.geometry.dispose();
-                intersects_up_ghost[0].object.material.dispose();
-                intersects_up_ghost[0].object.geometry.dispose();
                 player.score += GHOST_POINTS[difficulty_level];
                 audio[4].play();
+                n_ghosts--;
             }
             else {
                 console.log('Morto')
@@ -212,12 +206,9 @@ function animate() {
                 }
                 scene.remove(ghosts[i].ghost);
                 scene.remove(intersects_up_left_ghost[0].object);
-                ghosts[i].ghost.material.dispose();
-                ghosts[i].ghost.geometry.dispose();
-                intersects_up_ghost[0].object.material.dispose();
-                intersects_up_ghost[0].object.geometry.dispose();
                 player.score += GHOST_POINTS[difficulty_level];
                 audio[4].play();
+                n_ghosts--;
             }
             else {
                 console.log('Morto')
@@ -244,12 +235,9 @@ function animate() {
                 }
                 scene.remove(ghosts[i].ghost);
                 scene.remove(intersects_down_ghost[0].object);
-                ghosts[i].ghost.material.dispose();
-                ghosts[i].ghost.geometry.dispose();
-                intersects_up_ghost[0].object.material.dispose();
-                intersects_up_ghost[0].object.geometry.dispose();
                 player.score += GHOST_POINTS[difficulty_level];
                 audio[4].play();
+                n_ghosts--;
             }
             else {
                 console.log('Morto')
@@ -276,12 +264,9 @@ function animate() {
                 }
                 scene.remove(ghosts[i].ghost);
                 scene.remove(intersects_down_left_ghost[0].object);
-                ghosts[i].ghost.material.dispose();
-                ghosts[i].ghost.geometry.dispose();
-                intersects_up_ghost[0].object.material.dispose();
-                intersects_up_ghost[0].object.geometry.dispose();
                 player.score += GHOST_POINTS[difficulty_level];
                 audio[4].play();
+                n_ghosts--;
             }
             else {
                 console.log('Morto')
@@ -308,12 +293,9 @@ function animate() {
                 }
                 scene.remove(ghosts[i].ghost);
                 scene.remove(intersects_down_right_ghost[0].object);
-                ghosts[i].ghost.material.dispose();
-                ghosts[i].ghost.geometry.dispose();
-                intersects_up_ghost[0].object.material.dispose();
-                intersects_up_ghost[0].object.geometry.dispose();
                 player.score += GHOST_POINTS[difficulty_level];
                 audio[4].play();
+                n_ghosts--;
             }
             else {
                 console.log('Morto')
@@ -340,12 +322,9 @@ function animate() {
                 }
                 scene.remove(ghosts[i].ghost);
                 scene.remove(intersects_left_ghost[0].object);
-                ghosts[i].ghost.material.dispose();
-                ghosts[i].ghost.geometry.dispose();
-                intersects_up_ghost[0].object.material.dispose();
-                intersects_up_ghost[0].object.geometry.dispose();
                 player.score += GHOST_POINTS[difficulty_level];
                 audio[4].play();
+                n_ghosts--;
             }
             else {
                 console.log('Morto')
@@ -372,12 +351,9 @@ function animate() {
                 }
                 scene.remove(ghosts[i].ghost);
                 scene.remove(intersects_right_ghost[0].object);
-                ghosts[i].ghost.material.dispose();
-                ghosts[i].ghost.geometry.dispose();
-                intersects_up_ghost[0].object.material.dispose();
-                intersects_up_ghost[0].object.geometry.dispose();
                 player.score += GHOST_POINTS[difficulty_level];
                 audio[4].play();
+                n_ghosts--;
             }
             else {
                 console.log('Morto')
@@ -584,6 +560,7 @@ function onWindowResize() {
 function spawn() {
     if (n_ghosts < GHOSTS_MAX_NUMBER[difficulty_level]) {
         var ghost = new Ghost(0xffffff);
+        ghost.cube.userData = {id: n_ghosts};
         scene.add(ghost.ghost);
         scene.add(ghost.cube);
         ghosts.push(ghost);
