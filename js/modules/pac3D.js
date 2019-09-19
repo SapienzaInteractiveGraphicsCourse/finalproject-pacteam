@@ -186,19 +186,19 @@ function animate() {
 
     if (keyboard[87]) { // W key
         
-        if (intersects_up.length > 0) {
+        if (intersects_up.length != 0) {
             if (intersects_up[0].object.name == 'left') {
                 camera.position.x = 195;
             } else if (intersects_up[0].object.name == 'right') {
                 camera.position.x = 5;
             }
-        } else if (intersects_up_left.length > 0) {
+        } else if (intersects_up_left.length != 0) {
             if (intersects_up_left[0].object.name == 'left') {
                 camera.position.x = 195;
             } else if (intersects_up_left[0].object.name == 'right') {
                 camera.position.x = 5;
             }
-        } else if (intersects_up_right.length > 0) {
+        } else if (intersects_up_right.length != 0) {
             if (intersects_up_right[0].object.name == 'left') {
                 camera.position.x = 195;
             } else if (intersects_up_right[0].object.name == 'right') {
@@ -259,19 +259,19 @@ function animate() {
 
     if (keyboard[83]) { // S key
 
-        if (intersects_down.length > 0) {
+        if (intersects_down.length != 0) {
             if (intersects_down[0].object.name == 'left') {
                 camera.position.x = 195;
             } else if (intersects_down[0].object.name == 'right') {
                 camera.position.x = 5;
             }
-        } else if (intersects_down_left.length > 0) {
+        } else if (intersects_down_left.length != 0) {
             if (intersects_down_left[0].object.name == 'left') {
                 camera.position.x = 195;
             } else if (intersects_down_left[0].object.name == 'right') {
                 camera.position.x = 5;
             }
-        } else if (intersects_down_right.length > 0) {
+        } else if (intersects_down_right.length != 0) {
             if (intersects_down_right[0].object.name == 'left') {
                 camera.position.x = 195;
             } else if (intersects_down_right[0].object.name == 'right') {
@@ -285,19 +285,19 @@ function animate() {
 
     if (keyboard[65]) { // A key
 
-        if (intersects_left.length > 0) {
+        if (intersects_left.length != 0) {
             if (intersects_left[0].object.name == 'left') {
                 camera.position.x = 195;
             } else if (intersects_left[0].object.name == 'right') {
                 camera.position.x = 5;
             }
-        } else if (intersects_down_left.length > 0) {
+        } else if (intersects_down_left.length != 0) {
             if (intersects_down_left[0].object.name == 'left') {
                 camera.position.x = 195;
             } else if (intersects_down_left[0].object.name == 'right') {
                 camera.position.x = 5;
             }
-        } else if (intersects_up_left.length > 0) {
+        } else if (intersects_up_left.length != 0) {
             if (intersects_up_left[0].object.name == 'left') {
                 camera.position.x = 195;
             } else if (intersects_up_left[0].object.name == 'right') {
@@ -311,19 +311,19 @@ function animate() {
 
     if (keyboard[68]) { // D key
 
-        if (intersects_up_right.length > 0) {
+        if (intersects_up_right.length != 0) {
             if (intersects_up_right[0].object.name == 'left') {
                 camera.position.x = 195;
             } else if (intersects_up_right[0].object.name == 'right') {
                 camera.position.x = 5;
             }
-        } else if (intersects_down_right.length > 0) {
+        } else if (intersects_down_right.length != 0) {
             if (intersects_down_right[0].object.name == 'left') {
                 camera.position.x = 195;
             } else if (intersects_down_right[0].object.name == 'right') {
                 camera.position.x = 5;
             }
-        } else if (intersects_right.length > 0) {
+        } else if (intersects_right.length != 0) {
             if (intersects_right[0].object.name == 'left') {
                 camera.position.x = 195;
             } else if (intersects_right[0].object.name == 'right') {
@@ -344,14 +344,7 @@ function animate() {
 
     if (keyboard[39]) { // right arrow
 
-        raycaster.set(pacman.pacman.position, new THREE.Vector3(
-            Math.cos(-camera.rotation.y), 
-            0, 
-            Math.sin(-camera.rotation.y)
-        ));
-        var intersections = raycaster.intersectObjects(walls.children);
-
-        if ((intersections.length > 0 && intersections[0].distance > player.wall_distance + 2) || intersections.length == 0) {
+        if (intersects_up_right == 0) {
             camera.rotation.y -= player.turn_speed;
         }
     }
