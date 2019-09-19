@@ -123,50 +123,85 @@ function animate() {
         ghosts[i].moveGhost();
     }
 
+    var new_pacman_position = new THREE.Vector3(pacman.pacman.position.x, pacman.pacman.position.y + 1, pacman.pacman.position.z);
+
+    raycaster.set(new_pacman_position, new THREE.Vector3(
+        Math.cos(camera.rotation.y + Math.PI/4), 
+        0, 
+        -Math.sin(camera.rotation.y + Math.PI/4)
+    ));
+    var intersects_up_right = raycaster.intersectObjects(walls.children);
+    var intersects_balls_right = raycaster.intersectObjects(balls.children);
+
+    raycaster.set(new_pacman_position, new THREE.Vector3(
+        Math.cos(camera.rotation.y + 3*Math.PI/4), 
+        0, 
+        -Math.sin(camera.rotation.y + 3*Math.PI/4)
+    ));
+    var intersects_up_left = raycaster.intersectObjects(walls.children);
+    var intersects_balls_left = raycaster.intersectObjects(balls.children);
+
+    raycaster.set(new_pacman_position, new THREE.Vector3(
+        Math.sin(-camera.rotation.y), 
+        0, 
+        -Math.cos(-camera.rotation.y)
+    ));
+    var intersects_up = raycaster.intersectObjects(walls.children);
+    var intersects_balls_center = raycaster.intersectObjects(balls.children);
+
+    raycaster.set(pacman.pacman.position, new THREE.Vector3(
+        -Math.sin(-camera.rotation.y), 
+        0, 
+        Math.cos(-camera.rotation.y)
+    ));
+    var intersects_down = raycaster.intersectObjects(walls.children);
+
+    raycaster.set(pacman.pacman.position, new THREE.Vector3(
+        Math.cos(camera.rotation.y + 5*Math.PI/4), 
+        0, 
+        -Math.sin(camera.rotation.y + 5*Math.PI/4)
+    ));
+    var intersects_down_left = raycaster.intersectObjects(walls.children);
+
+    raycaster.set(pacman.pacman.position, new THREE.Vector3(
+        Math.cos(camera.rotation.y + 7*Math.PI/4), 
+        0, 
+        -Math.sin(camera.rotation.y + 7*Math.PI/4)
+    ));
+    var intersects_down_right = raycaster.intersectObjects(walls.children);
+
+    raycaster.set(pacman.pacman.position, new THREE.Vector3(
+        -Math.cos(-camera.rotation.y), 
+        0, 
+        -Math.sin(-camera.rotation.y)
+    ));
+    var intersects_left = raycaster.intersectObjects(walls.children);
+
+    raycaster.set(pacman.pacman.position, new THREE.Vector3(
+        Math.cos(-camera.rotation.y), 
+        0, 
+        Math.sin(-camera.rotation.y)
+    ));
+    var intersects_right = raycaster.intersectObjects(walls.children);
+
     if (keyboard[87]) { // W key
-
-        var new_pacman_position = new THREE.Vector3(pacman.pacman.position.x, pacman.pacman.position.y + 1, pacman.pacman.position.z);
         
-        raycaster.set(new_pacman_position, new THREE.Vector3(
-            Math.cos(camera.rotation.y + Math.PI/4), 
-            0, 
-            -Math.sin(camera.rotation.y + Math.PI/4)
-        ));
-        var intersects_right = raycaster.intersectObjects(walls.children);
-        var intersects_balls_right = raycaster.intersectObjects(balls.children);
-
-        raycaster.set(new_pacman_position, new THREE.Vector3(
-            Math.cos(camera.rotation.y + 3*Math.PI/4), 
-            0, 
-            -Math.sin(camera.rotation.y + 3*Math.PI/4)
-        ));
-        var intersects_left = raycaster.intersectObjects(walls.children);
-        var intersects_balls_left = raycaster.intersectObjects(balls.children);
-
-        raycaster.set(new_pacman_position, new THREE.Vector3(
-            Math.sin(-camera.rotation.y), 
-            0, 
-            -Math.cos(-camera.rotation.y)
-        ));
-        var intersects_center = raycaster.intersectObjects(walls.children);
-        var intersects_balls_center = raycaster.intersectObjects(balls.children);
-        
-        if (intersects_center.length > 0) {
-            if (intersects_center[0].object.name == 'left') {
+        if (intersects_up.length > 0) {
+            if (intersects_up[0].object.name == 'left') {
                 camera.position.x = 195;
-            } else if (intersects_center[0].object.name == 'right') {
+            } else if (intersects_up[0].object.name == 'right') {
                 camera.position.x = 5;
             }
-        } else if (intersects_left.length > 0) {
-            if (intersects_left[0].object.name == 'left') {
+        } else if (intersects_up_left.length > 0) {
+            if (intersects_up_left[0].object.name == 'left') {
                 camera.position.x = 195;
-            } else if (intersects_left[0].object.name == 'right') {
+            } else if (intersects_up_left[0].object.name == 'right') {
                 camera.position.x = 5;
             }
-        } else if (intersects_right.length > 0) {
-            if (intersects_right[0].object.name == 'left') {
+        } else if (intersects_up_right.length > 0) {
+            if (intersects_up_right[0].object.name == 'left') {
                 camera.position.x = 195;
-            } else if (intersects_right[0].object.name == 'right') {
+            } else if (intersects_up_right[0].object.name == 'right') {
                 camera.position.x = 5;
             }
         } else {
@@ -224,43 +259,22 @@ function animate() {
 
     if (keyboard[83]) { // S key
 
-        raycaster.set(pacman.pacman.position, new THREE.Vector3(
-            -Math.sin(-camera.rotation.y), 
-            0, 
-            Math.cos(-camera.rotation.y)
-        ));
-        var intersects_center = raycaster.intersectObjects(walls.children);
-        
-        raycaster.set(pacman.pacman.position, new THREE.Vector3(
-            Math.cos(camera.rotation.y + 5*Math.PI/4), 
-            0, 
-            -Math.sin(camera.rotation.y + 5*Math.PI/4)
-        ));
-        var intersects_right = raycaster.intersectObjects(walls.children);
-
-        raycaster.set(pacman.pacman.position, new THREE.Vector3(
-            Math.cos(camera.rotation.y + 7*Math.PI/4), 
-            0, 
-            -Math.sin(camera.rotation.y + 7*Math.PI/4)
-        ));
-        var intersects_left = raycaster.intersectObjects(walls.children);
-        
-        if (intersects_center.length > 0) {
-            if (intersects_center[0].object.name == 'left') {
+        if (intersects_down.length > 0) {
+            if (intersects_down[0].object.name == 'left') {
                 camera.position.x = 195;
-            } else if (intersects_center[0].object.name == 'right') {
+            } else if (intersects_down[0].object.name == 'right') {
                 camera.position.x = 5;
             }
-        } else if (intersects_left.length > 0) {
-            if (intersects_left[0].object.name == 'left') {
+        } else if (intersects_down_left.length > 0) {
+            if (intersects_down_left[0].object.name == 'left') {
                 camera.position.x = 195;
-            } else if (intersects_left[0].object.name == 'right') {
+            } else if (intersects_down_left[0].object.name == 'right') {
                 camera.position.x = 5;
             }
-        } else if (intersects_right.length > 0) {
-            if (intersects_right[0].object.name == 'left') {
+        } else if (intersects_down_right.length > 0) {
+            if (intersects_down_right[0].object.name == 'left') {
                 camera.position.x = 195;
-            } else if (intersects_right[0].object.name == 'right') {
+            } else if (intersects_down_right[0].object.name == 'right') {
                 camera.position.x = 5;
             }
         } else {
@@ -271,43 +285,22 @@ function animate() {
 
     if (keyboard[65]) { // A key
 
-        raycaster.set(pacman.pacman.position, new THREE.Vector3(
-            -Math.cos(-camera.rotation.y), 
-            0, 
-            -Math.sin(-camera.rotation.y)
-        ));
-        var intersects_center = raycaster.intersectObjects(walls.children);
-
-        raycaster.set(pacman.pacman.position, new THREE.Vector3(
-            Math.cos(camera.rotation.y + 3*Math.PI/4), 
-            0, 
-            -Math.sin(camera.rotation.y + 3*Math.PI/4)
-        ));
-        var intersects_right = raycaster.intersectObjects(walls.children);
-
-        raycaster.set(pacman.pacman.position, new THREE.Vector3(
-            Math.cos(camera.rotation.y + 5*Math.PI/4), 
-            0, 
-            -Math.sin(camera.rotation.y + 5*Math.PI/4)
-        ));
-        var intersects_left = raycaster.intersectObjects(walls.children);
-
-        if (intersects_center.length > 0) {
-            if (intersects_center[0].object.name == 'left') {
-                camera.position.x = 195;
-            } else if (intersects_center[0].object.name == 'right') {
-                camera.position.x = 5;
-            }
-        } else if (intersects_left.length > 0) {
+        if (intersects_left.length > 0) {
             if (intersects_left[0].object.name == 'left') {
                 camera.position.x = 195;
             } else if (intersects_left[0].object.name == 'right') {
                 camera.position.x = 5;
             }
-        } else if (intersects_right.length > 0) {
-            if (intersects_right[0].object.name == 'left') {
+        } else if (intersects_down_left.length > 0) {
+            if (intersects_down_left[0].object.name == 'left') {
                 camera.position.x = 195;
-            } else if (intersects_right[0].object.name == 'right') {
+            } else if (intersects_down_left[0].object.name == 'right') {
+                camera.position.x = 5;
+            }
+        } else if (intersects_up_left.length > 0) {
+            if (intersects_up_left[0].object.name == 'left') {
+                camera.position.x = 195;
+            } else if (intersects_up_left[0].object.name == 'right') {
                 camera.position.x = 5;
             }
         } else {
@@ -318,37 +311,16 @@ function animate() {
 
     if (keyboard[68]) { // D key
 
-        raycaster.set(pacman.pacman.position, new THREE.Vector3(
-            Math.cos(-camera.rotation.y), 
-            0, 
-            Math.sin(-camera.rotation.y)
-        ));
-        var intersects_center = raycaster.intersectObjects(walls.children);
-
-        raycaster.set(pacman.pacman.position, new THREE.Vector3(
-            Math.cos(camera.rotation.y + 7*Math.PI/4), 
-            0, 
-            -Math.sin(camera.rotation.y + 7*Math.PI/4)
-        ));
-        var intersects_right = raycaster.intersectObjects(walls.children);
-
-        raycaster.set(pacman.pacman.position, new THREE.Vector3(
-            Math.cos(camera.rotation.y + Math.PI/4), 
-            0, 
-            -Math.sin(camera.rotation.y + Math.PI/4)
-        ));
-        var intersects_left = raycaster.intersectObjects(walls.children);
-
-        if (intersects_center.length > 0) {
-            if (intersects_center[0].object.name == 'left') {
+        if (intersects_up_right.length > 0) {
+            if (intersects_up_right[0].object.name == 'left') {
                 camera.position.x = 195;
-            } else if (intersects_center[0].object.name == 'right') {
+            } else if (intersects_up_right[0].object.name == 'right') {
                 camera.position.x = 5;
             }
-        } else if (intersects_left.length > 0) {
-            if (intersects_left[0].object.name == 'left') {
+        } else if (intersects_down_right.length > 0) {
+            if (intersects_down_right[0].object.name == 'left') {
                 camera.position.x = 195;
-            } else if (intersects_left[0].object.name == 'right') {
+            } else if (intersects_down_right[0].object.name == 'right') {
                 camera.position.x = 5;
             }
         } else if (intersects_right.length > 0) {
@@ -365,18 +337,9 @@ function animate() {
 
     if (keyboard[37]) { // left arrow
 
-        raycaster.set(pacman.pacman.position, new THREE.Vector3(
-            -Math.cos(-camera.rotation.y), 
-            0, 
-            -Math.sin(-camera.rotation.y)
-        ));
-
-        var intersections = raycaster.intersectObjects(walls.children);
-
-        if ((intersections.length > 0 && intersections[0].distance > player.wall_distance + 2) || intersections.length == 0) {
+        if ((intersects_up_left == 0)) {
             camera.rotation.y += player.turn_speed;
         }
-
     }
 
     if (keyboard[39]) { // right arrow
