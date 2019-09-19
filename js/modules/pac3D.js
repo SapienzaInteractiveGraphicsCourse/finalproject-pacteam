@@ -27,6 +27,7 @@ var pacman;
 var n_ghosts = 0;
 var ghosts = [];
 var ghosts_objects = [];
+var ghost_eaten = false;
 
 var super_pacman = false;
 var i;
@@ -40,8 +41,8 @@ function finish_power_up() {
     audio[0].play();
 }
 
-var play;
 var score;
+var play;
 
 function init() {
 
@@ -63,7 +64,9 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    document.getElementById('home_page').onclick = reset_game(scene);
+    document.getElementById('home_page').onclick = function(){
+        location.reload(false);
+    }
 
     score = document.getElementById('score');
 
@@ -135,10 +138,7 @@ function animate() {
                 }
                 scene.remove(ghosts[i].ghost);
                 scene.remove(intersects_up_ghost[0].object);
-                player.score += GHOST_POINTS[difficulty_level];
-                score.innerHTML = 'Score: ' + player.score;
-                audio[4].play();
-                n_ghosts--;
+                ghost_eaten = true;
             }
             else {
                 paused = true;
@@ -168,11 +168,7 @@ function animate() {
                     }
                 }
                 scene.remove(ghosts[i].ghost);
-                scene.remove(intersects_up_right_ghost[0].object);
-                player.score += GHOST_POINTS[difficulty_level];
-                score.innerHTML = 'Score: ' + player.score;
-                audio[4].play();
-                n_ghosts--;
+                ghost_eaten = true;
             }
             else {
                 paused = true;
@@ -202,11 +198,7 @@ function animate() {
                     }
                 }
                 scene.remove(ghosts[i].ghost);
-                scene.remove(intersects_up_left_ghost[0].object);
-                player.score += GHOST_POINTS[difficulty_level];
-                score.innerHTML = 'Score: ' + player.score;
-                audio[4].play();
-                n_ghosts--;
+                ghost_eaten = true;
             }
             else {
                 paused = true;
@@ -235,11 +227,7 @@ function animate() {
                     }
                 }
                 scene.remove(ghosts[i].ghost);
-                scene.remove(intersects_down_ghost[0].object);
-                player.score += GHOST_POINTS[difficulty_level];
-                score.innerHTML = 'Score: ' + player.score;
-                audio[4].play();
-                n_ghosts--;
+                ghost_eaten = true;
             }
             else {
                 paused = true;
@@ -268,11 +256,7 @@ function animate() {
                     }
                 }
                 scene.remove(ghosts[i].ghost);
-                scene.remove(intersects_down_left_ghost[0].object);
-                player.score += GHOST_POINTS[difficulty_level];
-                score.innerHTML = 'Score: ' + player.score;
-                audio[4].play();
-                n_ghosts--;
+                ghost_eaten = true;
             }
             else {
                 paused = true;
@@ -301,11 +285,7 @@ function animate() {
                     }
                 }
                 scene.remove(ghosts[i].ghost);
-                scene.remove(intersects_down_right_ghost[0].object);
-                player.score += GHOST_POINTS[difficulty_level];
-                score.innerHTML = 'Score: ' + player.score;
-                audio[4].play();
-                n_ghosts--;
+                ghost_eaten = true;
             }
             else {
                 paused = true;
@@ -334,11 +314,7 @@ function animate() {
                     }
                 }
                 scene.remove(ghosts[i].ghost);
-                scene.remove(intersects_left_ghost[0].object);
-                player.score += GHOST_POINTS[difficulty_level];
-                score.innerHTML = 'Score: ' + player.score;
-                audio[4].play();
-                n_ghosts--;
+                ghost_eaten = true;
             }
             else {
                 paused = true;
@@ -367,11 +343,8 @@ function animate() {
                     }
                 }
                 scene.remove(ghosts[i].ghost);
-                scene.remove(intersects_right_ghost[0].object);
-                player.score += GHOST_POINTS[difficulty_level];
-                score.innerHTML = 'Score: ' + player.score;
-                audio[4].play();
-                n_ghosts--;
+                ghost_eaten = true;
+                
             }
             else {
                 paused = true;
@@ -553,6 +526,19 @@ function animate() {
         }
     }
 
+    if (ghost_eaten) {
+        audio[4].play();
+        player.score += GHOST_POINTS[difficulty_level];
+        score.innerHTML = "Score: " + player.score;
+        ghost_eaten = false;
+        n_ghosts--;
+    }
+
+    if (balls.children.length == 0) {
+        paused = true;
+        document.getElementById('victory').style.display = 'initial';
+    }
+
     // Update pacman position
     pacman.pacman.position.set(camera.position.x + Math.sin(-camera.rotation.y)*3.5, 1, camera.position.z - Math.cos(-camera.rotation.y)*3.5);
     pacman.pacman.rotation.set(camera.rotation.x, camera.rotation.y - 1.28, camera.rotation.z + 0.21);
@@ -664,30 +650,12 @@ const loadManager = () => {
 
     manager.onLoad = () => {
         pacman = new Pacman();
-        loadingOverlay.classList.add( 'loading-overlay-hidden' );
+        loadingOverlay.classList.add('loading-overlay-hidden');
 
         scene.add(dirLight, ambientLight, spotLight, target_object, play, floor, walls, balls, pacman.pacman);
         document.getElementById('Info').style.display = 'initial';
         animate();
     };
-}
-
-function reset_game(obj) {
-    console.log('ciao');
-    while(obj.children.length > 0){ 
-        reset_game(obj.children[0])
-        obj.remove(obj.children[0]);
-      }
-      if(obj.geometry) obj.geometry.dispose()
-    
-      if(obj.material){ 
-        //in case of map, bumpMap, normalMap, envMap ...
-        Object.keys(obj.material).forEach(prop => {                                             
-          if(typeof obj.material[prop].dispose === 'function')                                  
-          obj.material[prop].dispose()                                                        
-        })
-        obj.material.dispose()
-      }
 }
 
 // Resize listeners
