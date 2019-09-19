@@ -7,14 +7,15 @@ const GHOST_MODELS = [];
 
 class Ghost {
     constructor() {
-        this.ghost = GHOST_MODELS[Math.floor(Math.random() * GHOST_MODELS.length)].clone();
+        this.ghost = GHOST_MODELS[Math.floor(Math.random() * GHOST_MODELS.length)].clone(true);
+        
         this.actual_direction = 'down';
         this.cube = new THREE.Mesh(
             new THREE.BoxBufferGeometry(6, 6, 6),
             new THREE.MeshPhongMaterial()
         );
-        this.cube.material.opacity = 0;
-        this.cube.material.transparent = true;
+        /* this.cube.material.opacity = 0;
+        this.cube.material.transparent = true; */
 
         var position = POSSIBLE_GHOST_POSITIONS[Math.floor(Math.random() * POSSIBLE_GHOST_POSITIONS.length)];
         this.ghost.position.set(position.x, position.y, position.z);

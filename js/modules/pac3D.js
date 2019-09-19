@@ -20,14 +20,13 @@ const GHOST_SPAWN_TIME = [15000, 10000, 8000];
 var difficulty_level = 1;
 
 var paused = true;
-var player = {height: 6, speed: 0.25, turn_speed: Math.PI*0.015, score: 0.0};
+var player = {height: 6, speed: 0.6, turn_speed: Math.PI*0.015, score: 0.0};
 
 // Pacman.pacman variables
 var pacman;
 var n_ghosts = 0;
 var ghosts = [];
 var ghosts_objects = [];
-var ghost_eaten = false;
 
 var super_pacman = false;
 var i;
@@ -127,27 +126,7 @@ function animate() {
     
     var intersects_up = raycaster.intersectObjects(walls.children);
     var intersects_balls_center = raycaster.intersectObjects(balls.children);
-    if (ghosts.length != 0) {
-        var intersects_up_ghost = raycaster.intersectObjects(ghosts_objects);
-        if (intersects_up_ghost.length != 0) {
-            if (super_pacman) {
-                for (i = 0; i < ghosts.length; i++) {
-                    if (ghosts_objects[i] == intersects_up_ghost[0].object) {
-                        break;
-                    }
-                }
-                scene.remove(ghosts[i].ghost);
-                scene.remove(intersects_up_ghost[0].object);
-                ghost_eaten = true;
-            }
-            else {
-                paused = true;
-                audio[0].pause();
-                audio[3].play();
-                document.getElementById('container_death').style.display = 'initial';
-            }
-        }
-    }
+    var intersects_up_ghost = raycaster.intersectObjects(ghosts_objects);
 
     raycaster.set(new_pacman_position, new THREE.Vector3(
         Math.cos(camera.rotation.y + Math.PI/4), 
@@ -156,28 +135,7 @@ function animate() {
     ));
     var intersects_up_right = raycaster.intersectObjects(walls.children);
     var intersects_balls_right = raycaster.intersectObjects(balls.children);
-    
-    if (ghosts.length != 0) {
-        var intersects_up_right_ghost = raycaster.intersectObjects(ghosts_objects);
-        
-        if (intersects_up_right_ghost.length != 0) {
-            if (super_pacman) {
-                for (i = 0; i < ghosts.length; i++) {
-                    if (ghosts_objects[i] == intersects_up_right_ghost[0].object) {
-                        break;
-                    }
-                }
-                scene.remove(ghosts[i].ghost);
-                ghost_eaten = true;
-            }
-            else {
-                paused = true;
-                audio[0].pause();
-                audio[3].play();
-                document.getElementById('container_death').style.display = 'initial';
-            }
-        }
-    }
+    var intersects_up_right_ghost = raycaster.intersectObjects(ghosts_objects);
 
     raycaster.set(new_pacman_position, new THREE.Vector3(
         Math.cos(camera.rotation.y + 3*Math.PI/4), 
@@ -186,28 +144,7 @@ function animate() {
     ));
     var intersects_up_left = raycaster.intersectObjects(walls.children);
     var intersects_balls_left = raycaster.intersectObjects(balls.children);
-
-    if (ghosts.length != 0) {
-        var intersects_up_left_ghost = raycaster.intersectObjects(ghosts_objects);
-
-        if (intersects_up_left_ghost.length != 0) {
-            if (super_pacman) {
-                for (i = 0; i < ghosts.length; i++) {
-                    if (ghosts_objects[i] == intersects_up_left_ghost[0].object) {
-                        break;
-                    }
-                }
-                scene.remove(ghosts[i].ghost);
-                ghost_eaten = true;
-            }
-            else {
-                paused = true;
-                audio[0].pause();
-                audio[3].play();
-                document.getElementById('container_death').style.display = 'initial';
-            }
-        }
-    }
+    var intersects_up_left_ghost = raycaster.intersectObjects(ghosts_objects);
 
     raycaster.set(pacman.pacman.position, new THREE.Vector3(
         -Math.sin(-camera.rotation.y), 
@@ -215,28 +152,7 @@ function animate() {
         Math.cos(-camera.rotation.y)
     ));
     var intersects_down = raycaster.intersectObjects(walls.children);
-
-    if (ghosts.length != 0) {
-        var intersects_down_ghost = raycaster.intersectObjects(ghosts_objects);
-
-        if (intersects_down_ghost.length != 0) {
-            if (super_pacman) {
-                for (i = 0; i < ghosts.length; i++) {
-                    if (ghosts_objects[i] == intersects_down_ghost[0].object) {
-                        break;
-                    }
-                }
-                scene.remove(ghosts[i].ghost);
-                ghost_eaten = true;
-            }
-            else {
-                paused = true;
-                audio[0].pause();
-                audio[3].play();
-                document.getElementById('container_death').style.display = 'initial';
-            }
-        }
-    }
+    var intersects_down_ghost = raycaster.intersectObjects(ghosts_objects);
 
     raycaster.set(pacman.pacman.position, new THREE.Vector3(
         Math.cos(camera.rotation.y + 5*Math.PI/4), 
@@ -244,28 +160,7 @@ function animate() {
         -Math.sin(camera.rotation.y + 5*Math.PI/4)
     ));
     var intersects_down_left = raycaster.intersectObjects(walls.children);
-    
-    if (ghosts.length != 0) {
-        var intersects_down_left_ghost = raycaster.intersectObjects(ghosts_objects);
-
-        if (intersects_down_left_ghost.length != 0) {
-            if (super_pacman) {
-                for (i = 0; i < ghosts.length; i++) {
-                    if (ghosts_objects[i] == intersects_down_left_ghost[0].object) {
-                        break;
-                    }
-                }
-                scene.remove(ghosts[i].ghost);
-                ghost_eaten = true;
-            }
-            else {
-                paused = true;
-                audio[0].pause();
-                audio[3].play();
-                document.getElementById('container_death').style.display = 'initial';
-            }
-        }
-    }
+    var intersects_down_left_ghost = raycaster.intersectObjects(ghosts_objects);
 
     raycaster.set(pacman.pacman.position, new THREE.Vector3(
         Math.cos(camera.rotation.y + 7*Math.PI/4), 
@@ -273,28 +168,7 @@ function animate() {
         -Math.sin(camera.rotation.y + 7*Math.PI/4)
     ));
     var intersects_down_right = raycaster.intersectObjects(walls.children);
-    
-    if (ghosts.length != 0) {
-        var intersects_down_right_ghost = raycaster.intersectObjects(ghosts_objects);
-
-        if (intersects_down_right_ghost.length != 0) {
-            if (super_pacman) {
-                for (i = 0; i < ghosts.length; i++) {
-                    if (ghosts_objects[i] == intersects_down_right_ghost[0].object) {
-                        break;
-                    }
-                }
-                scene.remove(ghosts[i].ghost);
-                ghost_eaten = true;
-            }
-            else {
-                paused = true;
-                audio[0].pause();
-                audio[3].play();
-                document.getElementById('container_death').style.display = 'initial';
-            }
-        }
-    }
+    var intersects_down_right_ghost = raycaster.intersectObjects(ghosts_objects);
 
     raycaster.set(pacman.pacman.position, new THREE.Vector3(
         -Math.cos(-camera.rotation.y), 
@@ -302,28 +176,7 @@ function animate() {
         -Math.sin(-camera.rotation.y)
     ));
     var intersects_left = raycaster.intersectObjects(walls.children);
-
-    if (ghosts.length != 0) {
-        var intersects_left_ghost = raycaster.intersectObjects(ghosts_objects);
-
-        if (intersects_left_ghost.length != 0) {
-            if (super_pacman) {
-                for (i = 0; i < ghosts.length; i++) {
-                    if (ghosts_objects[i] == intersects_left_ghost[0].object) {
-                        break;
-                    }
-                }
-                scene.remove(ghosts[i].ghost);
-                ghost_eaten = true;
-            }
-            else {
-                paused = true;
-                audio[0].pause();
-                audio[3].play();
-                document.getElementById('container_death').style.display = 'initial';
-            }
-        }
-    }
+    var intersects_left_ghost = raycaster.intersectObjects(ghosts_objects);
 
     raycaster.set(pacman.pacman.position, new THREE.Vector3(
         Math.cos(-camera.rotation.y), 
@@ -331,27 +184,144 @@ function animate() {
         Math.sin(-camera.rotation.y)
     ));
     var intersects_right = raycaster.intersectObjects(walls.children);
-
-    if (ghosts.length != 0) {
-        var intersects_right_ghost = raycaster.intersectObjects(ghosts_objects);
-
-        if (intersects_right_ghost.length != 0) {
-            if (super_pacman) {
-                for (i = 0; i < ghosts.length; i++) {
-                    if (ghosts_objects[i] == intersects_right_ghost[0].object) {
-                        break;
-                    }
+    var intersects_right_ghost = raycaster.intersectObjects(ghosts_objects);
+    
+    // CHECK GHOST COLLISIONS
+    if (intersects_up_ghost.length != 0) {
+        if (super_pacman) {
+            for (i=0; i < ghosts.length; i++) {
+                if (ghosts[i].ghost.name == 'ghost' + intersects_up_ghost[0].object.name) {
+                    console.log('Removing ', ghosts[i].ghost);
+                    scene.remove(ghosts[i].ghost);
+                    scene.remove(intersects_up_ghost[0].object);
+                    ghost_eaten(i);
                 }
-                scene.remove(ghosts[i].ghost);
-                ghost_eaten = true;
-                
+            } 
+        }
+        else {
+            paused = true;
+            audio[0].pause();
+            audio[3].play();
+            document.getElementById('container_death').style.display = 'initial';
+        }
+    } else if (intersects_up_right_ghost.length != 0) {
+        if (super_pacman) {
+            for (i=0; i < ghosts.length; i++) {
+                if (ghosts[i].ghost.name == 'ghost' + intersects_up_right_ghost[0].object.name) {
+                    console.log('Removing ', ghosts[i].ghost);
+                    scene.remove(ghosts[i].ghost);
+                    scene.remove(intersects_up_right_ghost[0].object);
+                    ghost_eaten(i);
+                }
             }
-            else {
-                paused = true;
-                audio[0].pause();
-                audio[3].play();
-                document.getElementById('container_death').style.display = 'initial';
+        }
+        else {
+            paused = true;
+            audio[0].pause();
+            audio[3].play();
+            document.getElementById('container_death').style.display = 'initial';
+        }
+    } else if (intersects_up_left_ghost.length != 0) {
+        if (super_pacman) {
+            for (i=0; i < ghosts.length; i++) {
+                if (ghosts[i].ghost.name == 'ghost' + intersects_up_left_ghost[0].object.name) {
+                    console.log('Removing ', ghosts[i].ghost);
+                    scene.remove(ghosts[i].ghost);
+                    scene.remove(intersects_up_left_ghost[0].object);
+                    ghost_eaten(i);
+                }
             }
+        }
+        else {
+            paused = true;
+            audio[0].pause();
+            audio[3].play();
+            document.getElementById('container_death').style.display = 'initial';
+        }
+    } else if (intersects_down_ghost.length != 0) {
+        if (super_pacman) {
+            for (i=0; i < ghosts.length; i++) {
+                if (ghosts[i].ghost.name == 'ghost' + intersects_down_ghost[0].object.name) {
+                    console.log('Removing ', ghosts[i].ghost);
+                    scene.remove(ghosts[i].ghost);
+                    scene.remove(intersects_down_ghost[0].object);
+                    ghost_eaten(i);
+                }
+            }
+        }
+        else {
+            paused = true;
+            audio[0].pause();
+            audio[3].play();
+            document.getElementById('container_death').style.display = 'initial';
+        }
+    } else if (intersects_down_left_ghost.length != 0) {
+        if (super_pacman) {
+            for (i=0; i < ghosts.length; i++) {
+                if (ghosts[i].ghost.name == 'ghost' + intersects_down_left_ghost[0].object.name) {
+                    console.log('Removing ', ghosts[i].ghost);
+                    scene.remove(ghosts[i].ghost);
+                    scene.remove(intersects_down_left_ghost[0].object);
+                    ghost_eaten(i);
+                }
+            }
+        }
+        else {
+            paused = true;
+            audio[0].pause();
+            audio[3].play();
+            document.getElementById('container_death').style.display = 'initial';
+        }
+    } else if (intersects_left_ghost.length != 0) {
+        if (super_pacman) {
+            for (i=0; i < ghosts.length; i++) {
+                if (ghosts[i].ghost.name == 'ghost' + intersects_left_ghost[0].object.name) {
+                    console.log('Removing ', ghosts[i].ghost);
+                    scene.remove(ghosts[i].ghost);
+                    scene.remove(intersects_left_ghost[0].object);
+                    ghost_eaten(i);
+                }
+            }
+        } 
+        else {
+            paused = true;
+            audio[0].pause();
+            audio[3].play();
+            document.getElementById('container_death').style.display = 'initial';
+        }
+    } else if (intersects_right_ghost.length != 0) {
+        if (super_pacman) {
+            for (i=0; i < ghosts.length; i++) {
+                if (ghosts[i].ghost.name == 'ghost' + intersects_right_ghost[0].object.name) {
+                    console.log('Removing ', ghosts[i].ghost);
+                    scene.remove(ghosts[i].ghost);
+                    scene.remove(intersects_right_ghost[0].object);
+                    ghost_eaten(i);
+                }
+            }
+        }
+        else {
+            paused = true;
+            audio[0].pause();
+            audio[3].play();
+            document.getElementById('container_death').style.display = 'initial';
+        }
+    } else if (intersects_down_right_ghost.length != 0) {
+        if (super_pacman) {
+            for (i=0; i < ghosts.length; i++) {
+                if (ghosts[i].ghost.name == 'ghost' + intersects_down_right_ghost[0].object.name) {
+                    console.log('Removing ', ghosts[i].ghost);
+                    scene.remove(ghosts[i].ghost);
+                    scene.remove(intersects_down_right_ghost[0].object);
+                    ghost_eaten(i);
+                }
+            }
+        }
+        else {
+            paused = true;
+            audio[0].pause();
+            audio[3].play();
+            document.getElementById('container_death').style.display = 'initial';
         }
     }
 
@@ -526,14 +496,6 @@ function animate() {
         }
     }
 
-    if (ghost_eaten) {
-        audio[4].play();
-        player.score += GHOST_POINTS[difficulty_level];
-        score.innerHTML = "Score: " + player.score;
-        ghost_eaten = false;
-        n_ghosts--;
-    }
-
     if (balls.children.length == 0) {
         paused = true;
         document.getElementById('victory').style.display = 'initial';
@@ -575,6 +537,9 @@ function spawn() {
         var ghost = new Ghost();
         scene.add(ghost.ghost);
         scene.add(ghost.cube);
+
+        ghost.cube.name = String(n_ghosts);
+        ghost.ghost.name = 'ghost' + n_ghosts;
         ghosts.push(ghost);
         ghosts_objects.push(ghost.cube);
         n_ghosts++;
@@ -656,6 +621,17 @@ const loadManager = () => {
         document.getElementById('Info').style.display = 'initial';
         animate();
     };
+}
+
+function ghost_eaten(i) {
+    ghosts.splice(i, i+1);
+    console.log('removed_object: ', i);
+    ghosts_objects.splice(i, i+1);
+    audio[4].play();
+    player.score += GHOST_POINTS[difficulty_level];
+    score.innerHTML = "Score: " + player.score;
+    n_ghosts--;
+    console.log(ghosts);
 }
 
 // Resize listeners
