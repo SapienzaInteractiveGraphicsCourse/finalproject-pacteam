@@ -2,8 +2,7 @@ import {maze} from './maze.js'
 
 var possible_ghosts_positions = [new THREE.Vector3(70, 3, -130), new THREE.Vector3(130, 3, -130), new THREE.Vector3(70, 3, -90), new THREE.Vector3(130, 3, -90)];
 var ghost_model;
-var ghosts = [];
-var n_ghosts = 0;
+
 
 class Ghost {
     constructor(color) {
@@ -82,6 +81,5 @@ function loadGhost(loader, color) {
 export {
     Ghost,
     loadGhost,
-    possible_ghosts_positions,
     ghost_model
 }

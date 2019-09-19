@@ -45,6 +45,7 @@ var player = {height: 6, speed: 0.25, turn_speed: Math.PI*0.015, score: 0.0};
 // Pacman.pacman variables
 var pacman;
 var ghosts = [];
+var ghosts_objects = [];
 
 var super_pacman = false;
 
@@ -126,12 +127,33 @@ function animate() {
     var new_pacman_position = new THREE.Vector3(pacman.pacman.position.x, pacman.pacman.position.y + 1, pacman.pacman.position.z);
 
     raycaster.set(new_pacman_position, new THREE.Vector3(
+        Math.sin(-camera.rotation.y), 
+        0, 
+        -Math.cos(-camera.rotation.y)
+    ));
+    //scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000) );
+    var intersects_up = raycaster.intersectObjects(walls.children);
+    var intersects_balls_center = raycaster.intersectObjects(balls.children);
+    if (ghosts.length != 0) {
+        var intersects_up_ghost = raycaster.intersectObjects(ghosts_objects);
+        if (intersects_up_ghost.length != 0) {
+        }
+    }
+
+    raycaster.set(new_pacman_position, new THREE.Vector3(
         Math.cos(camera.rotation.y + Math.PI/4), 
         0, 
         -Math.sin(camera.rotation.y + Math.PI/4)
     ));
     var intersects_up_right = raycaster.intersectObjects(walls.children);
     var intersects_balls_right = raycaster.intersectObjects(balls.children);
+    
+    if (ghosts.length != 0) {
+        var intersects_up_right_ghost = raycaster.intersectObjects(ghosts_objects, true);
+        
+        if (intersects_up_right_ghost.length != 0) {
+        }
+    }
 
     raycaster.set(new_pacman_position, new THREE.Vector3(
         Math.cos(camera.rotation.y + 3*Math.PI/4), 
@@ -141,13 +163,12 @@ function animate() {
     var intersects_up_left = raycaster.intersectObjects(walls.children);
     var intersects_balls_left = raycaster.intersectObjects(balls.children);
 
-    raycaster.set(new_pacman_position, new THREE.Vector3(
-        Math.sin(-camera.rotation.y), 
-        0, 
-        -Math.cos(-camera.rotation.y)
-    ));
-    var intersects_up = raycaster.intersectObjects(walls.children);
-    var intersects_balls_center = raycaster.intersectObjects(balls.children);
+    if (ghosts.length != 0) {
+        var intersects_up_left_ghost = raycaster.intersectObjects(ghosts_objects, true);
+
+        if (intersects_up_left_ghost.length != 0) {
+        }
+    }
 
     raycaster.set(pacman.pacman.position, new THREE.Vector3(
         -Math.sin(-camera.rotation.y), 
@@ -156,12 +177,26 @@ function animate() {
     ));
     var intersects_down = raycaster.intersectObjects(walls.children);
 
+    if (ghosts.length != 0) {
+        var intersects_down_ghost = raycaster.intersectObjects(ghosts_objects, true);
+
+        if (intersects_down_ghost.length != 0) {
+        }
+    }
+
     raycaster.set(pacman.pacman.position, new THREE.Vector3(
         Math.cos(camera.rotation.y + 5*Math.PI/4), 
         0, 
         -Math.sin(camera.rotation.y + 5*Math.PI/4)
     ));
     var intersects_down_left = raycaster.intersectObjects(walls.children);
+    
+    if (ghosts.length != 0) {
+        var intersects_down_left_ghost = raycaster.intersectObjects(ghosts_objects, true);
+
+        if (intersects_down_left_ghost.length != 0) {
+        }
+    }
 
     raycaster.set(pacman.pacman.position, new THREE.Vector3(
         Math.cos(camera.rotation.y + 7*Math.PI/4), 
@@ -169,6 +204,13 @@ function animate() {
         -Math.sin(camera.rotation.y + 7*Math.PI/4)
     ));
     var intersects_down_right = raycaster.intersectObjects(walls.children);
+    
+    if (ghosts.length != 0) {
+        var intersects_down_right_ghost = raycaster.intersectObjects(ghosts_objects, true);
+
+        if (intersects_down_right_ghost.length != 0) {
+        }
+    }
 
     raycaster.set(pacman.pacman.position, new THREE.Vector3(
         -Math.cos(-camera.rotation.y), 
@@ -177,12 +219,26 @@ function animate() {
     ));
     var intersects_left = raycaster.intersectObjects(walls.children);
 
+    if (ghosts.length != 0) {
+        var intersects_left_ghost = raycaster.intersectObjects(ghosts_objects, true);
+
+        if (intersects_left_ghost.length != 0) {
+        }
+    }
+
     raycaster.set(pacman.pacman.position, new THREE.Vector3(
         Math.cos(-camera.rotation.y), 
         0, 
         Math.sin(-camera.rotation.y)
     ));
     var intersects_right = raycaster.intersectObjects(walls.children);
+
+    if (ghosts.length != 0) {
+        var intersects_right_ghost = raycaster.intersectObjects(ghosts_objects, true);
+
+        if (intersects_right_ghost.length != 0) {
+        }
+    }
 
     if (keyboard[87]) { // W key
         
@@ -381,13 +437,11 @@ function onWindowResize() {
 }
 
 function spawn() {
-    var ghost = new Ghost(0xffffff);
-    scene.add(ghost.ghost);
-    ghosts.push(ghost);
-
-    if (ghosts.length == GHOSTS_MAX_NUMBER[difficulty_level]) {
-        console.log(GHOSTS_MAX_NUMBER[difficulty_level]);
-        clearInterval(id_interval);
+    if (ghosts.length < GHOSTS_MAX_NUMBER[difficulty_level]) {
+        var ghost = new Ghost(0xffffff);
+        scene.add(ghost.ghost);
+        ghosts.push(ghost);
+        ghosts_objects.push(ghost.ghost);
     }
 }
 
