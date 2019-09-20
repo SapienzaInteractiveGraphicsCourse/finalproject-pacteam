@@ -130,13 +130,13 @@ class Ghost {
 
         this.current_angle += this.sphere_speed;
         if (this.flag) {
-            this.current_y_angle += this.sphere_speed;
+            this.current_y_angle += this.y_angle_speed;
             if (this.current_y_angle > this.max_y_angle) {
                 this.flag = false;
             }
         }
         else {
-            this.current_y_angle -= this.sphere_speed;
+            this.current_y_angle -= this.y_angle_speed;
             if (this.current_y_angle < -this.max_y_angle) {
                 this.flag = true;
             }
