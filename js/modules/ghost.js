@@ -86,10 +86,12 @@ class Ghost {
         this.ghost.position.x += 0.25*Math.sin(this.ghost.rotation.y);
         this.ghost.position.z += 0.25*Math.cos(this.ghost.rotation.y);
 
-        for (var i=0; i < this.ghost.children.length; i++) {
+        /* for (var i=0; i < this.ghost.children.length; i++) {
             var obj = this.ghost.children[i];
-            if (obj.name == 'sphere1') obj.position.x += 2;     
-        }
+            if (obj.name == 'sphere1') {
+                obj.position.x += 2;
+            }     
+        } */
 
         this.cube.position.set(this.ghost.position.x, this.ghost.position.y, this.ghost.position.z);
     }
