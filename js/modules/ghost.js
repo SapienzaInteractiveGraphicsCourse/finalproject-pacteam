@@ -29,22 +29,22 @@ class Ghost {
 
         var sphere1 = new THREE.Mesh(
             new THREE.SphereBufferGeometry(0.1, 32, 32),
-            new THREE.MeshPhongMaterial(chosen_color)
+            new THREE.MeshPhongMaterial()
         );
 
         var sphere2 = new THREE.Mesh(
             new THREE.SphereBufferGeometry(0.1, 32, 32),
-            new THREE.MeshPhongMaterial(chosen_color)
+            new THREE.MeshPhongMaterial()
         );
 
         var sphere3 = new THREE.Mesh(
             new THREE.SphereBufferGeometry(0.1, 32, 32),
-            new THREE.MeshPhongMaterial(chosen_color)
+            new THREE.MeshPhongMaterial()
         );
 
         var sphere4 = new THREE.Mesh(
             new THREE.SphereBufferGeometry(0.1, 32, 32),
-            new THREE.MeshPhongMaterial(chosen_color)
+            new THREE.MeshPhongMaterial()
         );
 
         sphere1.position.x += this.radius;
@@ -66,6 +66,12 @@ class Ghost {
         this.ghost.add(sphere2);
         this.ghost.add(sphere3);
         this.ghost.add(sphere4);
+
+        this.ghost.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+                child.material.color.setHex(chosen_color);
+            }
+        });
 
         var position = POSSIBLE_GHOSTS_POSITIONS[Math.floor(Math.random() * POSSIBLE_GHOSTS_POSITIONS.length)];
         this.ghost.position.set(position.x, position.y, position.z);
