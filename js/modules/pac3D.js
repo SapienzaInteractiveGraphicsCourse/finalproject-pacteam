@@ -88,7 +88,7 @@ function init() {
 
     // Create pacman
     loadPacman(object_loader);
-    
+
     // Load ghost model
     loadGhost(object_loader, 0xffff00);
     loadGhost(object_loader, 0xffb852);
@@ -188,141 +188,21 @@ function animate() {
     
     // CHECK GHOST COLLISIONS
     if (intersects_up_ghost.length != 0) {
-        if (super_pacman) {
-            for (i=0; i < ghosts.length; i++) {
-                if (ghosts[i].ghost.name == 'ghost' + intersects_up_ghost[0].object.name) {
-                    console.log('Removing ', ghosts[i].ghost);
-                    scene.remove(ghosts[i].ghost);
-                    scene.remove(intersects_up_ghost[0].object);
-                    ghost_eaten(i);
-                }
-            } 
-        }
-        else {
-            paused = true;
-            audio[0].pause();
-            audio[3].play();
-            document.getElementById('container_death').style.display = 'initial';
-        }
+        ghost_interaction(intersects_up_ghost[0].object);
     } else if (intersects_up_right_ghost.length != 0) {
-        if (super_pacman) {
-            for (i=0; i < ghosts.length; i++) {
-                if (ghosts[i].ghost.name == 'ghost' + intersects_up_right_ghost[0].object.name) {
-                    console.log('Removing ', ghosts[i].ghost);
-                    scene.remove(ghosts[i].ghost);
-                    scene.remove(intersects_up_right_ghost[0].object);
-                    ghost_eaten(i);
-                }
-            }
-        }
-        else {
-            paused = true;
-            audio[0].pause();
-            audio[3].play();
-            document.getElementById('container_death').style.display = 'initial';
-        }
+        ghost_interaction(intersects_up_right_ghost[0].object);
     } else if (intersects_up_left_ghost.length != 0) {
-        if (super_pacman) {
-            for (i=0; i < ghosts.length; i++) {
-                if (ghosts[i].ghost.name == 'ghost' + intersects_up_left_ghost[0].object.name) {
-                    console.log('Removing ', ghosts[i].ghost);
-                    scene.remove(ghosts[i].ghost);
-                    scene.remove(intersects_up_left_ghost[0].object);
-                    ghost_eaten(i);
-                }
-            }
-        }
-        else {
-            paused = true;
-            audio[0].pause();
-            audio[3].play();
-            document.getElementById('container_death').style.display = 'initial';
-        }
+        ghost_interaction(intersects_up_left_ghost[0].object);
     } else if (intersects_down_ghost.length != 0) {
-        if (super_pacman) {
-            for (i=0; i < ghosts.length; i++) {
-                if (ghosts[i].ghost.name == 'ghost' + intersects_down_ghost[0].object.name) {
-                    console.log('Removing ', ghosts[i].ghost);
-                    scene.remove(ghosts[i].ghost);
-                    scene.remove(intersects_down_ghost[0].object);
-                    ghost_eaten(i);
-                }
-            }
-        }
-        else {
-            paused = true;
-            audio[0].pause();
-            audio[3].play();
-            document.getElementById('container_death').style.display = 'initial';
-        }
+        ghost_interaction(intersects_down_ghost[0].object);
     } else if (intersects_down_left_ghost.length != 0) {
-        if (super_pacman) {
-            for (i=0; i < ghosts.length; i++) {
-                if (ghosts[i].ghost.name == 'ghost' + intersects_down_left_ghost[0].object.name) {
-                    console.log('Removing ', ghosts[i].ghost);
-                    scene.remove(ghosts[i].ghost);
-                    scene.remove(intersects_down_left_ghost[0].object);
-                    ghost_eaten(i);
-                }
-            }
-        }
-        else {
-            paused = true;
-            audio[0].pause();
-            audio[3].play();
-            document.getElementById('container_death').style.display = 'initial';
-        }
+        ghost_interaction(intersects_down_left_ghost[0].object);
     } else if (intersects_left_ghost.length != 0) {
-        if (super_pacman) {
-            for (i=0; i < ghosts.length; i++) {
-                if (ghosts[i].ghost.name == 'ghost' + intersects_left_ghost[0].object.name) {
-                    console.log('Removing ', ghosts[i].ghost);
-                    scene.remove(ghosts[i].ghost);
-                    scene.remove(intersects_left_ghost[0].object);
-                    ghost_eaten(i);
-                }
-            }
-        } 
-        else {
-            paused = true;
-            audio[0].pause();
-            audio[3].play();
-            document.getElementById('container_death').style.display = 'initial';
-        }
+        ghost_interaction(intersects_left_ghost[0].object);
     } else if (intersects_right_ghost.length != 0) {
-        if (super_pacman) {
-            for (i=0; i < ghosts.length; i++) {
-                if (ghosts[i].ghost.name == 'ghost' + intersects_right_ghost[0].object.name) {
-                    console.log('Removing ', ghosts[i].ghost);
-                    scene.remove(ghosts[i].ghost);
-                    scene.remove(intersects_right_ghost[0].object);
-                    ghost_eaten(i);
-                }
-            }
-        }
-        else {
-            paused = true;
-            audio[0].pause();
-            audio[3].play();
-            document.getElementById('container_death').style.display = 'initial';
-        }
+        ghost_interaction(intersects_right_ghost[0].object);
     } else if (intersects_down_right_ghost.length != 0) {
-        if (super_pacman) {
-            for (i=0; i < ghosts.length; i++) {
-                if (ghosts[i].ghost.name == 'ghost' + intersects_down_right_ghost[0].object.name) {
-                    console.log('Removing ', ghosts[i].ghost);
-                    scene.remove(ghosts[i].ghost);
-                    scene.remove(intersects_down_right_ghost[0].object);
-                    ghost_eaten(i);
-                }
-            }
-        }
-        else {
-            paused = true;
-            audio[0].pause();
-            audio[3].play();
-            document.getElementById('container_death').style.display = 'initial';
-        }
+        ghost_interaction(intersects_down_right_ghost[0].object);
     }
 
     if (keyboard[87]) { // W key
@@ -532,20 +412,6 @@ function onWindowResize() {
     cameraOrtho.updateProjectionMatrix(); 
 }
 
-function spawn() {
-    if (n_ghosts < GHOSTS_MAX_NUMBER[difficulty_level]) {
-        var ghost = new Ghost();
-        scene.add(ghost.ghost);
-        scene.add(ghost.cube);
-
-        ghost.cube.name = String(n_ghosts);
-        ghost.ghost.name = 'ghost' + n_ghosts;
-        ghosts.push(ghost);
-        ghosts_objects.push(ghost.cube);
-        n_ghosts++;
-    }
-}
-
 const loadPlay = () => {
     //Used to add events listenders
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement);
@@ -623,15 +489,39 @@ const loadManager = () => {
     };
 }
 
-function ghost_eaten(i) {
-    ghosts.splice(i, i+1);
-    console.log('removed_object: ', i);
-    ghosts_objects.splice(i, i+1);
-    audio[4].play();
-    player.score += GHOST_POINTS[difficulty_level];
-    score.innerHTML = "Score: " + player.score;
-    n_ghosts--;
-    console.log(ghosts);
+function spawn() {
+    if (n_ghosts < GHOSTS_MAX_NUMBER[difficulty_level]) {
+        var ghost = new Ghost();
+        scene.add(ghost.ghost);
+        scene.add(ghost.cube);
+
+        ghosts.push(ghost);
+        ghosts_objects.push(ghost.cube);
+        n_ghosts++;
+    }
+}
+
+function ghost_interaction(ghost) {
+    if (super_pacman) {
+        for(i=0; i<ghosts.length; i++) {
+            if (ghosts[i].cube == ghost) {
+                scene.remove(ghost);
+                scene.remove(ghosts[i].ghost);
+                ghosts.splice(i, 1);
+                ghosts_objects.splice(i, 1);
+                audio[4].play();
+                player.score += GHOST_POINTS[difficulty_level];
+                score.innerHTML = "Score: " + player.score;
+                n_ghosts--;
+            }
+        }
+    } else {
+        paused = true;
+        audio[0].pause();
+        audio[3].play();
+        document.getElementById('container_death').style.display = 'initial';
+    }
+    
 }
 
 // Resize listeners
