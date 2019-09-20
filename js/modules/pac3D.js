@@ -317,7 +317,7 @@ const loadManager = () => {
     loadPacman(object_loader);
 
     // Load ghost model
-    loadGhost(object_loader, 0xffff00);
+    loadGhost(object_loader, 0xce3025);
     loadGhost(object_loader, 0xffb852);
     loadGhost(object_loader, 0x00ffff);
     loadGhost(object_loader, 0xffb8ff);
