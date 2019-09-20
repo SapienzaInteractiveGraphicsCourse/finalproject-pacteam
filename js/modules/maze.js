@@ -20,8 +20,7 @@ const unique_ball_material = new THREE.MeshPhongMaterial({color:0xFFFF00});
 const unique_super_ball = new THREE.SphereBufferGeometry(1.5, 16, 16);
 const unique_super_ball_material = new THREE.MeshPhongMaterial({color:0xFFD700});
 
-
-        // Represents the maze's blocks
+// Represents the maze's blocks
 var maze = new Array(42);
 for (var i = 0; i < maze.length; i++) {
     maze[i] = new Array(41);
@@ -36,7 +35,10 @@ var walls = new THREE.Group();
 // Represents the balls objects
 var balls = new THREE.Group();
 // Represents the floor
-var floor = new THREE.Mesh();
+var floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(205, 211, 10, 10),
+    new THREE.MeshPhongMaterial({map:textureFloor})
+);
 
 function createMaze() {
     for (var i = 0; i < maze.length; i++) {
@@ -177,10 +179,6 @@ var initMaze = () => {
     createMaze()
     createBalls()
 
-    floor.geometry = new THREE.PlaneGeometry(205, 211, 10, 10);
-    floor.material = new THREE.MeshPhongMaterial({map:textureFloor});
-    floor.castShadow = true;
-    floor.receiveShadow = true;
     floor.rotation.x -= Math.PI / 2;
     floor.position.x = 100;
     floor.position.z = -103;
@@ -238,7 +236,7 @@ var initMaze = () => {
     textureTeleport.wrapT = THREE.RepeatWrapping;
 
     cube = new THREE.Mesh(
-        new THREE.BoxBufferGeometry(1, 50, 15),
+        new THREE.BoxBufferGeometry(5, 50, 15),
         new THREE.MeshBasicMaterial({map:textureTeleport})
     );
     cube.position.set(0, 25, -110);
@@ -246,7 +244,7 @@ var initMaze = () => {
     walls.add(cube);
 
     cube = new THREE.Mesh(
-        new THREE.BoxBufferGeometry(1, 50, 15),
+        new THREE.BoxBufferGeometry(5, 50, 15),
         new THREE.MeshBasicMaterial({map:textureTeleport})
     );
     cube.position.set(200, 25, -110);

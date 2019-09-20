@@ -1,4 +1,3 @@
-
 let pacman_model;
 class Pacman {
     constructor() {
