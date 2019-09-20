@@ -55,7 +55,7 @@
 
 \chapter{Introduction}
 
-For our final project, we have decided to build a 3D version of the traditional Pacman game using the advanced library Three.js. 
+For our final project, we have decided to build a 3D version of the traditional Pacman game using the following libraries: Three.js, threex.domevents.js, and OBJLoader.js. 
 
 \section{How to play}
 The game presents itself with the camera placed and oriented as in a first person game. The goal is to eat all the balls running inside of a maze, avoiding to be eaten by the ghosts. It is possible to move in each direction and to rotate the camera. The commands are the followings:
@@ -87,7 +87,6 @@ Hard & 8 & 8s & 10s & 10 & 100 \\
 \end{tabular}
 \end{center}
 \end{table}
-
 \chapter{Models}
 \section{Maze}
 The maze is composed by a floor, many cubes representing the walls and also balls and super-balls. In order to build it as the original Pacman maze, we have used a matrix where each cell's value represents a different object, 1 for walls, 2 for balls, 3 for super-balls.
@@ -259,15 +258,45 @@ For every movement-command('W', 'A', 'S', 'D', $\rightarrow , \leftarrow$) we us
 \item '\textbf{A}': We use the West, South-West and North-West directions;
 \item '\textbf{S}': We use the South, South-East and South-West directions;
 \item '\textbf{D}': We use the East, South-East and North-East directions;
-\item $\rightarrow$: We use only North-West;
-\item $\leftarrow$: We use only North-East;
+\item $\rightarrow$: We use the East and North-East directions;
+\item $\leftarrow$: We use the West and North-West directions.
 \end{itemize}
-\subsection{Walls}
-for the rotation-commands($\rightarrow , \leftarrow$) we check for only one ray intersection. If any collision is detected, the relative command is skipped.
-\subsection{Portals}
-When checking for the walls' collisions, if a portal is detected Pacman is teleported to the other one.
-\subsection{Balls}
-Likewise, for the balls we use 3 different rays intersections. If a ball is detected, pacman eats it(the ball is removed from the scene) and the score is increased. If a super-ball is detected pacman also gains the super-ball power. Whenever a ball is eaten, if it is the last one, the game ends and Pacman has won.
-\subsection{Ghosts}
 
+Thus, for each collision, if the object is a:
+\begin{itemize}
+\item \textit{wall}: we skip the command which yielded the collision;
+\item \textit{portal}: Pacman is teleported to the opposite portal;
+\item \textit{ball}: Pacman eats it(the ball is removed from the scene) and the score is increased. If a super-ball is detected Pacman also gains the super-ball power. Whenever a ball is eaten, if it is the last one, the game ends and Pacman has won.
+\item \textit{ghost}: if Pacman has the super-ball power, it eats the ghost (which is removed from the scene), and the score is increased. Otherwise, Pacman dies and the game is over. To check for ghosts collisions, since collision with 3D imported objects can be quite computationally-expensive, we made a trick: each ghost carries an invisible cube which moves with it and we look for collisions using these cubes.
+\end{itemize}
+
+\chapter{Extra Stuff}
+
+\section{Minimap}
+In order to improve the overall game experience, we have added a minimap in the top right corner. This minimap is represented in a second viewport, which displays a second orthographic camera point of view. The second camera is instantiated as follows
+\begin{lstlisting}
+var cameraOrtho = new THREE.OrthographicCamera(-2.5, 202.5, 207.5, -2.5, -1000, 1000);
+cameraOrtho.up = new THREE.Vector3(0, 0, -1);
+cameraOrtho.lookAt(new THREE.Vector3(0, -1, 0));
+\end{lstlisting}
+In order to set up the minimap's viewport we have used the following instructions:
+\begin{lstlisting}
+var insetHeight = window.innerHeight/3, insetWidth = window.innerWidth/3;
+renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
+renderer.render(scene, camera);
+renderer.clearDepth();
+renderer.setScissorTest(true);
+renderer.setScissor(window.innerWidth-insetWidth-2, window.innerHeight - insetHeight, insetWidth-2, insetHeight);
+renderer.setViewport(window.innerWidth-insetWidth-2, window.innerHeight - insetHeight, insetWidth-2, insetHeight);
+renderer.render(scene, cameraOrtho);
+renderer.setScissorTest(false);
+requestAnimationFrame(animate);
+\end{lstlisting}
+
+\section{Audio}
+We have set up a variety of different audio tracks for the different interactions with the environment.
+In the homepage it's possible to pause the main soundtrack and in the settings menu there are a volume slider, to adjust the volume accordingly, and a mute icon to disable every sound. The soundtrack only starts after hitting the PLAY object.
+
+\section{Manager}
+We have used a loading manager(new THREE.LoadingManager();) in order to first load everything, while displaying a loading bar, and only then set up the homepage.
 \end{document}
