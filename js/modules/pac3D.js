@@ -2,27 +2,28 @@ import {audioInitializer, audio} from './audio.js';
 import {settingsInitializer, settinged} from './settings.js';
 import {keyboard, addKeyboardListeners} from './keyboard_controls.js';
 
-
 import {Ghost, loadGhost} from './ghost.js';
 import {Pacman, loadPacman} from './pacman.js';
 import {initMaze, walls, balls, floor} from './maze.js';
 import {spotLight, target_object, dirLight, ambientLight} from './lights.js';
 
+// Main variables
 let scene, camera, cameraOrtho, renderer, raycaster;
 
+// Minimap Variables
 var insetWidth, insetHeight;
 
-const FRUIT_POINTS = [2, 5, 10] , GHOST_POINTS = [20, 50, 100];
+// Points and setting for each difficulty
+var difficulty_level;
+const FRUIT_POINTS = [2, 5, 10] , 
+      GHOST_POINTS = [20, 50, 100];
 const SUPER_PACMAN_TIME = [20000, 15000, 10000];
 const GHOSTS_MAX_NUMBER = [4, 6, 8];
 const GHOST_SPAWN_TIME = [15000, 10000, 8000];
 
-var difficulty_level = 1;
-
 var paused = true;
 var player = {height: 6, speed: 0.6, turn_speed: Math.PI*0.015, score: 0.0};
 
-// Pacman.pacman variables
 var pacman;
 var n_ghosts = 0;
 var ghosts = [];
@@ -31,8 +32,8 @@ var ghosts_objects = [];
 var super_pacman = false;
 var i;
 
-var score = document.getElementById('score');
 var play;
+var score = document.getElementById('score');
 
 var id_interval;
 
