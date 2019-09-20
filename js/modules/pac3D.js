@@ -22,7 +22,7 @@ const GHOSTS_MAX_NUMBER = [4, 6, 8];
 const GHOST_SPAWN_TIME = [15000, 10000, 8000];
 
 var paused = true;
-var player = {height: 6, speed: 0.6, turn_speed: Math.PI*0.015, score: 0.0};
+var player = {height: 6, speed: 0.25, turn_speed: Math.PI*0.015, score: 0.0};
 
 var pacman;
 var n_ghosts = 0;
@@ -59,7 +59,7 @@ function init() {
 
     //Create a raycaster instance
     raycaster = new THREE.Raycaster();
-    raycaster.far = 2.5;
+    raycaster.far = 3;
 
     // Initialize the manager
     loadManager();
