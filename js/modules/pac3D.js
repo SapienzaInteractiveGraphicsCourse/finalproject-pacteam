@@ -193,12 +193,12 @@ function animate() {
 
     // left arrow
     if (keyboard[37]) { 
-        if ((intersects_up_left == 0))
+        if (intersects_up_left.length == 0)
             camera.rotation.y += player.turn_speed;
     }
     // right arrow
     if (keyboard[39]) { 
-        if (intersects_up_right == 0)
+        if (intersects_up_right.length == 0)
             camera.rotation.y -= player.turn_speed;
     }
 
@@ -423,7 +423,6 @@ function walls_interactions(intersections_rigth, intersections_center, intersect
             camera.position.x = 5;
         } else {audio[6].play();}
     } else {
-        console.log(audio);
         switch (key) {
             case 'W':
                 camera.position.x -= Math.sin(camera.rotation.y) * player.speed;

@@ -253,15 +253,17 @@ raycaster.set(
 	)
 );
 \end{lstlisting}
-For every movement-command('W', 'A', 'S', 'D') we use 3 rays to detect any kind of collision. In particular:
+For every movement-command('W', 'A', 'S', 'D', $\rightarrow , \leftarrow$) we use the following directions to cast the rays:
 \begin{itemize}
 \item '\textbf{W}': We use the North, North-East and North-West directions;
 \item '\textbf{A}': We use the West, South-West and North-West directions;
 \item '\textbf{S}': We use the South, South-East and South-West directions;
-\item '\textbf{D}': We use the East, South-East and North-East directions.
+\item '\textbf{D}': We use the East, South-East and North-East directions;
+\item $\rightarrow$: We use only North-West;
+\item $\leftarrow$: We use only North-East;
 \end{itemize}
 \subsection{Walls}
-To avoid that Pacman could pass through walls we check for collisions in the direction Pacman is moving. In particular for each different translation-command('W', 'A', 'S', 'D') we check 3 different rays intersections with the walls' cubes. Moreover for the rotation-commands($\rightarrow , \leftarrow$) we check for only one ray intersection. If any collision is detected, the relative command is skipped.
+for the rotation-commands($\rightarrow , \leftarrow$) we check for only one ray intersection. If any collision is detected, the relative command is skipped.
 \subsection{Portals}
 When checking for the walls' collisions, if a portal is detected Pacman is teleported to the other one.
 \subsection{Balls}
