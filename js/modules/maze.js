@@ -236,7 +236,7 @@ var initMaze = () => {
     textureTeleport.wrapT = THREE.RepeatWrapping;
 
     cube = new THREE.Mesh(
-        new THREE.BoxBufferGeometry(1, 50, 15),
+        new THREE.BoxBufferGeometry(5, 50, 15),
         new THREE.MeshBasicMaterial({map:textureTeleport})
     );
     cube.position.set(0, 25, -110);
@@ -244,7 +244,7 @@ var initMaze = () => {
     walls.add(cube);
 
     cube = new THREE.Mesh(
-        new THREE.BoxBufferGeometry(1, 50, 15),
+        new THREE.BoxBufferGeometry(5, 50, 15),
         new THREE.MeshBasicMaterial({map:textureTeleport})
     );
     cube.position.set(200, 25, -110);
