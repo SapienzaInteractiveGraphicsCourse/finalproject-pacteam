@@ -1,13 +1,19 @@
 import {maze} from './maze.js'
 
-const POSSIBLE_GHOST_POSITIONS = [new THREE.Vector3(70, 3, -130), new THREE.Vector3(130, 3, -130), new THREE.Vector3(70, 3, -90), new THREE.Vector3(130, 3, -90)];
-
-const GHOST_MODELS = [];
-
+const POSSIBLE_GHOSTS_POSITIONS = [new THREE.Vector3(70, 3, -130), new THREE.Vector3(130, 3, -130), new THREE.Vector3(70, 3, -90), new THREE.Vector3(130, 3, -90)];
+const POSSIBLE_GHOSTS_COLOR = [0xce3025, 0xffb852, 0x00ffff, 0xffb8ff];
+let ghost_model;
 
 class Ghost {
     constructor() {
-        this.ghost = GHOST_MODELS[Math.floor(Math.random() * GHOST_MODELS.length)].clone();
+        this.ghost = ghost_model.clone();
+        var chosen_color = POSSIBLE_GHOSTS_COLOR[Math.floor(Math.random() * POSSIBLE_GHOSTS_COLOR.length)];
+        this.ghost.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+                child.material = child.material.clone();
+                child.material.color.setHex(chosen_color);
+            }
+        });
         
         this.actual_direction = 'down';
         this.cube = new THREE.Mesh(
@@ -17,30 +23,48 @@ class Ghost {
         this.cube.material.opacity = 0;
         this.cube.material.transparent = true;
 
-        this.sphere_speed = 0.01;
+        this.sphere_speed = 0.05;
         this.current_angle = Math.PI / 10;
         this.radius = 1.5;
 
         var sphere1 = new THREE.Mesh(
-            new THREE.SphereBufferGeometry(1, 32, 32),
-            new THREE.MeshPhongMaterial(0xffffff)
+            new THREE.SphereBufferGeometry(0.1, 32, 32),
+            new THREE.MeshPhongMaterial(chosen_color)
         );
 
         var sphere2 = new THREE.Mesh(
             new THREE.SphereBufferGeometry(0.1, 32, 32),
-            new THREE.MeshPhongMaterial(0xffffff)
+            new THREE.MeshPhongMaterial(chosen_color)
+        );
+
+        var sphere3 = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(0.1, 32, 32),
+            new THREE.MeshPhongMaterial(chosen_color)
+        );
+
+        var sphere4 = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(0.1, 32, 32),
+            new THREE.MeshPhongMaterial(chosen_color)
         );
 
         sphere1.position.z += this.radius;
         sphere2.position.z -= this.radius;
+        sphere3.position.x += this.radius;
+        sphere4.position.x -= this.radius;
 
-        sphere1.name = 'sphere';
-        sphere2.name = 'sphere';
+        sphere1.name = 'sphere1';
+        sphere2.name = 'sphere2';
+        sphere3.name = 'sphere3';
+        sphere4.name = 'sphere4';
 
         this.ghost.add(sphere1);
         this.ghost.add(sphere2);
+        this.ghost.add(sphere3);
+        this.ghost.add(sphere4);
+        
+        
 
-        var position = POSSIBLE_GHOST_POSITIONS[Math.floor(Math.random() * POSSIBLE_GHOST_POSITIONS.length)];
+        var position = POSSIBLE_GHOSTS_POSITIONS[Math.floor(Math.random() * POSSIBLE_GHOSTS_POSITIONS.length)];
         this.ghost.position.set(position.x, position.y, position.z);
         this.cube.position.set(position.x, position.y, position.z);
     }
@@ -90,37 +114,39 @@ class Ghost {
         this.ghost.position.x += 0.25*Math.sin(this.ghost.rotation.y);
         this.ghost.position.z += 0.25*Math.cos(this.ghost.rotation.y);
 
-        this.current_angle += this.current_angle*this.sphere_speed;
+        this.current_angle += this.sphere_speed;
 
         for (var i=0; i < this.ghost.children.length; i++) {
             var obj = this.ghost.children[i];
-            if (obj.name == 'sphere') {
+            if (obj.name == 'sphere1') {
                 obj.position.x = this.radius * Math.cos(this.current_angle);
                 obj.position.z = this.radius * Math.sin(this.current_angle);
-            }     
+            } else if (obj.name == 'sphere2') {
+                obj.position.x = -this.radius * Math.cos(this.current_angle);
+                obj.position.z = -this.radius * Math.sin(this.current_angle);
+            } else if (obj.name == 'sphere3') {
+                obj.position.x = this.radius * Math.cos(this.current_angle);
+                obj.position.z = this.radius * Math.sin(this.current_angle);
+            } else if (obj.name == 'sphere4') {
+                obj.position.x = -this.radius * Math.cos(this.current_angle);
+                obj.position.z = -this.radius * Math.sin(this.current_angle);
+            }
         }
 
         this.cube.position.set(this.ghost.position.x, this.ghost.position.y, this.ghost.position.z);
     }
 }
 
-function loadGhost(loader, color) {
+function loadGhost(loader) {
     loader.load(
         '3DModels/pacman_ghost.obj', 
 
         (object) => {
             object.scale.set(4, 3, 4);
-
-            object.traverse((child) => {
-                if (child instanceof THREE.Mesh) {
-                    child.material.color.setHex(color);
-                }
-            });
-            GHOST_MODELS.push(object);
+            ghost_model = object;
         }
     );
 }
-
 
 export {
     Ghost,
