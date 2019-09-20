@@ -406,23 +406,31 @@ function finish_power_up() {
 function walls_interactions(intersections_rigth, intersections_center, intersections_left, key) {
     if (intersections_rigth.length != 0) {
         if (intersections_rigth[0].object.name == 'left') {
-            camera.position.x = 195;
+            audio[7].play();
+            camera.position.x = 195;  
         } else if (intersections_rigth[0].object.name == 'right') {
+            audio[7].play();
             camera.position.x = 5;
-        }
+        } else {audio[6].play();}
     } else if (intersections_center.length != 0) {
         if (intersections_center[0].object.name == 'left') {
+            audio[7].play();
             camera.position.x = 195;
+            return;
         } else if (intersections_center[0].object.name == 'right') {
+            audio[7].play();
             camera.position.x = 5;
-        }
+        } else {audio[6].play();}
     } else if (intersections_left.length != 0) {
         if (intersections_left[0].object.name == 'left') {
+            audio[7].play();
             camera.position.x = 195;
         } else if (intersections_left[0].object.name == 'right') {
+            audio[7].play();
             camera.position.x = 5;
-        }
+        } else {audio[6].play();}
     } else {
+        console.log(audio);
         switch (key) {
             case 'W':
                 camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
