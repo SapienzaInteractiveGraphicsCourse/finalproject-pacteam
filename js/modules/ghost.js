@@ -17,12 +17,13 @@ class Ghost {
         this.cube.material.opacity = 0;
         this.cube.material.transparent = true;
 
-        this.sphere_speed = 0.01;
-        this.current_angle = Math.PI / 10;
+        this.sphere_speed = 0.04;
+        this.current_angle = 0;
         this.radius = 1.5;
 
+
         var sphere1 = new THREE.Mesh(
-            new THREE.SphereBufferGeometry(1, 32, 32),
+            new THREE.SphereBufferGeometry(0.1, 32, 32),
             new THREE.MeshPhongMaterial(0xffffff)
         );
 
@@ -31,14 +32,35 @@ class Ghost {
             new THREE.MeshPhongMaterial(0xffffff)
         );
 
+        var sphere3 = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(0.1, 32, 32),
+            new THREE.MeshPhongMaterial(0xffffff)
+        );
+
+        var sphere4 = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(0.1, 32, 32),
+            new THREE.MeshPhongMaterial(0xffffff)
+        );
+
+        sphere1.position.x += this.radius;
+        sphere2.position.x += this.radius;
+        sphere3.position.x -= this.radius;
+        sphere4.position.x -= this.radius;
+
         sphere1.position.z += this.radius;
         sphere2.position.z -= this.radius;
+        sphere3.position.z += this.radius;
+        sphere4.position.z -= this.radius;
 
-        sphere1.name = 'sphere';
-        sphere2.name = 'sphere';
+        sphere1.name = 'sphere1';
+        sphere2.name = 'sphere2';
+        sphere3.name = 'sphere3';
+        sphere4.name = 'sphere4';
 
         this.ghost.add(sphere1);
         this.ghost.add(sphere2);
+        this.ghost.add(sphere3);
+        this.ghost.add(sphere4);
 
         var position = POSSIBLE_GHOST_POSITIONS[Math.floor(Math.random() * POSSIBLE_GHOST_POSITIONS.length)];
         this.ghost.position.set(position.x, position.y, position.z);
@@ -90,14 +112,26 @@ class Ghost {
         this.ghost.position.x += 0.25*Math.sin(this.ghost.rotation.y);
         this.ghost.position.z += 0.25*Math.cos(this.ghost.rotation.y);
 
-        this.current_angle += this.current_angle*this.sphere_speed;
+        this.current_angle += this.sphere_speed;
 
         for (var i=0; i < this.ghost.children.length; i++) {
             var obj = this.ghost.children[i];
-            if (obj.name == 'sphere') {
+            if (obj.name == 'sphere1') {
+                obj.position.x = this.radius * Math.sin(this.current_angle);
+                obj.position.z = this.radius * Math.cos(this.current_angle);
+            }
+            else if (obj.name == 'sphere2') {
                 obj.position.x = this.radius * Math.cos(this.current_angle);
+                obj.position.z = -this.radius * Math.sin(this.current_angle);
+            }
+            else if (obj.name == 'sphere3') {
+                obj.position.x = -this.radius * Math.cos(this.current_angle);
                 obj.position.z = this.radius * Math.sin(this.current_angle);
-            }     
+            }
+            else if (obj.name == 'sphere4') {
+                obj.position.x = -this.radius * Math.sin(this.current_angle);
+                obj.position.z = -this.radius * Math.cos(this.current_angle);
+            }
         }
 
         this.cube.position.set(this.ghost.position.x, this.ghost.position.y, this.ghost.position.z);
