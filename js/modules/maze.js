@@ -189,22 +189,16 @@ var initMaze = () => {
         for (var j=0; j<maze[0].length; j++) {
             if (maze[i][j] == 1) {
                 cube = new THREE.Mesh(unique_cube, unique_cube_material);
-                cube.castShadow = true;
-                cube.receiveShadow = true;
                 cube.position.set(5*j, 25, -5*i);
                 walls.add(cube);
             } 
             else if (maze[i][j] == 2) {
                 ball = new THREE.Mesh(unique_ball, unique_ball_material);
-                ball.castShadow = true;
-                ball.receiveShadow = true;
                 ball.position.set(5*j, 2, -5*i);
                 balls.add(ball);
             }
             else if (maze[i][j] == 3) {
                 ball = new THREE.Mesh(unique_super_ball, unique_super_ball_material);
-                ball.castShadow = true;
-                ball.receiveShadow = true;
                 ball.position.set(5*j, 2, -5*i);
                 ball.name = 'sp';
                 balls.add(ball);
@@ -214,40 +208,28 @@ var initMaze = () => {
 
     // Adding some, otherwise non-aligned, balls
     ball = new THREE.Mesh(unique_super_ball, unique_super_ball_material);
-    ball.castShadow = true;
-    ball.receiveShadow = true;
     ball.position.set(190, 2, -182.5);
     ball.name = 'sp';
     balls.add(ball);
 
     ball = new THREE.Mesh(unique_super_ball, unique_super_ball_material);
-    ball.castShadow = true;
-    ball.receiveShadow = true;
     ball.position.set(10, 2, -182.5);
     ball.name = 'sp';
     balls.add(ball);
 
     ball = new THREE.Mesh(unique_ball, unique_ball_material);
-    ball.castShadow = true;
-    ball.receiveShadow = true;
     ball.position.set(50, 2, -182.5);
     balls.add(ball);
 
     ball = new THREE.Mesh(unique_ball, unique_ball_material);
-    ball.castShadow = true;
-    ball.receiveShadow = true;
     ball.position.set(90, 2, -182.5);
     balls.add(ball);
 
     ball = new THREE.Mesh(unique_ball, unique_ball_material);
-    ball.castShadow = true;
-    ball.receiveShadow = true;
     ball.position.set(110, 2, -182.5);
     balls.add(ball);
 
     ball = new THREE.Mesh(unique_ball, unique_ball_material);
-    ball.castShadow = true;
-    ball.receiveShadow = true;
     ball.position.set(150, 2, -182.5);
     balls.add(ball);
 
