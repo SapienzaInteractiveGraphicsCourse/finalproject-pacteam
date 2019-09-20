@@ -193,12 +193,12 @@ function animate() {
 
     // left arrow
     if (keyboard[37]) { 
-        if (intersects_up_left.length == 0)
+        if (intersects_up_left.length == 0 && intersects_left.length == 0)
             camera.rotation.y += player.turn_speed;
     }
     // right arrow
     if (keyboard[39]) { 
-        if (intersects_up_right.length == 0)
+        if (intersects_up_right.length == 0 && intersects_right.length == 0)
             camera.rotation.y -= player.turn_speed;
     }
 
