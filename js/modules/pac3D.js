@@ -205,180 +205,39 @@ function animate() {
         ghost_interaction(intersects_down_right_ghost[0].object);
     }
 
-    if (keyboard[87]) { // W key
-        
-        if (intersects_up.length != 0) {
-            if (intersects_up[0].object.name == 'left') {
-                camera.position.x = 195;
-            } else if (intersects_up[0].object.name == 'right') {
-                camera.position.x = 5;
-            }
-        } else if (intersects_up_left.length != 0) {
-            if (intersects_up_left[0].object.name == 'left') {
-                camera.position.x = 195;
-            } else if (intersects_up_left[0].object.name == 'right') {
-                camera.position.x = 5;
-            }
-        } else if (intersects_up_right.length != 0) {
-            if (intersects_up_right[0].object.name == 'left') {
-                camera.position.x = 195;
-            } else if (intersects_up_right[0].object.name == 'right') {
-                camera.position.x = 5;
-            }
-        } else {
-            camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
-            camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
-        }
+    // W key
+    if (keyboard[87]) { 
+        walls_interactions(intersects_up_left, intersects_up, intersects_up_right, 'W');
 
         // ball interactions
-        if (intersects_balls_left.length > 0) {
-            if (intersects_balls_left[0].object.name == 'sp') {
-                balls.remove(intersects_balls_left[0].object);
-                super_pacman = true;
-                setTimeout(finish_power_up, SUPER_PACMAN_TIME[difficulty_level]);
-                audio[5].play();
-                audio[0].pause();
-                player.score += FRUIT_POINTS[difficulty_level];
-                score.innerHTML = 'Score: ' + player.score;
-            } 
-            else {
-                balls.remove(intersects_balls_left[0].object);
-                audio[1].play();
-                player.score += FRUIT_POINTS[difficulty_level];
-                score.innerHTML = 'Score: ' + player.score;
-            }
-        }
-        else if (intersects_balls_center.length > 0) {
-            if (intersects_balls_center[0].object.name == 'sp') {
-                balls.remove(intersects_balls_center[0].object);
-                super_pacman = true;
-                setTimeout(finish_power_up, SUPER_PACMAN_TIME[difficulty_level]);
-                audio[5].play();
-                audio[0].pause();
-                player.score += FRUIT_POINTS[difficulty_level];
-                score.innerHTML = 'Score: ' + player.score;
-            } 
-            else {
-                balls.remove(intersects_balls_center[0].object);
-                audio[1].play();
-                player.score += FRUIT_POINTS[difficulty_level];
-                score.innerHTML = 'Score: ' + player.score;
-            }
-        } 
-        else if (intersects_balls_right.length > 0) {
-            if (intersects_balls_right[0].object.name == 'sp') {
-                balls.remove(intersects_balls_right[0].object);
-                super_pacman = true;
-                setTimeout(finish_power_up, SUPER_PACMAN_TIME[difficulty_level]);
-                audio[5].play();
-                audio[0].pause();
-                player.score += FRUIT_POINTS[difficulty_level];
-                score.innerHTML = 'Score: ' + player.score;
-            } 
-            else {
-                balls.remove(intersects_balls_right[0].object);
-                audio[1].play();
-                player.score += FRUIT_POINTS[difficulty_level];
-                score.innerHTML = 'Score: ' + player.score;
-            }
-        }
+        if (intersects_balls_left.length > 0) 
+            balls_interaction(intersects_balls_left[0].object);  
+        else if (intersects_balls_center.length > 0) 
+            balls_interaction(intersects_balls_center[0].object);
+        else if (intersects_balls_right.length > 0) 
+            balls_interaction(intersects_balls_right[0].object);
     }
+    // S key
+    if (keyboard[83])
+        walls_interactions(intersects_down_left, intersects_down, intersects_down_right, 'S');
 
-    if (keyboard[83]) { // S key
+    // A key
+    if (keyboard[65])
+        walls_interactions(intersects_up_left, intersects_left, intersects_down_left, 'A');
 
-        if (intersects_down.length != 0) {
-            if (intersects_down[0].object.name == 'left') {
-                camera.position.x = 195;
-            } else if (intersects_down[0].object.name == 'right') {
-                camera.position.x = 5;
-            }
-        } else if (intersects_down_left.length != 0) {
-            if (intersects_down_left[0].object.name == 'left') {
-                camera.position.x = 195;
-            } else if (intersects_down_left[0].object.name == 'right') {
-                camera.position.x = 5;
-            }
-        } else if (intersects_down_right.length != 0) {
-            if (intersects_down_right[0].object.name == 'left') {
-                camera.position.x = 195;
-            } else if (intersects_down_right[0].object.name == 'right') {
-                camera.position.x = 5;
-            }
-        } else {
-            camera.position.x += Math.sin(camera.rotation.y) * player.speed;
-            camera.position.z += Math.cos(camera.rotation.y) * player.speed;
-        }
-    }
+    // D key
+    if (keyboard[68]) 
+        walls_interactions(intersects_up_right, intersects_right, intersects_down_right, 'D');
 
-    if (keyboard[65]) { // A key
-
-        if (intersects_left.length != 0) {
-            if (intersects_left[0].object.name == 'left') {
-                camera.position.x = 195;
-            } else if (intersects_left[0].object.name == 'right') {
-                camera.position.x = 5;
-            }
-        } else if (intersects_down_left.length != 0) {
-            if (intersects_down_left[0].object.name == 'left') {
-                camera.position.x = 195;
-            } else if (intersects_down_left[0].object.name == 'right') {
-                camera.position.x = 5;
-            }
-        } else if (intersects_up_left.length != 0) {
-            if (intersects_up_left[0].object.name == 'left') {
-                camera.position.x = 195;
-            } else if (intersects_up_left[0].object.name == 'right') {
-                camera.position.x = 5;
-            }
-        } else {
-            camera.position.x += Math.sin(camera.rotation.y - Math.PI/2) * player.speed;
-            camera.position.z += Math.cos(camera.rotation.y - Math.PI/2) * player.speed;
-        }
-    }
-
-    if (keyboard[68]) { // D key
-
-        if (intersects_up_right.length != 0) {
-            if (intersects_up_right[0].object.name == 'left') {
-                camera.position.x = 195;
-            } else if (intersects_up_right[0].object.name == 'right') {
-                camera.position.x = 5;
-            }
-        } else if (intersects_down_right.length != 0) {
-            if (intersects_down_right[0].object.name == 'left') {
-                camera.position.x = 195;
-            } else if (intersects_down_right[0].object.name == 'right') {
-                camera.position.x = 5;
-            }
-        } else if (intersects_right.length != 0) {
-            if (intersects_right[0].object.name == 'left') {
-                camera.position.x = 195;
-            } else if (intersects_right[0].object.name == 'right') {
-                camera.position.x = 5;
-            }
-        } else {
-            camera.position.x += Math.sin(camera.rotation.y + Math.PI/2) * player.speed;
-            camera.position.z += Math.cos(camera.rotation.y + Math.PI/2) * player.speed;
-        }
-    }
-
-    if (keyboard[37]) { // left arrow
-
-        if ((intersects_up_left == 0)) {
+    // left arrow
+    if (keyboard[37]) { 
+        if ((intersects_up_left == 0))
             camera.rotation.y += player.turn_speed;
-        }
     }
-
-    if (keyboard[39]) { // right arrow
-
-        if (intersects_up_right == 0) {
+    // right arrow
+    if (keyboard[39]) { 
+        if (intersects_up_right == 0)
             camera.rotation.y -= player.turn_speed;
-        }
-    }
-
-    if (balls.children.length == 0) {
-        paused = true;
-        document.getElementById('victory').style.display = 'initial';
     }
 
     // Update pacman position
@@ -501,11 +360,11 @@ function spawn() {
     }
 }
 
-function ghost_interaction(ghost) {
+function ghost_interaction(cube) {
     if (super_pacman) {
         for(i=0; i<ghosts.length; i++) {
-            if (ghosts[i].cube == ghost) {
-                scene.remove(ghost);
+            if (ghosts[i].cube == cube) {
+                scene.remove(cube);
                 scene.remove(ghosts[i].ghost);
                 ghosts.splice(i, 1);
                 ghosts_objects.splice(i, 1);
@@ -522,6 +381,70 @@ function ghost_interaction(ghost) {
         document.getElementById('container_death').style.display = 'initial';
     }
     
+}
+
+function balls_interaction(ball) {
+    if (ball.name == 'sp') {
+        balls.remove(ball);
+        super_pacman = true;
+        setTimeout(finish_power_up, SUPER_PACMAN_TIME[difficulty_level]);
+        audio[5].play();
+        audio[0].pause();
+        player.score += FRUIT_POINTS[difficulty_level];
+        score.innerHTML = 'Score: ' + player.score;
+    } 
+    else {
+        balls.remove(ball);
+        audio[1].play();
+        player.score += FRUIT_POINTS[difficulty_level];
+        score.innerHTML = 'Score: ' + player.score;
+    }
+
+    if (balls.children.length == 0) {
+        paused = true;
+        document.getElementById('victory').style.display = 'initial';
+    }
+}
+
+function walls_interactions(intersections_rigth, intersections_center, intersections_left, key) {
+    if (intersections_rigth.length != 0) {
+        if (intersections_rigth[0].object.name == 'left') {
+            camera.position.x = 195;
+        } else if (intersections_rigth[0].object.name == 'right') {
+            camera.position.x = 5;
+        }
+    } else if (intersections_center.length != 0) {
+        if (intersections_center[0].object.name == 'left') {
+            camera.position.x = 195;
+        } else if (intersections_center[0].object.name == 'right') {
+            camera.position.x = 5;
+        }
+    } else if (intersections_left.length != 0) {
+        if (intersections_left[0].object.name == 'left') {
+            camera.position.x = 195;
+        } else if (intersections_left[0].object.name == 'right') {
+            camera.position.x = 5;
+        }
+    } else {
+        switch (key) {
+            case 'W':
+                camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
+                camera.position.z -= Math.cos(camera.rotation.y) * player.speed;
+                break;
+            case 'S':
+                camera.position.x += Math.sin(camera.rotation.y) * player.speed;
+                camera.position.z += Math.cos(camera.rotation.y) * player.speed;
+                break;
+            case 'A':
+                camera.position.x += Math.sin(camera.rotation.y - Math.PI/2) * player.speed;
+                camera.position.z += Math.cos(camera.rotation.y - Math.PI/2) * player.speed;
+                break;
+            case 'D':
+                camera.position.x += Math.sin(camera.rotation.y + Math.PI/2) * player.speed;
+                camera.position.z += Math.cos(camera.rotation.y + Math.PI/2) * player.speed;
+                break;
+        }
+    }
 }
 
 // Resize listeners
