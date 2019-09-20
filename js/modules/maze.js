@@ -20,8 +20,7 @@ const unique_ball_material = new THREE.MeshPhongMaterial({color:0xFFFF00});
 const unique_super_ball = new THREE.SphereBufferGeometry(1.5, 16, 16);
 const unique_super_ball_material = new THREE.MeshPhongMaterial({color:0xFFD700});
 
-
-        // Represents the maze's blocks
+// Represents the maze's blocks
 var maze = new Array(42);
 for (var i = 0; i < maze.length; i++) {
     maze[i] = new Array(41);
@@ -180,8 +179,6 @@ var initMaze = () => {
     createMaze()
     createBalls()
 
-    floor.castShadow = true;
-    floor.receiveShadow = true;
     floor.rotation.x -= Math.PI / 2;
     floor.position.x = 100;
     floor.position.z = -103;
