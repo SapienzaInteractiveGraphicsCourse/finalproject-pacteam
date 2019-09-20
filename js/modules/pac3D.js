@@ -63,10 +63,6 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    document.getElementById('home_page').onclick = function(){
-        location.reload(false);
-    }
-
     score = document.getElementById('score');
 
     // Initialize the manager
