@@ -51,11 +51,11 @@ class Ghost {
             directions.push('down');
         }
 
-        if (maze[i][j-2] != 1 && j != 10) {
+        if (maze[i][j-2] != 1 && i!=22) {
             directions.push('left');
         }
 
-        if (maze[i][j+2] != 1 && j != 30) {
+        if (maze[i][j+2] != 1 && i!=22) {
             directions.push('right');
         }
 
