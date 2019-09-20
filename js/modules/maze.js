@@ -36,7 +36,10 @@ var walls = new THREE.Group();
 // Represents the balls objects
 var balls = new THREE.Group();
 // Represents the floor
-var floor = new THREE.Mesh();
+var floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(205, 211, 10, 10),
+    new THREE.MeshPhongMaterial({map:textureFloor})
+);
 
 function createMaze() {
     for (var i = 0; i < maze.length; i++) {
@@ -177,8 +180,6 @@ var initMaze = () => {
     createMaze()
     createBalls()
 
-    floor.geometry = new THREE.PlaneGeometry(205, 211, 10, 10);
-    floor.material = new THREE.MeshPhongMaterial({map:textureFloor});
     floor.castShadow = true;
     floor.receiveShadow = true;
     floor.rotation.x -= Math.PI / 2;
