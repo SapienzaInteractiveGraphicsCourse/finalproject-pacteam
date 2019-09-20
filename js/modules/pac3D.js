@@ -31,7 +31,7 @@ var ghosts_objects = [];
 var super_pacman = false;
 var i;
 
-var score;
+var score = document.getElementById('score');
 var play;
 
 var id_interval;
@@ -56,25 +56,12 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    score = document.getElementById('score');
-
-    // Initialize the manager
-    loadManager();
-
-    // Add setting and audio
-    settingsInitializer();
-    audioInitializer();
-
-    // Useful stuffs
-    onWindowResize();
-    addKeyboardListeners();
-
-    // Create an instance for the maze
-    initMaze();
-    
     //Create a raycaster instance
     raycaster = new THREE.Raycaster();
     raycaster.far = 2.5;
+
+    // Initialize the manager
+    loadManager();
 };
 
 function animate() {
@@ -336,6 +323,17 @@ const loadManager = () => {
 
     // Load Play
     loadPlay(font_loader);
+
+    // Add setting and audio
+    settingsInitializer();
+    audioInitializer();
+
+    // Useful stuffs
+    onWindowResize();
+    addKeyboardListeners();
+
+    // Create an instance for the maze
+    initMaze();
 }
 
 function spawn() {
