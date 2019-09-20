@@ -19,11 +19,10 @@ class Ghost {
 
         this.sphere_speed = 0.01;
         this.current_angle = Math.PI / 10;
-
-        this.radius = 2;
+        this.radius = 1.5;
 
         var sphere1 = new THREE.Mesh(
-            new THREE.SphereBufferGeometry(0.1, 32, 32),
+            new THREE.SphereBufferGeometry(1, 32, 32),
             new THREE.MeshPhongMaterial(0xffffff)
         );
 
@@ -35,8 +34,8 @@ class Ghost {
         sphere1.position.z += this.radius;
         sphere2.position.z -= this.radius;
 
-        sphere1.name = 'sphere1';
-        sphere2.name = 'sphere2';
+        sphere1.name = 'sphere';
+        sphere2.name = 'sphere';
 
         this.ghost.add(sphere1);
         this.ghost.add(sphere2);
@@ -95,9 +94,9 @@ class Ghost {
 
         for (var i=0; i < this.ghost.children.length; i++) {
             var obj = this.ghost.children[i];
-            if (obj.name == 'sphere1') {
-                obj.position.x = this.ghost.position.x + this.radius * Math.sin(this.current_angle);
-                obj.position.z = this.ghost.position.z + this.radius * Math.cos(this.current_angle);
+            if (obj.name == 'sphere') {
+                obj.position.x = this.radius * Math.cos(this.current_angle);
+                obj.position.z = this.radius * Math.sin(this.current_angle);
             }     
         }
 
