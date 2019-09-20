@@ -17,7 +17,7 @@ class Ghost {
         this.cube.material.opacity = 0;
         this.cube.material.transparent = true;
 
-        this.sphere_speed = 0.04;
+        this.sphere_speed = Math.PI/80;
         this.current_angle = 0;
         this.radius = 1.5;
 
