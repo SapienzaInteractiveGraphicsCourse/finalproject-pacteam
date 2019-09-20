@@ -31,17 +31,10 @@ var ghosts_objects = [];
 var super_pacman = false;
 var i;
 
-var manager;
-var object_loader;
-
-function finish_power_up() {
-    super_pacman = false;
-    audio[5].pause();
-    audio[0].play();
-}
-
 var score;
 var play;
+
+var id_interval;
 
 function init() {
 
@@ -78,21 +71,6 @@ function init() {
 
     // Create an instance for the maze
     initMaze();
-    
-    // Create manager and loader
-    object_loader = new THREE.OBJLoader(manager);
-
-    // Create pacman
-    loadPacman(object_loader);
-
-    // Load ghost model
-    loadGhost(object_loader, 0xffff00);
-    loadGhost(object_loader, 0xffb852);
-    loadGhost(object_loader, 0x00ffff);
-    loadGhost(object_loader, 0xffb8ff);
-
-    // Load Play
-    loadPlay();
     
     //Create a raycaster instance
     raycaster = new THREE.Raycaster();
@@ -267,11 +245,10 @@ function onWindowResize() {
     cameraOrtho.updateProjectionMatrix(); 
 }
 
-const loadPlay = () => {
+const loadPlay = (loader) => {
     //Used to add events listenders
     const domEvents = new THREEx.DomEvents(camera, renderer.domElement);
 
-    var loader = new THREE.FontLoader(manager);
     loader.load("fonts/Super_Mario_256.json", 
     
         function(font) {
@@ -308,7 +285,7 @@ const loadPlay = () => {
                 document.getElementById("playpausebtn").style.background = "url(images/pause.png) no-repeat";
                 audio[0].play();
                 scene.remove(dirLight);
-                setInterval(spawn, GHOST_SPAWN_TIME[difficulty_level]);
+                id_interval = setInterval(spawn, GHOST_SPAWN_TIME[difficulty_level]);
             });
         
             domEvents.addEventListener(play, "mouseout", event => {
@@ -320,7 +297,12 @@ const loadPlay = () => {
 }
 
 const loadManager = () => {
-    manager = new THREE.LoadingManager();
+    
+    // Create manager and loader
+    var manager = new THREE.LoadingManager();
+    var object_loader = new THREE.OBJLoader(manager);
+    var font_loader = new THREE.FontLoader(manager);
+
     const loadingBar = document.querySelector('#loading-bar');
     const progressBar = document.querySelector('#progress');
     const loadingOverlay = document.querySelector('#loading-overlay');
@@ -342,6 +324,18 @@ const loadManager = () => {
         document.getElementById('Info').style.display = 'initial';
         animate();
     };
+
+    // Create pacman
+    loadPacman(object_loader);
+
+    // Load ghost model
+    loadGhost(object_loader, 0xffff00);
+    loadGhost(object_loader, 0xffb852);
+    loadGhost(object_loader, 0x00ffff);
+    loadGhost(object_loader, 0xffb8ff);
+
+    // Load Play
+    loadPlay(font_loader);
 }
 
 function spawn() {
@@ -375,6 +369,7 @@ function ghost_interaction(cube) {
         audio[0].pause();
         audio[3].play();
         document.getElementById('container_death').style.display = 'initial';
+        clearInterval(id_interval);
     }
     
 }
@@ -399,7 +394,14 @@ function balls_interaction(ball) {
     if (balls.children.length == 0) {
         paused = true;
         document.getElementById('victory').style.display = 'initial';
+        clearInterval(id_interval);
     }
+}
+
+function finish_power_up() {
+    super_pacman = false;
+    audio[5].pause();
+    audio[0].play();
 }
 
 function walls_interactions(intersections_rigth, intersections_center, intersections_left, key) {
