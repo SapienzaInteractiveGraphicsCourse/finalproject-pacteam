@@ -1,5 +1,5 @@
 // Textures
-var textureWall = new THREE.TextureLoader().load("textures/grass.png");
+var textureWall = new THREE.TextureLoader().load("textures/Grass.png");
 textureWall.wrapS = THREE.RepeatWrapping;
 textureWall.wrapT = THREE.RepeatWrapping;
 textureWall.generateMipmaps = true;
