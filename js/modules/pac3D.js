@@ -150,25 +150,25 @@ function animate() {
     
     // CHECK GHOST COLLISIONS
     if (intersects_up_ghost.length != 0) {
-        ghost_interaction(intersects_up_ghost[0].object);
+        ghost_interaction(intersects_up_ghost[0].object, true);
     } else if (intersects_up_right_ghost.length != 0) {
-        ghost_interaction(intersects_up_right_ghost[0].object);
+        ghost_interaction(intersects_up_right_ghost[0].object, true);
     } else if (intersects_up_left_ghost.length != 0) {
-        ghost_interaction(intersects_up_left_ghost[0].object);
+        ghost_interaction(intersects_up_left_ghost[0].object, true);
     } else if (intersects_down_ghost.length != 0) {
-        ghost_interaction(intersects_down_ghost[0].object);
+        ghost_interaction(intersects_down_ghost[0].object, false);
     } else if (intersects_down_left_ghost.length != 0) {
-        ghost_interaction(intersects_down_left_ghost[0].object);
+        ghost_interaction(intersects_down_left_ghost[0].object, false);
     } else if (intersects_left_ghost.length != 0) {
-        ghost_interaction(intersects_left_ghost[0].object);
+        ghost_interaction(intersects_left_ghost[0].object, false);
     } else if (intersects_right_ghost.length != 0) {
-        ghost_interaction(intersects_right_ghost[0].object);
+        ghost_interaction(intersects_right_ghost[0].object, false);
     } else if (intersects_down_right_ghost.length != 0) {
-        ghost_interaction(intersects_down_right_ghost[0].object);
+        ghost_interaction(intersects_down_right_ghost[0].object, false);
     }
 
     // W key
-    if (keyboard[87]) { 
+    if (keyboard[87]) {
         walls_interactions(intersects_up_left, intersects_up, intersects_up_right, 'W');
 
         // ball interactions
@@ -349,8 +349,8 @@ function spawn() {
     }
 }
 
-function ghost_interaction(cube) {
-    if (super_pacman) {
+function ghost_interaction(cube, moving_forward) {
+    if (super_pacman && moving_forward) {
         for(i=0; i<ghosts.length; i++) {
             if (ghosts[i].cube == cube) {
                 scene.remove(cube);
@@ -363,7 +363,7 @@ function ghost_interaction(cube) {
                 n_ghosts--;
             }
         }
-    } else {
+    } else if (!super_pacman) {
         paused = true;
         audio[0].pause();
         audio[3].play();
