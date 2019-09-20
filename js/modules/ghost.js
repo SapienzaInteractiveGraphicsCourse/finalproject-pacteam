@@ -27,6 +27,11 @@ class Ghost {
         this.current_angle = 0;
         this.radius = 1.5;
 
+        this.current_y_angle = 0;
+        this.max_y_angle = Math.PI/15;
+        this.y_angle_speed = Math.PI/150;
+        this.y_flag = true;
+
         var sphere1 = new THREE.Mesh(
             new THREE.SphereBufferGeometry(0.1, 32, 32),
             new THREE.MeshPhongMaterial()
@@ -124,24 +129,40 @@ class Ghost {
         this.ghost.position.z += 0.25*Math.cos(this.ghost.rotation.y);
 
         this.current_angle += this.sphere_speed;
+        if (this.flag) {
+            this.current_y_angle += this.sphere_speed;
+            if (this.current_y_angle > this.max_y_angle) {
+                this.flag = false;
+            }
+        }
+        else {
+            this.current_y_angle -= this.sphere_speed;
+            if (this.current_y_angle < -this.max_y_angle) {
+                this.flag = true;
+            }
+        }
 
         for (var i=0; i < this.ghost.children.length; i++) {
             var obj = this.ghost.children[i];
             if (obj.name == 'sphere1') {
                 obj.position.x = this.radius * Math.sin(this.current_angle);
                 obj.position.z = this.radius * Math.cos(this.current_angle);
+                obj.position.y = Math.sin(this.current_y_angle);
             }
             else if (obj.name == 'sphere2') {
                 obj.position.x = this.radius * Math.cos(this.current_angle);
                 obj.position.z = -this.radius * Math.sin(this.current_angle);
+                obj.position.y = -Math.sin(this.current_y_angle);
             }
             else if (obj.name == 'sphere3') {
                 obj.position.x = -this.radius * Math.cos(this.current_angle);
                 obj.position.z = this.radius * Math.sin(this.current_angle);
+                obj.position.y = -Math.sin(this.current_y_angle);
             }
             else if (obj.name == 'sphere4') {
                 obj.position.x = -this.radius * Math.sin(this.current_angle);
                 obj.position.z = -this.radius * Math.cos(this.current_angle);
+                obj.position.y = Math.sin(this.current_y_angle);
             }
         }
 
