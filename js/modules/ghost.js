@@ -17,6 +17,25 @@ class Ghost {
         this.cube.material.opacity = 0;
         this.cube.material.transparent = true;
 
+        var sphere1 = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(0.1, 32, 32),
+            new THREE.MeshPhongMaterial(0xffffff)
+        );
+
+        var sphere2 = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(0.1, 32, 32),
+            new THREE.MeshPhongMaterial(0xffffff)
+        );
+
+        sphere1.position.z += 2;
+        sphere2.position.z -= 2;
+
+        sphere1.name = 'sphere1'
+        sphere2.name = 'sphere2'
+
+        this.ghost.add(sphere1);
+        this.ghost.add(sphere2)
+
         var position = POSSIBLE_GHOST_POSITIONS[Math.floor(Math.random() * POSSIBLE_GHOST_POSITIONS.length)];
         this.ghost.position.set(position.x, position.y, position.z);
         this.cube.position.set(position.x, position.y, position.z);
@@ -66,6 +85,14 @@ class Ghost {
 
         this.ghost.position.x += 0.25*Math.sin(this.ghost.rotation.y);
         this.ghost.position.z += 0.25*Math.cos(this.ghost.rotation.y);
+
+        for (var i=0; i < this.ghost.children.length; i++) {
+            var obj = this.ghost.children[i]
+            if (obj.name == 'sphere1') {
+                obj.position.x += 
+            }
+                
+        }
 
         this.cube.position.set(this.ghost.position.x, this.ghost.position.y, this.ghost.position.z);
     }
