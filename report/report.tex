@@ -1,7 +1,7 @@
 \documentclass[a4paper,oneside]{report}
 \title{Interactive Graphics Report}
 
-\author{PacTeam \cr Edoardo Piroli - Luca Faraoni}
+\author{PacTeam \cr Edoardo Piroli 1711234 - Luca Faraoni 1667345}
 
 \usepackage{graphicx}
 \usepackage{amsmath,amsfonts,amsthm,bm}
@@ -58,7 +58,7 @@
 For our final project, we have decided to build a 3D version of the traditional Pacman game using the following libraries: Three.js, threex.domevents.js, and OBJLoader.js. 
 
 \section{How to play}
-The game presents itself with the camera placed and oriented as in a first person game. The goal is to eat all the balls running inside of a maze, avoiding to be eaten by the ghosts. It is possible to move in each direction and to rotate the camera. The commands are the followings:
+The game presents itself with the camera placed and oriented as in a first person game. The goal is to eat all the balls in the maze, avoiding to be eaten by the ghosts. It is possible to move in each direction and to rotate the camera. The commands are the followings:
 \begin{itemize}
 \item 'W': move forward;
 \item 'A': move to the left;
@@ -68,7 +68,7 @@ The game presents itself with the camera placed and oriented as in a first perso
 \item $\rightarrow$: rotate the camera to the right.
 \end{itemize}
 
-There are some bigger balls, the super-balls, which, if eaten, grant Pacman the possibility to eat the ghosts for a certain amount of time. Both balls or ghosts can be eaten exclusively moving forward(using the 'W' command) as pacman's mouth is located in front. Eating ghosts or balls increases the score based on the chosen difficulty. When touched by a ghost, Pacman dies and the game ends.
+There are some bigger balls, the super-balls, which, if eaten, grant Pacman the ability to eat the ghosts for a certain amount of time. Both balls or ghosts can be eaten exclusively if they are in front of Pacman as that's where its mouth is located. Eating ghosts or balls increases the score based on the chosen difficulty. When touched by a ghost, Pacman dies and the game ends.
 
 Before the start of the game, it is possible to change the difficulty in the settings menu, located at the top left corner. There are three different difficulty levels that change some game parameters, according to the following table.
 \begin{table}[H]
@@ -109,7 +109,7 @@ var unique_cube = new THREE.BoxBufferGeometry(5, 50, 5);
 var unique_cube_material = new THREE.MeshPhongMaterial({map: textureWall};
 
 //We use the same geometry and material to optimize rendering
-var	cube = new THREE.Mesh(
+var cube = new THREE.Mesh(
 	unique_cube,
 	unique_cube_material
 );
@@ -117,11 +117,11 @@ var	cube = new THREE.Mesh(
 \end{lstlisting}
 Each cube has its own position based on the cell it belongs to. Moreover there are 2 special cubes, which are defined as follows
 \begin{lstlisting}
-var	cube1 = new THREE.Mesh(
+var cube1 = new THREE.Mesh(
 	new THREE.BoxBufferGeometry(5, 50, 5),
 	new THREE.MeshPhongMaterial({map: textureTeleport})
 );
-var	cube2 = new THREE.Mesh(
+var cube2 = new THREE.Mesh(
 	new THREE.BoxBufferGeometry(5, 50, 5),
 	new THREE.MeshPhongMaterial({map: textureTeleport})
 );
@@ -138,7 +138,7 @@ var unique_ball = new THREE.SphereBufferGeometry(0.75, 16, 16);
 var unique_ball_material = new THREE.MeshPhongMaterial({color: 0xffff00};
 
 //We use the same geometry and material to optimize rendering
-var	ball = new THREE.Mesh(
+var ball = new THREE.Mesh(
 	unique_ball,
 	unique_ball_material
 );
@@ -150,7 +150,7 @@ var unique_super_ball = new THREE.SphereBufferGeometry(1.5, 16, 16);
 var unique_super_ball_material = new THREE.MeshPhongMaterial({color: 0xffd700};
 
 //We use the same geometry and material to optimize rendering
-var	ball = new THREE.Mesh(
+var ball = new THREE.Mesh(
 	unique_super_ball,
 	unique_super_ball_material
 );
@@ -180,36 +180,141 @@ loader.load(
 \end{lstlisting}
 
 \section{Ghosts}
-There are four different colors for ghosts, light\textunderscore blue(0x00ffff), red(0xce3025), pink(0xffb8ff), and orange(0xffb852). Each color is associated to a different model, each loaded as follow
-\begin{lstlisting}
-var GHOST_MODELS = [];
-var loader = new THREE.OBJJLoader();
+As for the ghosts, we load just one model and for every new ghost we apply to it one of four different colors chosen randomly: blue(0x00ffff), red(0xce3025), pink(0xffb8ff), and orange(0xffb852) as in the original game.
 
-function loadGhost(loader, color) {
-	loader.load(
-		'3DModels/pacman_ghost.obj',
-		(object) => {
-			object.scale.set(4,3,4);
-			object.travers((child) => {
-				if (child instanceof THREE.Mesh) {
-					child.material.color.setHex(color);
-				}
-			});
-			GHOST_MODELS.push(object);
-		};
-	}
+The ghosts' model is loaded as follows:
+\begin{lstlisting}
+var ghost_model;
+
+function loadGhost(loader) {
+    loader.load(
+        '3DModels/pacman_ghost.obj', 
+
+        (object) => {
+            object.scale.set(4, 3, 4);
+            ghost_model = object;
+        }
+    );
 }
 
-loadghost(loader, 0xce3025);
-loadghost(loader, 0x00ffff);
-loadghost(loader, 0xffb8ff);
-loadghost(loader, 0xffb852);
+var loader = new THREE.OBJLoader();
+loadghost(loader);
 \end{lstlisting}
 
-To instantiate a ghost, we use a class Ghost that clones a random model and sets a random position among 4 different predefined locations.
+Finally every ghost model has 4 spherical objects associated to it as its children, these objects, leveraging the hierarchical structure of the model, move with the associated ghost and rotate, while oscillating up and down, around it.
+
+Ghosts are automatically added to the environment via the following function: 
+\begin{lstlisting}
+function spawn() {
+    if (n_ghosts < GHOSTS_MAX_NUMBER[difficulty_level]) {
+        // Class described later
+        var ghost = new Ghost();
+        scene.add(ghost.ghost);
+        scene.add(ghost.cube);
+
+
+	    // Arrays used to handle ghosts
+        ghosts.push(ghost);
+        ghosts_objects.push(ghost.cube);
+        
+        // Keeps track of the number of ghosts actually deployed
+        n_ghosts++;
+    }
+}
+\end{lstlisting}
+
+The Ghost class is defined in the ghost.js file, it is too long to be reported but here is its constructor:
+\begin{lstlisting}
+const POSSIBLE_GHOSTS_COLOR = [0xce3025, 0xffb852, 0x00ffff, 0xffb8ff];
+const POSSIBLE_GHOSTS_POSITIONS = [new THREE.Vector3(70, 3, -130), new THREE.Vector3(130, 3, -130), new THREE.Vector3(70, 3, -90), new THREE.Vector3(130, 3, -90)];
+
+constructor() {
+	   // It clones the pre-loaded model and assigns a color to it
+        this.ghost = ghost_model.clone();
+        var chosen_color = POSSIBLE_GHOSTS_COLOR[Math.floor(Math.random() * POSSIBLE_GHOSTS_COLOR.length)];
+        
+        this.ghost.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+                child.material = child.material.clone();
+                child.material.color.setHex(chosen_color);
+            }
+        });
+        
+        this.actual_direction = 'down';
+        
+        // Transparent cube used to handle ghosts' collisions described later on
+        this.cube = new THREE.Mesh(
+            new THREE.BoxBufferGeometry(6, 6, 6),
+            new THREE.MeshPhongMaterial()
+        );
+        this.cube.material.opacity = 0;
+        this.cube.material.transparent = true;
+        
+        // Spheres associated to the ghost
+        var sphere1 = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(0.1, 32, 32),
+            new THREE.MeshPhongMaterial()
+        );
+
+        var sphere2 = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(0.1, 32, 32),
+            new THREE.MeshPhongMaterial()
+        );
+
+        var sphere3 = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(0.1, 32, 32),
+            new THREE.MeshPhongMaterial()
+        );
+
+        var sphere4 = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(0.1, 32, 32),
+            new THREE.MeshPhongMaterial()
+        );
+        
+        sphere1.position.x += this.radius;
+        sphere2.position.x += this.radius;
+        sphere3.position.x -= this.radius;
+        sphere4.position.x -= this.radius;
+
+        sphere1.position.z += this.radius;
+        sphere2.position.z -= this.radius;
+        sphere3.position.z += this.radius;
+        sphere4.position.z -= this.radius;
+
+        sphere1.name = 'sphere1';
+        sphere2.name = 'sphere2';
+        sphere3.name = 'sphere3';
+        sphere4.name = 'sphere4';
+
+        this.ghost.add(sphere1);
+        this.ghost.add(sphere2);
+        this.ghost.add(sphere3);
+        this.ghost.add(sphere4);
+
+        this.ghost.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+                child.material.color.setHex(chosen_color);
+            }
+        });
+        
+	    // Attributes used to handle the movements of the spheres as described later on
+        this.sphere_speed = Math.PI/80;
+        this.current_angle = 0;
+        this.radius = 1.5;
+        
+        this.y_speed = Math.PI/150;
+        this.current_y_angle = 0;
+        this.y_radius = 0.628;
+	
+	   // Also the position of the ghost is randomly picked from a set of predefined options.
+        var position = POSSIBLE_GHOSTS_POSITIONS[Math.floor(Math.random() * POSSIBLE_GHOSTS_POSITIONS.length)];
+        this.ghost.position.set(position.x, position.y, position.z);
+        this.cube.position.set(position.x, position.y, position.z);
+    }
+\end{lstlisting}
 
 \section{Play}
-In the homepage there is an object representing the text "PLAY". Such object is clickable and makes the game start. 
+In the homepage there is an object representing the text "PLAY". This object is clickable and makes the game start. 
 \chapter{Lights and Textures}
 \section{Textures}
 In order to load the textures we have used THREE.TextureLoader();
@@ -269,6 +374,39 @@ Thus, for each collision, if the object is a:
 \item \textit{ball}: Pacman eats it(the ball is removed from the scene) and the score is increased. If a super-ball is detected Pacman also gains the super-ball power. Whenever a ball is eaten, if it is the last one, the game ends and Pacman has won.
 \item \textit{ghost}: if Pacman has the super-ball power, it eats the ghost (which is removed from the scene), and the score is increased. Otherwise, Pacman dies and the game is over. To check for ghosts collisions, since collision with 3D imported objects can be quite computationally-expensive, we made a trick: each ghost carries an invisible cube which moves with it and we look for collisions using these cubes.
 \end{itemize}
+
+\section{Ghosts Movement}
+\subsection{Ghost Movement}
+\subsection{Sphere Movement}
+At every rendering the following instructions, as part of a method of the Ghost class, are executed in order to handle the movement of the balls for every deployed ghost.
+\begin{lstlisting}
+this.current_angle += this.sphere_speed;
+this.current_y_angle += this.y_speed;
+
+for (var i=0; i < this.ghost.children.length; i++) {
+    var obj = this.ghost.children[i];
+    if (obj.name == 'sphere1') {
+        obj.position.x = this.radius * Math.sin(this.current_angle);
+        obj.position.z = this.radius * Math.cos(this.current_angle);
+        obj.position.y = this.y_radius * Math.sin(this.current_y_angle);
+    }
+    else if (obj.name == 'sphere2') {
+        obj.position.x = this.radius * Math.cos(this.current_angle);
+        obj.position.z = -this.radius * Math.sin(this.current_angle);
+        obj.position.y = -this.y_radius * Math.sin(this.current_y_angle);
+    }
+    else if (obj.name == 'sphere3') {
+        obj.position.x = -this.radius * Math.cos(this.current_angle);
+        obj.position.z = this.radius * Math.sin(this.current_angle);
+        obj.position.y = -this.y_radius * Math.sin(this.current_y_angle);
+    }
+    else if (obj.name == 'sphere4') {
+        obj.position.x = -this.radius * Math.sin(this.current_angle);
+        obj.position.z = -this.radius * Math.cos(this.current_angle);
+        obj.position.y = this.y_radius * Math.sin(this.current_y_angle);
+    }
+}
+\end{lstlisting}
 
 \chapter{Extra Stuff}
 
