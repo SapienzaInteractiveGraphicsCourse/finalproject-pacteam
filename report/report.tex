@@ -54,7 +54,6 @@
 \tableofcontents
 
 \chapter{Introduction}
-
 For our final project, we have decided to build a 3D version of the traditional Pacman game using the following libraries: Three.js, threex.domevents.js, and OBJLoader.js. 
 
 \section{How to play}
@@ -379,6 +378,62 @@ Thus, for each collision, if the object is a:
 
 \section{Ghosts Movement}
 \subsection{Ghost Movement}
+To handle ghosts movement we have used the maze matrix. In particular, when a ghost reaches a cross (where there are at least three possible ways), it checks for the available directions (looking for walls around itself) and randomly picks one of them, changing its orientation. If the ghost detects the reaches position is not a cross, it keeps moving forward. Here is the relative code to check for possible directions.
+\begin{lstlisting}
+moveGhost() {
+
+    if (-this.ghost.position.z % 10 == 0 && this.ghost.position.x % 10 == 0) {
+            this.ghost.rotation.y = this.get_rotation(-this.ghost.position.z/5, this.ghost.position.x/5);
+    }
+
+    this.ghost.position.x += 0.25*Math.sin(this.ghost.rotation.y);
+    this.ghost.position.z += 0.25*Math.cos(this.ghost.rotation.y);
+
+    this.cube.position.set(this.ghost.position.x, this.ghost.position.y, this.ghost.position.z);
+        
+    .
+    .
+    .
+}
+
+get_rotation(i, j) {
+    var directions = [];
+    if (maze[i+2][j] != 1 && i != 34) {
+        directions.push('up');
+    }
+
+    if (maze[i-2][j] != 1) {
+        directions.push('down');
+    }
+
+    if (maze[i][j-2] != 1 && i!=22) {
+        directions.push('left');
+    }
+    
+    if (maze[i][j+2] != 1 && i!=22) {
+        directions.push('right');
+    }
+
+    if (directions.length == 2 && directions.includes(this.actual_direction)) return this.ghost.rotation.y;
+        
+    switch (directions[Math.floor(Math.random() * directions.length)]) {
+        case 'up':
+            this.actual_direction = 'up';
+            return Math.PI;
+        case 'down':
+            this.actual_direction = 'down';
+            return 0;
+        case 'left': 
+            this.actual_direction = 'left';
+            return -Math.PI/2;
+        case 'right':
+            this.actual_direction = 'right';
+            return Math.PI/2;
+    }
+}
+
+
+\end{lstlisting}
 \subsection{Sphere Movement}
 At every rendering the following instructions, as part of a method of the Ghost class, are executed in order to handle the movement of the balls for every deployed ghost.
 \begin{lstlisting}
