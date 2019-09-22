@@ -129,32 +129,32 @@ class Ghost {
 
         this.cube.position.set(this.ghost.position.x, this.ghost.position.y, this.ghost.position.z);
 
-this.current_angle += this.sphere_speed;
-this.current_y_angle += this.y_speed;
+        this.current_angle += this.sphere_speed;
+        this.current_y_angle += this.y_speed;
 
-for (var i=0; i < this.ghost.children.length; i++) {
-    var obj = this.ghost.children[i];
-    if (obj.name == 'sphere1') {
-        obj.position.x = this.radius * Math.sin(this.current_angle);
-        obj.position.z = this.radius * Math.cos(this.current_angle);
-        obj.position.y = this.y_radius * Math.sin(this.current_y_angle);
-    }
-    else if (obj.name == 'sphere2') {
-        obj.position.x = this.radius * Math.cos(this.current_angle);
-        obj.position.z = -this.radius * Math.sin(this.current_angle);
-        obj.position.y = -this.y_radius * Math.sin(this.current_y_angle);
-    }
-    else if (obj.name == 'sphere3') {
-        obj.position.x = -this.radius * Math.cos(this.current_angle);
-        obj.position.z = this.radius * Math.sin(this.current_angle);
-        obj.position.y = -this.y_radius * Math.sin(this.current_y_angle);
-    }
-    else if (obj.name == 'sphere4') {
-        obj.position.x = -this.radius * Math.sin(this.current_angle);
-        obj.position.z = -this.radius * Math.cos(this.current_angle);
-        obj.position.y = this.y_radius * Math.sin(this.current_y_angle);
-    }
-}
+        for (var i=0; i < this.ghost.children.length; i++) {
+            var obj = this.ghost.children[i];
+            if (obj.name == 'sphere1') {
+                obj.position.x = this.radius * Math.sin(this.current_angle);
+                obj.position.z = this.radius * Math.cos(this.current_angle);
+                obj.position.y = this.y_radius * Math.sin(this.current_y_angle);
+            }
+            else if (obj.name == 'sphere2') {
+                obj.position.x = this.radius * Math.cos(this.current_angle);
+                obj.position.z = -this.radius * Math.sin(this.current_angle);
+                obj.position.y = -this.y_radius * Math.sin(this.current_y_angle);
+            }
+            else if (obj.name == 'sphere3') {
+                obj.position.x = -this.radius * Math.cos(this.current_angle);
+                obj.position.z = this.radius * Math.sin(this.current_angle);
+                obj.position.y = -this.y_radius * Math.sin(this.current_y_angle);
+            }
+            else if (obj.name == 'sphere4') {
+                obj.position.x = -this.radius * Math.sin(this.current_angle);
+                obj.position.z = -this.radius * Math.cos(this.current_angle);
+                obj.position.y = this.y_radius * Math.sin(this.current_y_angle);
+            }
+        }
     }
 }
 
