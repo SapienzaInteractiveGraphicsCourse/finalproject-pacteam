@@ -378,7 +378,9 @@ Thus, for each collision, if the object is a:
 
 \section{Ghosts Movement}
 \subsection{Ghost Movement}
-To handle ghosts movement we have used the maze matrix. In particular, when a ghost reaches a cross (where there are at least three possible ways), it checks for the available directions (looking for walls around itself) and randomly picks one of them, changing its orientation. If the ghost detects the reaches position is not a cross, it keeps moving forward. Here is the relative code to check for possible directions.
+To handle ghosts movement we have used the maze matrix. In particular, when in a new cell, the ghost checks for the available directions looking cells around itself. If there is a cross, where there are at least three possible directions, it randomly picks one and rotates. If not, the ghost keeps moving forward. 
+
+Here is the relative code to check for possible directions and for the ghosts movement.
 \begin{lstlisting}
 moveGhost() {
 
@@ -493,5 +495,5 @@ We have set up a variety of different audio tracks for the different interaction
 In the homepage it's possible to pause the main soundtrack and in the settings menu there are a volume slider, to adjust the volume accordingly, and a mute icon to disable every sound. The soundtrack only starts after hitting the PLAY object.
 
 \section{Manager}
-We have used a loading manager(new THREE.LoadingManager();) in order to first load everything, while displaying a loading bar, and only then set up the homepage.
+We have used a loading manager(new THREE.LoadingManager()) in order to first load everything, while displaying a loading bar, and only then set up the homepage.
 \end{document}
